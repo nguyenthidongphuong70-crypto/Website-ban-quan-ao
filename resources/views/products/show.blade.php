@@ -50,6 +50,8 @@
     aspect-ratio: 3 / 4;
     overflow: hidden;
     background: var(--clr-offwhite);
+    border-radius: 18px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
 }
 
 .product-detail-img-wrap img {
@@ -192,11 +194,14 @@
     display: flex;
     align-items: center;
     border: 1px solid var(--clr-beige);
+    border-radius: 10px;
     background: var(--clr-white);
+    overflow: hidden;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.03);
 }
 
 .qty-btn {
-    width: 40px;
+    width: 42px;
     height: 44px;
     background: none;
     border: none;
@@ -235,7 +240,7 @@
 }
 
 .btn-add-to-cart {
-    height: 56px;
+    height: 54px;
     background: var(--clr-black);
     color: var(--clr-white);
     font-family: var(--font-body);
@@ -244,15 +249,21 @@
     letter-spacing: 0.2em;
     text-transform: uppercase;
     border: none;
+    border-radius: 12px;
     cursor: pointer;
     display: flex;
     align-items: center;
     justify-content: center;
     gap: 12px;
-    transition: opacity 0.3s ease;
+    box-shadow: 0 4px 12px rgba(10, 10, 10, 0.15);
+    transition: all 0.25s ease;
 }
 
-.btn-add-to-cart:hover { opacity: 0.8; }
+.btn-add-to-cart:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 8px 24px rgba(10, 10, 10, 0.32);
+    opacity: 0.95;
+}
 
 .btn-add-to-cart svg {
     width: 18px;
@@ -269,12 +280,14 @@
     align-items: center;
     justify-content: center;
     gap: 10px;
-    height: 56px;
+    height: 54px;
     border: 1px solid var(--clr-beige);
+    border-radius: 12px;
     font-size: 11px;
     letter-spacing: 0.2em;
     text-transform: uppercase;
     color: var(--clr-warm-gray);
+    background: var(--clr-offwhite);
 }
 
 @media (max-width: 900px) {
@@ -396,7 +409,6 @@
 @push('scripts')
 <script>
 (function () {
-    /* Quantity stepper — pure UI, không liên quan cart logic */
     const input = document.getElementById('quantity');
     const minus = document.getElementById('qty-minus');
     const plus  = document.getElementById('qty-plus');

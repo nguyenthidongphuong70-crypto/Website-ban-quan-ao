@@ -401,6 +401,7 @@
             letter-spacing: 0.15em;
             text-transform: uppercase;
             border: none;
+            border-radius: 10px;
             cursor: pointer;
             transition: all var(--transition-base);
             position: relative;
@@ -423,25 +424,53 @@
         .btn-dark {
             background: var(--clr-black);
             color: var(--clr-white);
+            box-shadow: 0 2px 6px rgba(10, 10, 10, 0.12);
         }
         .btn-dark::before { background: var(--clr-dark-gray); }
+        .btn-dark:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 6px 18px rgba(10, 10, 10, 0.28);
+        }
 
         .btn-outline {
             background: transparent;
             color: var(--clr-black);
             border: 1px solid var(--clr-black);
+            border-radius: 10px;
         }
         .btn-outline::before { background: var(--clr-black); }
-        .btn-outline:hover { color: var(--clr-white); }
+        .btn-outline:hover {
+            color: var(--clr-white);
+            transform: translateY(-1px);
+            box-shadow: 0 6px 16px rgba(10, 10, 10, 0.18);
+        }
 
         .btn-ghost {
             background: transparent;
             color: var(--clr-black);
             border: 1px solid var(--clr-beige);
+            border-radius: 8px;
             height: 40px;
             padding: 0 20px;
         }
         .btn-ghost::before { background: var(--clr-beige); }
+        .btn-ghost:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+        }
+
+        .btn-glow-dark:hover {
+            box-shadow: 0 6px 18px rgba(10, 10, 10, 0.3) !important;
+            transform: translateY(-1px);
+        }
+        .btn-glow-blue:hover {
+            box-shadow: 0 6px 18px rgba(37, 99, 235, 0.35) !important;
+            transform: translateY(-1px);
+        }
+        .btn-glow-danger:hover {
+            box-shadow: 0 6px 18px rgba(239, 68, 68, 0.35) !important;
+            transform: translateY(-1px);
+        }
 
         .btn-arrow {
             display: inline-flex;
@@ -481,15 +510,17 @@
             color: var(--clr-black);
             background: var(--clr-white);
             border: 1px solid var(--clr-beige);
-            border-radius: 0;
+            border-radius: 10px;
             outline: none;
-            transition: border-color var(--transition-base);
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.02);
+            transition: border-color var(--transition-base), box-shadow var(--transition-base);
             -webkit-appearance: none;
             appearance: none;
         }
 
         .auren-input:focus {
             border-color: var(--clr-black);
+            box-shadow: 0 0 0 3px rgba(10, 10, 10, 0.08);
         }
 
         .auren-input::placeholder {
@@ -506,15 +537,19 @@
             color: var(--clr-black);
             background: var(--clr-white) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%232e2b28' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E") right 14px center no-repeat;
             border: 1px solid var(--clr-beige);
-            border-radius: 0;
+            border-radius: 10px;
             outline: none;
             cursor: pointer;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.02);
             -webkit-appearance: none;
             appearance: none;
-            transition: border-color var(--transition-base);
+            transition: border-color var(--transition-base), box-shadow var(--transition-base);
         }
 
-        .auren-select:focus { border-color: var(--clr-black); }
+        .auren-select:focus {
+            border-color: var(--clr-black);
+            box-shadow: 0 0 0 3px rgba(10, 10, 10, 0.08);
+        }
 
         .auren-divider {
             border: none;
@@ -915,14 +950,34 @@
                 </ul>
             </div>
 
-            {{-- Contact --}}
+            {{-- Contact & Map --}}
             <div>
                 <p class="footer-col-title">Liên hệ</p>
-                <ul class="footer-col-links">
+                <ul class="footer-col-links" style="margin-bottom: 16px;">
                     <li><a href="mailto:hello@auren.vn">hello@auren.vn</a></li>
                     <li><a href="tel:+84901234567">+84 90 123 4567</a></li>
-                    <li><a href="#">TP. Hồ Chí Minh, Việt Nam</a></li>
+                    <li><span>TP. Hồ Chí Minh, Việt Nam</span></li>
                 </ul>
+            </div>
+        </div>
+
+        {{-- Google Maps Embed Responsive --}}
+        <div style="max-width: var(--max-width); margin: 36px auto 0; padding: 0 var(--spacing-md);">
+            <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px;">
+                <span style="font-size: 10px; font-weight: 400; letter-spacing: 0.2em; text-transform: uppercase; color: var(--clr-warm-gray);">Bản đồ khu vực</span>
+                <span style="font-size: 11px; color: rgba(255,255,255,0.4);">TP. Hồ Chí Minh</span>
+            </div>
+            <div style="width: 100%; height: 160px; border-radius: 12px; overflow: hidden; border: 1px solid rgba(255,255,255,0.08); box-shadow: 0 4px 20px rgba(0,0,0,0.3);">
+                <iframe
+                    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d125410.74805721114!2d106.60838183182875!3d10.775843916961445!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x317529292e42c671%3A0x9c42630a618f8e12!2zVGjDoG5oIHBo4buRIEjhu5MgQ2jDrSBNaW5oLCBWaeG7h3QgTmFt!5e0!3m2!1svi!2s!4v1710000000000!5m2!1svi!2s"
+                    width="100%"
+                    height="100%"
+                    style="border:0; filter: invert(90%) hue-rotate(180deg) brightness(90%) contrast(90%);"
+                    allowfullscreen=""
+                    loading="lazy"
+                    referrerpolicy="no-referrer-when-downgrade"
+                    title="Bản đồ AUREN - TP. Hồ Chí Minh"
+                ></iframe>
             </div>
         </div>
 
@@ -931,9 +986,9 @@
                 © {{ date('Y') }} AUREN. All rights reserved.
             </span>
             <div class="footer-social">
-                <a href="#">Instagram</a>
-                <a href="#">Facebook</a>
-                <a href="#">Pinterest</a>
+                <a href="https://www.facebook.com/" target="_blank" rel="noopener noreferrer">Facebook</a>
+                <a href="https://www.instagram.com/" target="_blank" rel="noopener noreferrer">Instagram</a>
+                <a href="https://www.pinterest.com/" target="_blank" rel="noopener noreferrer">Pinterest</a>
             </div>
         </div>
     </footer>

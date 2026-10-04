@@ -253,6 +253,7 @@
             align-items: center;
             gap: 10px;
             border-left: 3px solid;
+            border-radius: 10px;
         }
 
         .flash-alert.success {
@@ -270,6 +271,8 @@
         .admin-card {
             background: var(--ad-card-bg);
             border: 1px solid var(--ad-border);
+            border-radius: 14px;
+            box-shadow: 0 2px 12px rgba(0, 0, 0, 0.03);
             padding: 24px;
             margin-bottom: 24px;
         }
@@ -337,6 +340,7 @@
             letter-spacing: 0.14em;
             text-transform: uppercase;
             border: 1px solid;
+            border-radius: 8px;
             cursor: pointer;
             transition: all var(--transition);
             white-space: nowrap;
@@ -347,25 +351,36 @@
             background: var(--ad-sidebar-bg);
             color: #ffffff;
             border-color: var(--ad-sidebar-bg);
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
         }
-        .btn-ad-dark:hover { opacity: 0.8; }
+        .btn-ad-dark:hover {
+            opacity: 0.9;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 14px rgba(17, 17, 16, 0.28);
+        }
 
         .btn-ad-outline {
             background: transparent;
             color: var(--ad-text);
             border-color: var(--ad-border);
+            border-radius: 8px;
         }
         .btn-ad-outline:hover {
             border-color: var(--ad-text);
+            transform: translateY(-1px);
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.05);
         }
 
         .btn-ad-danger {
             background: transparent;
             color: #991b1b;
             border-color: #fecaca;
+            border-radius: 8px;
         }
         .btn-ad-danger:hover {
             background: #fef2f2;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(153, 27, 27, 0.2);
         }
 
         .btn-ad svg {
@@ -406,13 +421,18 @@
             color: var(--ad-text);
             background: var(--ad-card-bg);
             border: 1px solid var(--ad-border);
+            border-radius: 8px;
             outline: none;
-            transition: border-color var(--transition);
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.02);
+            transition: all var(--transition);
             -webkit-appearance: none;
             appearance: none;
         }
 
-        .form-input:focus { border-color: var(--ad-text); }
+        .form-input:focus {
+            border-color: var(--ad-text);
+            box-shadow: 0 0 0 3px rgba(10, 10, 10, 0.06);
+        }
         .form-input::placeholder { color: var(--ad-muted); }
 
         .form-textarea {
@@ -424,13 +444,18 @@
             color: var(--ad-text);
             background: var(--ad-card-bg);
             border: 1px solid var(--ad-border);
+            border-radius: 8px;
             outline: none;
             resize: vertical;
-            transition: border-color var(--transition);
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.02);
+            transition: all var(--transition);
             min-height: 100px;
         }
 
-        .form-textarea:focus { border-color: var(--ad-text); }
+        .form-textarea:focus {
+            border-color: var(--ad-text);
+            box-shadow: 0 0 0 3px rgba(10, 10, 10, 0.06);
+        }
 
         .form-select {
             width: 100%;
@@ -442,14 +467,19 @@
             color: var(--ad-text);
             background: var(--ad-card-bg) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='7' viewBox='0 0 10 7'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%231a1917' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E") right 14px center no-repeat;
             border: 1px solid var(--ad-border);
+            border-radius: 8px;
             outline: none;
             cursor: pointer;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.02);
             -webkit-appearance: none;
             appearance: none;
-            transition: border-color var(--transition);
+            transition: all var(--transition);
         }
 
-        .form-select:focus { border-color: var(--ad-text); }
+        .form-select:focus {
+            border-color: var(--ad-text);
+            box-shadow: 0 0 0 3px rgba(10, 10, 10, 0.06);
+        }
 
         .form-error {
             margin-top: 6px;
@@ -544,6 +574,8 @@
             padding: 32px;
             max-width: 420px;
             width: 90%;
+            border-radius: 16px;
+            box-shadow: 0 16px 40px rgba(0, 0, 0, 0.25);
         }
 
         .delete-modal-title {
