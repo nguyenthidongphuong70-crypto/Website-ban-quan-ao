@@ -476,7 +476,8 @@
 
                         </label>
 
-                        <a href="#">
+                        <a href="{{ route('password.request') }}"
+                            style="font-size:12px; color:#555; text-decoration:none;">
                             Quên mật khẩu?
                         </a>
 

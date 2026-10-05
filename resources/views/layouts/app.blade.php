@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="vi" class="scroll-smooth">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -13,33 +14,35 @@
 
     <style>
         :root {
-            --clr-black:      #0a0a0a;
-            --clr-white:      #ffffff;
-            --clr-ivory:      #f8f5f0;
-            --clr-offwhite:   #f2ede8;
-            --clr-beige:      #e8e0d6;
-            --clr-warm-gray:  #a89f95;
-            --clr-mid-gray:   #6b6560;
-            --clr-dark-gray:  #2e2b28;
+            --clr-black: #0a0a0a;
+            --clr-white: #ffffff;
+            --clr-ivory: #f8f5f0;
+            --clr-offwhite: #f2ede8;
+            --clr-beige: #e8e0d6;
+            --clr-warm-gray: #a89f95;
+            --clr-mid-gray: #6b6560;
+            --clr-dark-gray: #2e2b28;
 
-            --font-display:  'Cormorant Garamond', Georgia, serif;
-            --font-body:     'DM Sans', -apple-system, sans-serif;
+            --font-display: 'Cormorant Garamond', Georgia, serif;
+            --font-body: 'DM Sans', -apple-system, sans-serif;
 
             --nav-height: 72px;
             --transition-base: 300ms cubic-bezier(0.25, 0.46, 0.45, 0.94);
             --transition-slow: 600ms cubic-bezier(0.25, 0.46, 0.45, 0.94);
 
-            --spacing-xs:  8px;
-            --spacing-sm:  16px;
-            --spacing-md:  32px;
-            --spacing-lg:  64px;
-            --spacing-xl:  96px;
+            --spacing-xs: 8px;
+            --spacing-sm: 16px;
+            --spacing-md: 32px;
+            --spacing-lg: 64px;
+            --spacing-xl: 96px;
             --spacing-2xl: 128px;
 
             --max-width: 1280px;
         }
 
-        *, *::before, *::after {
+        *,
+        *::before,
+        *::after {
             box-sizing: border-box;
             margin: 0;
             padding: 0;
@@ -66,7 +69,8 @@
             -moz-osx-font-smoothing: grayscale;
         }
 
-        img, video {
+        img,
+        video {
             max-width: 100%;
             display: block;
         }
@@ -122,9 +126,20 @@
         }
 
         @keyframes loader-pulse {
-            0%   { opacity: 0; transform: translateY(8px); }
-            50%  { opacity: 1; transform: translateY(0); }
-            100% { opacity: 1; transform: translateY(0); }
+            0% {
+                opacity: 0;
+                transform: translateY(8px);
+            }
+
+            50% {
+                opacity: 1;
+                transform: translateY(0);
+            }
+
+            100% {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
         .auren-nav {
@@ -135,8 +150,8 @@
             z-index: 1000;
             height: var(--nav-height);
             transition: background var(--transition-base),
-                        border-color var(--transition-base),
-                        backdrop-filter var(--transition-base);
+                border-color var(--transition-base),
+                backdrop-filter var(--transition-base);
         }
 
         .auren-nav.transparent {
@@ -174,9 +189,14 @@
             white-space: nowrap;
         }
 
-        .nav-brand:hover { opacity: 0.7; }
+        .nav-brand:hover {
+            opacity: 0.7;
+        }
 
-        .nav-brand .brand-suit { font-size: 14px; margin-right: 4px; }
+        .nav-brand .brand-suit {
+            font-size: 14px;
+            margin-right: 4px;
+        }
 
         .nav-links-left {
             display: flex;
@@ -218,13 +238,106 @@
             transition: transform var(--transition-base);
         }
 
-        .nav-link-item:hover { opacity: 0.6; }
+        .nav-link-item:hover {
+            opacity: 0.6;
+        }
+
         .nav-link-item:hover::after,
         .nav-link-item.active::after {
             transform: scaleX(1);
         }
-        .nav-link-item.active { opacity: 1; }
-        .nav-link-item.active::after { transform: scaleX(1); }
+
+        .nav-link-item.active {
+            opacity: 1;
+        }
+
+        .account-menu {
+            position: relative;
+        }
+
+        .account-toggle {
+            cursor: pointer;
+        }
+
+        .account-dropdown {
+            position: absolute;
+            top: 48px;
+            right: 0;
+
+            min-width: 190px;
+
+            background: var(--clr-white);
+            border: 1px solid var(--clr-beige);
+            border-radius: 10px;
+
+            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.12);
+
+            padding: 8px 0;
+
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(-8px);
+
+            transition: all 0.2s ease;
+
+            z-index: 2000;
+        }
+
+        .account-menu:hover .account-dropdown {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+
+        .account-dropdown a,
+        .account-dropdown button {
+            width: 100%;
+
+            display: block;
+
+            padding: 11px 16px;
+
+            border: none;
+            background: transparent;
+
+            color: var(--clr-black);
+
+            text-align: left;
+            text-decoration: none;
+
+            font-family: var(--font-body);
+            font-size: 13px;
+
+            cursor: pointer;
+        }
+
+        .account-dropdown a:hover,
+        .account-dropdown button:hover {
+            background: var(--clr-offwhite);
+        }
+
+        .account-dropdown form {
+            margin: 0;
+        }
+
+        .account-name {
+            padding: 10px 16px;
+
+            font-size: 12px;
+            font-weight: 500;
+
+            color: var(--clr-mid-gray);
+
+            border-bottom: 1px solid var(--clr-beige);
+
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .nav-link-item.active::after {
+            transform: scaleX(1);
+        }
 
         .nav-icon-btn {
             display: flex;
@@ -240,7 +353,9 @@
             position: relative;
         }
 
-        .nav-icon-btn:hover { opacity: 0.6; }
+        .nav-icon-btn:hover {
+            opacity: 0.6;
+        }
 
         .nav-icon-btn svg {
             width: 20px;
@@ -295,10 +410,12 @@
         .nav-hamburger.open .hamburger-line:nth-child(1) {
             transform: translateY(6px) rotate(45deg);
         }
+
         .nav-hamburger.open .hamburger-line:nth-child(2) {
             opacity: 0;
             transform: scaleX(0);
         }
+
         .nav-hamburger.open .hamburger-line:nth-child(3) {
             transform: translateY(-6px) rotate(-45deg);
         }
@@ -418,15 +535,26 @@
             transition: transform var(--transition-base);
         }
 
-        .btn-auren:hover::before { transform: scaleX(1); transform-origin: left; }
-        .btn-auren span { position: relative; z-index: 1; }
+        .btn-auren:hover::before {
+            transform: scaleX(1);
+            transform-origin: left;
+        }
+
+        .btn-auren span {
+            position: relative;
+            z-index: 1;
+        }
 
         .btn-dark {
             background: var(--clr-black);
             color: var(--clr-white);
             box-shadow: 0 2px 6px rgba(10, 10, 10, 0.12);
         }
-        .btn-dark::before { background: var(--clr-dark-gray); }
+
+        .btn-dark::before {
+            background: var(--clr-dark-gray);
+        }
+
         .btn-dark:hover {
             transform: translateY(-1px);
             box-shadow: 0 6px 18px rgba(10, 10, 10, 0.28);
@@ -438,7 +566,11 @@
             border: 1px solid var(--clr-black);
             border-radius: 10px;
         }
-        .btn-outline::before { background: var(--clr-black); }
+
+        .btn-outline::before {
+            background: var(--clr-black);
+        }
+
         .btn-outline:hover {
             color: var(--clr-white);
             transform: translateY(-1px);
@@ -453,7 +585,11 @@
             height: 40px;
             padding: 0 20px;
         }
-        .btn-ghost::before { background: var(--clr-beige); }
+
+        .btn-ghost::before {
+            background: var(--clr-beige);
+        }
+
         .btn-ghost:hover {
             transform: translateY(-1px);
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
@@ -463,10 +599,12 @@
             box-shadow: 0 6px 18px rgba(10, 10, 10, 0.3) !important;
             transform: translateY(-1px);
         }
+
         .btn-glow-blue:hover {
             box-shadow: 0 6px 18px rgba(37, 99, 235, 0.35) !important;
             transform: translateY(-1px);
         }
+
         .btn-glow-danger:hover {
             box-shadow: 0 6px 18px rgba(239, 68, 68, 0.35) !important;
             transform: translateY(-1px);
@@ -498,7 +636,10 @@
             transition: transform var(--transition-base);
         }
 
-        .btn-arrow:hover::after { transform: scaleX(0); transform-origin: right; }
+        .btn-arrow:hover::after {
+            transform: scaleX(0);
+            transform-origin: right;
+        }
 
         .auren-input {
             width: 100%;
@@ -578,6 +719,7 @@
         }
 
         @media (prefers-reduced-motion: no-preference) {
+
             .reveal,
             .reveal-up,
             .reveal-left,
@@ -588,11 +730,23 @@
                 transition: opacity 0.8s ease, transform 0.8s ease;
             }
 
-            .reveal-up     { transform: translateY(30px); }
-            .reveal-left   { transform: translateX(-30px); }
-            .reveal-right  { transform: translateX(30px); }
-            .scale-in      { transform: scale(0.96); }
-            .fade-in       {}
+            .reveal-up {
+                transform: translateY(30px);
+            }
+
+            .reveal-left {
+                transform: translateX(-30px);
+            }
+
+            .reveal-right {
+                transform: translateX(30px);
+            }
+
+            .scale-in {
+                transform: scale(0.96);
+            }
+
+            .fade-in {}
 
             .reveal.is-visible,
             .reveal-up.is-visible,
@@ -604,15 +758,35 @@
                 transform: none;
             }
 
-            .reveal-delay-1 { transition-delay: 0.1s; }
-            .reveal-delay-2 { transition-delay: 0.2s; }
-            .reveal-delay-3 { transition-delay: 0.3s; }
-            .reveal-delay-4 { transition-delay: 0.4s; }
-            .reveal-delay-5 { transition-delay: 0.5s; }
+            .reveal-delay-1 {
+                transition-delay: 0.1s;
+            }
+
+            .reveal-delay-2 {
+                transition-delay: 0.2s;
+            }
+
+            .reveal-delay-3 {
+                transition-delay: 0.3s;
+            }
+
+            .reveal-delay-4 {
+                transition-delay: 0.4s;
+            }
+
+            .reveal-delay-5 {
+                transition-delay: 0.5s;
+            }
         }
 
         @media (prefers-reduced-motion: reduce) {
-            .reveal, .reveal-up, .reveal-left, .reveal-right, .fade-in, .scale-in {
+
+            .reveal,
+            .reveal-up,
+            .reveal-left,
+            .reveal-right,
+            .fade-in,
+            .scale-in {
                 opacity: 1 !important;
                 transform: none !important;
                 transition: none !important;
@@ -671,17 +845,19 @@
         .footer-col-links a {
             font-size: 13px;
             font-weight: 300;
-            color: rgba(255,255,255,0.75);
+            color: rgba(255, 255, 255, 0.75);
             transition: color var(--transition-base);
         }
 
-        .footer-col-links a:hover { color: var(--clr-white); }
+        .footer-col-links a:hover {
+            color: var(--clr-white);
+        }
 
         .footer-bottom {
             max-width: var(--max-width);
             margin: var(--spacing-lg) auto 0;
             padding: var(--spacing-sm) var(--spacing-md) 0;
-            border-top: 1px solid rgba(255,255,255,0.08);
+            border-top: 1px solid rgba(255, 255, 255, 0.08);
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -691,7 +867,7 @@
 
         .footer-copy {
             font-size: 11px;
-            color: rgba(255,255,255,0.35);
+            color: rgba(255, 255, 255, 0.35);
             letter-spacing: 0.06em;
         }
 
@@ -704,11 +880,13 @@
             font-size: 11px;
             letter-spacing: 0.12em;
             text-transform: uppercase;
-            color: rgba(255,255,255,0.5);
+            color: rgba(255, 255, 255, 0.5);
             transition: color var(--transition-base);
         }
 
-        .footer-social a:hover { color: var(--clr-white); }
+        .footer-social a:hover {
+            color: var(--clr-white);
+        }
 
         #back-to-top {
             position: fixed;
@@ -761,33 +939,51 @@
                 --spacing-xl: 64px;
             }
 
-            .nav-links-left { display: none; }
+            .nav-links-left {
+                display: none;
+            }
 
             .nav-inner {
                 grid-template-columns: auto 1fr auto;
                 padding: 0 var(--spacing-md);
             }
 
-            .nav-brand { grid-column: 2; text-align: center; }
+            .nav-brand {
+                grid-column: 2;
+                text-align: center;
+            }
 
-            .nav-hamburger { display: flex; }
+            .nav-hamburger {
+                display: flex;
+            }
 
-            .nav-actions .nav-link-item { display: none; }
+            .nav-actions .nav-link-item {
+                display: none;
+            }
 
             .footer-grid {
                 grid-template-columns: 1fr;
             }
 
-            .footer-brand { font-size: 22px; }
+            .footer-brand {
+                font-size: 22px;
+            }
 
-            #back-to-top { bottom: 20px; right: 20px; }
+            #back-to-top {
+                bottom: 20px;
+                right: 20px;
+            }
         }
 
         @media (max-width: 480px) {
-            .nav-inner { padding: 0 var(--spacing-xs); }
+            .nav-inner {
+                padding: 0 var(--spacing-xs);
+            }
         }
 
-        .pt-nav { padding-top: var(--nav-height); }
+        .pt-nav {
+            padding-top: var(--nav-height);
+        }
 
         .auren-alert {
             padding: 14px 20px;
@@ -833,13 +1029,13 @@
             <ul class="nav-links-left">
                 <li>
                     <a href="{{ route('products.index') }}"
-                       class="nav-link-item {{ request()->routeIs('products.index') ? 'active' : '' }}">
+                        class="nav-link-item {{ request()->routeIs('products.index') ? 'active' : '' }}">
                         Sản phẩm
                     </a>
                 </li>
                 <li>
                     <a href="{{ url('/admin/products') }}"
-                       class="nav-link-item {{ request()->is('admin*') ? 'active' : '' }}">
+                        class="nav-link-item {{ request()->is('admin*') ? 'active' : '' }}">
                         Quản trị
                     </a>
                 </li>
@@ -855,30 +1051,82 @@
             <div class="nav-actions">
                 {{-- Search icon --}}
                 <a href="{{ route('products.index', ['search' => '']) }}"
-                   class="nav-icon-btn"
-                   aria-label="Tìm kiếm">
-                    <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+                    class="nav-icon-btn"
+                    aria-label="Tìm kiếm">
+                    <svg viewBox="0 0 24 24">
+                        <circle cx="11" cy="11" r="8" />
+                        <path d="m21 21-4.35-4.35" />
+                    </svg>
                 </a>
 
                 {{-- Cart icon — UI hook cho Người 3 (chỉ icon, không có cart logic) --}}
                 <a href="{{ Route::has('cart.index') ? route('cart.index') : '#' }}"
-                   class="nav-icon-btn"
-                   aria-label="Giỏ hàng">
-                    <svg viewBox="0 0 24 24"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+                    class="nav-icon-btn"
+                    aria-label="Giỏ hàng">
+                    <svg viewBox="0 0 24 24">
+                        <path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z" />
+                        <line x1="3" y1="6" x2="21" y2="6" />
+                        <path d="M16 10a4 4 0 0 1-8 0" />
+                    </svg>
                 </a>
 
                 {{-- Account icon — UI hook cho Người 2 (chỉ icon, không có auth logic) --}}
-                @if(Route::has('login'))
-                    <a href="{{ auth()->check() ? (Route::has('profile.edit') ? route('profile.edit') : '#') : route('login') }}"
-                       class="nav-icon-btn"
-                       aria-label="Tài khoản">
-                        <svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
-                    </a>
-                @else
-                    <a href="{{ url('/login') }}" class="nav-icon-btn" aria-label="Tài khoản">
-                        <svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
-                    </a>
-                @endif
+                {{-- Account icon — Người 2 --}}
+                <div class="account-menu">
+
+                    <button type="button"
+                        class="nav-icon-btn account-toggle"
+                        aria-label="Tài khoản">
+
+                        <svg viewBox="0 0 24 24">
+                            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+                            <circle cx="12" cy="7" r="4" />
+                        </svg>
+
+                    </button>
+
+
+                    <div class="account-dropdown">
+
+                        @guest
+
+                        <a href="{{ route('login') }}">
+                            Đăng nhập
+                        </a>
+
+                        <a href="{{ route('register') }}">
+                            Đăng ký
+                        </a>
+
+                        @endguest
+
+
+                        @auth
+
+                        <div class="account-name">
+                            {{ auth()->user()->full_name }}
+                        </div>
+
+                        <a href="{{ route('profile.edit') }}">
+                            Thông tin cá nhân
+                        </a>
+
+                        <form action="{{ route('logout') }}"
+                            method="POST">
+
+                            @csrf
+
+                            <button type="submit">
+                                Đăng xuất
+                            </button>
+
+                        </form>
+
+                        @endauth
+
+                    </div>
+
+                </div>
 
                 {{-- Hamburger for mobile --}}
                 <button class="nav-hamburger" id="nav-hamburger" aria-label="Mở menu" aria-expanded="false">
@@ -904,15 +1152,15 @@
     <main class="page-main" id="main-content">
         {{-- Flash messages from any controller --}}
         @if(session('success'))
-            <div class="auren-container" style="padding-top: 24px;">
-                <div class="auren-alert success" role="alert">{{ session('success') }}</div>
-            </div>
+        <div class="auren-container" style="padding-top: 24px;">
+            <div class="auren-alert success" role="alert">{{ session('success') }}</div>
+        </div>
         @endif
 
         @if(session('error'))
-            <div class="auren-container" style="padding-top: 24px;">
-                <div class="auren-alert error" role="alert">{{ session('error') }}</div>
-            </div>
+        <div class="auren-container" style="padding-top: 24px;">
+            <div class="auren-alert error" role="alert">{{ session('error') }}</div>
+        </div>
         @endif
 
         @yield('content')
@@ -976,8 +1224,7 @@
                     allowfullscreen=""
                     loading="lazy"
                     referrerpolicy="no-referrer-when-downgrade"
-                    title="Bản đồ AUREN - TP. Hồ Chí Minh"
-                ></iframe>
+                    title="Bản đồ AUREN - TP. Hồ Chí Minh"></iframe>
             </div>
         </div>
 
@@ -995,130 +1242,143 @@
 
     {{-- ======================== BACK TO TOP ======================== --}}
     <button id="back-to-top" aria-label="Quay lên đầu trang">
-        <svg viewBox="0 0 24 24"><polyline points="18 15 12 9 6 15"/></svg>
+        <svg viewBox="0 0 24 24">
+            <polyline points="18 15 12 9 6 15" />
+        </svg>
     </button>
 
     {{-- ======================== GLOBAL SCRIPTS ======================== --}}
     <script>
-    (function () {
-        'use strict';
+        (function() {
+            'use strict';
 
-        const loader = document.getElementById('auren-loader');
-        if (loader) {
-            const hideLoader = () => {
-                setTimeout(() => loader.classList.add('loaded'), 600);
-            };
-            if (document.readyState === 'complete') {
-                hideLoader();
+            const loader = document.getElementById('auren-loader');
+            if (loader) {
+                const hideLoader = () => {
+                    setTimeout(() => loader.classList.add('loaded'), 600);
+                };
+                if (document.readyState === 'complete') {
+                    hideLoader();
+                } else {
+                    window.addEventListener('load', hideLoader);
+                }
+            }
+
+            const progressBar = document.getElementById('auren-progress');
+
+            function updateProgress() {
+                if (!progressBar) return;
+                const scrolled = window.scrollY;
+                const total = document.documentElement.scrollHeight - window.innerHeight;
+                progressBar.style.width = total > 0 ? (scrolled / total * 100) + '%' : '0%';
+            }
+
+            const header = document.getElementById('auren-header');
+            const NAV_TRANSPARENT_CLASS = 'transparent';
+            const NAV_SCROLLED_CLASS = 'scrolled';
+
+            // Only use transparent mode if view explicitly opts in
+            const useTransparentNav = header && header.classList.contains(NAV_TRANSPARENT_CLASS);
+
+            function handleNavScroll() {
+                if (!header) return;
+                const scrolled = window.scrollY > 40;
+                if (useTransparentNav) {
+                    header.classList.toggle(NAV_SCROLLED_CLASS, scrolled);
+                    header.classList.toggle(NAV_TRANSPARENT_CLASS, !scrolled);
+                }
+            }
+
+            const btt = document.getElementById('back-to-top');
+
+            function handleBackToTop() {
+                if (!btt) return;
+                btt.classList.toggle('visible', window.scrollY > 400);
+            }
+
+            if (btt) {
+                btt.addEventListener('click', () => {
+                    window.scrollTo({
+                        top: 0,
+                        behavior: 'smooth'
+                    });
+                });
+            }
+
+            let scrollTicking = false;
+            window.addEventListener('scroll', () => {
+                if (!scrollTicking) {
+                    requestAnimationFrame(() => {
+                        updateProgress();
+                        handleNavScroll();
+                        handleBackToTop();
+                        scrollTicking = false;
+                    });
+                    scrollTicking = true;
+                }
+            }, {
+                passive: true
+            });
+
+            updateProgress();
+            handleNavScroll();
+            handleBackToTop();
+
+            if ('IntersectionObserver' in window) {
+                const revealEls = document.querySelectorAll(
+                    '.reveal, .reveal-up, .reveal-left, .reveal-right, .fade-in, .scale-in'
+                );
+
+                const revealObserver = new IntersectionObserver((entries) => {
+                    entries.forEach(entry => {
+                        if (entry.isIntersecting) {
+                            entry.target.classList.add('is-visible');
+                            revealObserver.unobserve(entry.target);
+                        }
+                    });
+                }, {
+                    threshold: 0.08,
+                    rootMargin: '0px 0px -40px 0px'
+                });
+
+                revealEls.forEach(el => revealObserver.observe(el));
             } else {
-                window.addEventListener('load', hideLoader);
+                document.querySelectorAll(
+                    '.reveal, .reveal-up, .reveal-left, .reveal-right, .fade-in, .scale-in'
+                ).forEach(el => el.classList.add('is-visible'));
             }
-        }
 
-        const progressBar = document.getElementById('auren-progress');
-        function updateProgress() {
-            if (!progressBar) return;
-            const scrolled = window.scrollY;
-            const total = document.documentElement.scrollHeight - window.innerHeight;
-            progressBar.style.width = total > 0 ? (scrolled / total * 100) + '%' : '0%';
-        }
+            const hamburger = document.getElementById('nav-hamburger');
+            const drawer = document.getElementById('mobile-drawer');
+            let drawerOpen = false;
 
-        const header = document.getElementById('auren-header');
-        const NAV_TRANSPARENT_CLASS = 'transparent';
-        const NAV_SCROLLED_CLASS = 'scrolled';
-
-        // Only use transparent mode if view explicitly opts in
-        const useTransparentNav = header && header.classList.contains(NAV_TRANSPARENT_CLASS);
-
-        function handleNavScroll() {
-            if (!header) return;
-            const scrolled = window.scrollY > 40;
-            if (useTransparentNav) {
-                header.classList.toggle(NAV_SCROLLED_CLASS, scrolled);
-                header.classList.toggle(NAV_TRANSPARENT_CLASS, !scrolled);
+            function toggleDrawer(open) {
+                drawerOpen = open;
+                hamburger && hamburger.classList.toggle('open', open);
+                hamburger && hamburger.setAttribute('aria-expanded', open ? 'true' : 'false');
+                drawer && drawer.classList.toggle('open', open);
+                drawer && drawer.setAttribute('aria-hidden', open ? 'false' : 'true');
+                document.body.style.overflow = open ? 'hidden' : '';
             }
-        }
 
-        const btt = document.getElementById('back-to-top');
-        function handleBackToTop() {
-            if (!btt) return;
-            btt.classList.toggle('visible', window.scrollY > 400);
-        }
+            if (hamburger) {
+                hamburger.addEventListener('click', () => toggleDrawer(!drawerOpen));
+            }
 
-        if (btt) {
-            btt.addEventListener('click', () => {
-                window.scrollTo({ top: 0, behavior: 'smooth' });
-            });
-        }
-
-        let scrollTicking = false;
-        window.addEventListener('scroll', () => {
-            if (!scrollTicking) {
-                requestAnimationFrame(() => {
-                    updateProgress();
-                    handleNavScroll();
-                    handleBackToTop();
-                    scrollTicking = false;
+            if (drawer) {
+                drawer.querySelectorAll('a').forEach(link => {
+                    link.addEventListener('click', () => toggleDrawer(false));
                 });
-                scrollTicking = true;
             }
-        }, { passive: true });
 
-        updateProgress();
-        handleNavScroll();
-        handleBackToTop();
-
-        if ('IntersectionObserver' in window) {
-            const revealEls = document.querySelectorAll(
-                '.reveal, .reveal-up, .reveal-left, .reveal-right, .fade-in, .scale-in'
-            );
-
-            const revealObserver = new IntersectionObserver((entries) => {
-                entries.forEach(entry => {
-                    if (entry.isIntersecting) {
-                        entry.target.classList.add('is-visible');
-                        revealObserver.unobserve(entry.target);
-                    }
-                });
-            }, { threshold: 0.08, rootMargin: '0px 0px -40px 0px' });
-
-            revealEls.forEach(el => revealObserver.observe(el));
-        } else {
-            document.querySelectorAll(
-                '.reveal, .reveal-up, .reveal-left, .reveal-right, .fade-in, .scale-in'
-            ).forEach(el => el.classList.add('is-visible'));
-        }
-
-        const hamburger = document.getElementById('nav-hamburger');
-        const drawer = document.getElementById('mobile-drawer');
-        let drawerOpen = false;
-
-        function toggleDrawer(open) {
-            drawerOpen = open;
-            hamburger && hamburger.classList.toggle('open', open);
-            hamburger && hamburger.setAttribute('aria-expanded', open ? 'true' : 'false');
-            drawer && drawer.classList.toggle('open', open);
-            drawer && drawer.setAttribute('aria-hidden', open ? 'false' : 'true');
-            document.body.style.overflow = open ? 'hidden' : '';
-        }
-
-        if (hamburger) {
-            hamburger.addEventListener('click', () => toggleDrawer(!drawerOpen));
-        }
-
-        if (drawer) {
-            drawer.querySelectorAll('a').forEach(link => {
-                link.addEventListener('click', () => toggleDrawer(false));
+            document.addEventListener('keydown', e => {
+                if (e.key === 'Escape' && drawerOpen) toggleDrawer(false);
             });
-        }
 
-        document.addEventListener('keydown', e => {
-            if (e.key === 'Escape' && drawerOpen) toggleDrawer(false);
-        });
-
-    })();
+        })();
     </script>
 
     @stack('scripts')
 </body>
+
 </html>
