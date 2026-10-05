@@ -102,26 +102,37 @@ class ProductController extends Controller
     }
 
     public function update(UpdateProductRequest $request, Product $product): RedirectResponse
-    {
-        $data = $request->validated();
+{
+    $data = $request->validated();
 
-        if ($request->hasFile('image')) {
-            $upload = (new UploadApi())->upload(
-                $request->file('image')->getRealPath(),
-                [
-                    'folder' => 'auren/products',
-                ]
-            );
+    Configuration::instance([
+        'cloud' => [
+            'cloud_name' => config('cloudinary.cloud.cloud_name'),
+            'api_key' => config('cloudinary.cloud.api_key'),
+            'api_secret' => config('cloudinary.cloud.api_secret'),
+        ],
+        'url' => [
+            'secure' => true,
+        ],
+    ]);
 
-            $data['image'] = $upload['secure_url'];
-        }
+    if ($request->hasFile('image')) {
+        $upload = (new UploadApi())->upload(
+            $request->file('image')->getRealPath(),
+            [
+                'folder' => 'auren/products',
+            ]
+        );
 
-        $product->update($data);
-
-        return redirect()
-            ->route('admin.products.index')
-            ->with('success', 'Cập nhật thông tin sản phẩm thành công!');
+        $data['image'] = $upload['secure_url'];
     }
+
+    $product->update($data);
+
+    return redirect()
+        ->route('admin.products.index')
+        ->with('success', 'Cập nhật thông tin sản phẩm thành công!');
+}
 
     public function destroy(Product $product): RedirectResponse
     {
