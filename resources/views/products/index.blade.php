@@ -32,33 +32,33 @@
             align-items: center;
             justify-content: space-between;
 
-            border-bottom: 1px solid #eee;
-
             background: white;
+            border-bottom: 1px solid #eee;
         }
 
         .logo {
             font-family: Georgia, serif;
             font-size: 27px;
             letter-spacing: 3px;
-            text-decoration: none;
+
             color: #111;
+            text-decoration: none;
         }
 
         .nav-links {
             display: flex;
             align-items: center;
-            gap: 30px;
+            gap: 28px;
         }
 
         .nav-links > a {
-            text-decoration: none;
             color: #333;
+            text-decoration: none;
             font-size: 13px;
         }
 
         .nav-links > a:hover {
-            color: #9a704d;
+            color: #98704f;
         }
 
         /* ================= ACCOUNT ================= */
@@ -72,13 +72,13 @@
             align-items: center;
             gap: 7px;
 
-            padding: 25px 5px;
+            padding: 26px 5px;
 
-            font-size: 13px;
             cursor: pointer;
+            font-size: 13px;
         }
 
-        .account-title i {
+        .account-title i:first-child {
             font-size: 18px;
         }
 
@@ -89,17 +89,16 @@
             top: 100%;
             right: 0;
 
-            width: 180px;
-
-            background: white;
-
-            border: 1px solid #eee;
-
-            box-shadow: 0 8px 25px rgba(0, 0, 0, .12);
-
-            z-index: 999;
+            width: 185px;
 
             padding: 7px 0;
+
+            background: white;
+            border: 1px solid #eee;
+
+            box-shadow: 0 8px 25px rgba(0,0,0,.12);
+
+            z-index: 999;
         }
 
         .account-menu:hover .account-dropdown {
@@ -112,17 +111,15 @@
 
             display: block;
 
-            padding: 12px 18px;
+            padding: 12px 17px;
 
             border: none;
             background: white;
 
             text-align: left;
-
             text-decoration: none;
 
             color: #222;
-
             font-size: 13px;
 
             cursor: pointer;
@@ -130,18 +127,19 @@
 
         .account-dropdown a:hover,
         .account-dropdown button:hover {
-            background: #f5f2ee;
+            background: #f6f2ed;
         }
 
         .account-dropdown form {
             margin: 0;
         }
 
-        /* ================= MAIN ================= */
+        /* ================= CONTENT ================= */
 
         .container {
             width: 92%;
             max-width: 1250px;
+
             margin: 35px auto;
         }
 
@@ -149,6 +147,7 @@
             font-family: Georgia, serif;
             font-size: 34px;
             font-weight: normal;
+
             margin-bottom: 25px;
         }
 
@@ -157,6 +156,7 @@
         .search-form {
             display: flex;
             gap: 10px;
+
             margin-bottom: 35px;
         }
 
@@ -164,11 +164,10 @@
         .search-form select {
             height: 42px;
 
-            border: 1px solid #ddd;
-
-            border-radius: 5px;
-
             padding: 0 12px;
+
+            border: 1px solid #ddd;
+            border-radius: 5px;
 
             outline: none;
         }
@@ -184,15 +183,13 @@
         .search-form button {
             height: 42px;
 
-            padding: 0 25px;
+            padding: 0 22px;
 
             border: none;
-
-            background: #1c1b18;
-
-            color: white;
-
             border-radius: 5px;
+
+            background: #1d1c19;
+            color: white;
 
             cursor: pointer;
         }
@@ -201,27 +198,22 @@
 
         .product-grid {
             display: grid;
-
-            grid-template-columns:
-                repeat(3, 1fr);
-
-            gap: 30px;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 28px;
         }
 
         .product-card {
-            border: 1px solid #eee;
             background: white;
+            border: 1px solid #eee;
 
-            padding-bottom: 20px;
+            overflow: hidden;
 
             transition: .2s;
         }
 
         .product-card:hover {
-            box-shadow:
-                0 10px 30px rgba(0, 0, 0, .08);
-
             transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(0,0,0,.08);
         }
 
         .product-image {
@@ -243,11 +235,9 @@
 
         .product-name a {
             font-family: Georgia, serif;
-
             font-size: 20px;
 
             color: #222;
-
             text-decoration: none;
         }
 
@@ -256,17 +246,16 @@
         }
 
         .product-info p {
-            font-size: 13px;
-
             margin-bottom: 8px;
 
+            font-size: 13px;
             color: #666;
         }
 
         .price {
             color: #111 !important;
-            font-weight: bold;
             font-size: 15px !important;
+            font-weight: bold;
         }
 
         .empty {
@@ -278,7 +267,6 @@
         }
 
         @media(max-width: 900px) {
-
             .navbar {
                 padding: 0 20px;
             }
@@ -293,7 +281,6 @@
         }
 
         @media(max-width: 600px) {
-
             .product-grid {
                 grid-template-columns: 1fr;
             }
@@ -321,7 +308,6 @@
         AUREN
     </a>
 
-
     <nav class="nav-links">
 
         <a href="/">
@@ -336,7 +322,6 @@
             Bộ sưu tập
         </a>
 
-
         <!-- TÀI KHOẢN -->
 
         <div class="account-menu">
@@ -350,8 +335,7 @@
                 </span>
 
                 <i class="fa-solid fa-chevron-down"
-                   style="font-size: 9px;">
-                </i>
+                   style="font-size:9px;"></i>
 
             </div>
 
@@ -365,6 +349,7 @@
                     <a href="{{ route('login') }}">
 
                         <i class="fa-solid fa-right-to-bracket"></i>
+
                         &nbsp; Đăng nhập
 
                     </a>
@@ -373,6 +358,7 @@
                     <a href="{{ route('register') }}">
 
                         <i class="fa-regular fa-user"></i>
+
                         &nbsp; Đăng ký
 
                     </a>
@@ -387,6 +373,7 @@
                     <a href="{{ route('profile.edit') }}">
 
                         <i class="fa-regular fa-user"></i>
+
                         &nbsp; Thông tin cá nhân
 
                     </a>
@@ -429,7 +416,7 @@
     </h1>
 
 
-    <!-- TÌM KIẾM -->
+    <!-- SEARCH -->
 
     <form
         method="GET"
@@ -476,14 +463,13 @@
     </form>
 
 
-    <!-- DANH SÁCH SẢN PHẨM -->
+    <!-- PRODUCTS -->
 
     <div class="product-grid">
 
         @forelse ($products as $product)
 
             <div class="product-card">
-
 
                 @if ($product->image)
 
@@ -497,7 +483,6 @@
 
                 <div class="product-info">
 
-
                     <h2 class="product-name">
 
                         <a href="{{ route('products.show', $product) }}">
@@ -510,10 +495,8 @@
 
 
                     <p>
-
                         Danh mục:
                         {{ $product->category?->name }}
-
                     </p>
 
 
@@ -526,17 +509,13 @@
 
 
                     <p>
-
                         Còn lại:
                         {{ $product->stock }}
-
                     </p>
-
 
                 </div>
 
             </div>
-
 
         @empty
 
@@ -556,7 +535,6 @@
     </div>
 
 </main>
-
 
 </body>
 </html>

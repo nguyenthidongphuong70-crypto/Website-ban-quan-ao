@@ -4,6 +4,10 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\ProfileController;
+
+use App\Http\Controllers\Admin\ProductController as AdminProductController;
+use App\Http\Controllers\Admin\CategoryController as AdminCategoryController;
+
 Route::get('/', function () {
     return redirect()->route('products.index');
 });
@@ -17,6 +21,7 @@ Route::get('/products/{product}', [
     ProductController::class,
     'show',
 ])->name('products.show');
+
 // Đăng ký
 Route::get('/register', [AuthController::class, 'showRegister'])
     ->name('register');
@@ -35,6 +40,7 @@ Route::post('/login', [AuthController::class, 'login'])
 
 // Đăng xuất
 Route::post('/logout', [AuthController::class, 'logout'])
+    ->middleware('auth')
     ->name('logout');
 Route::middleware('auth')->group(function () {
 
@@ -55,3 +61,11 @@ Route::get(
     '/auth/{provider}/callback',
     [AuthController::class, 'handleProviderCallback']
 )->name('social.callback');
+
+
+
+//(Người 1)
+Route::prefix('admin')->name('admin.')->group(function () {
+    Route::resource('categories', AdminCategoryController::class);
+    Route::resource('products', AdminProductController::class);
+});
