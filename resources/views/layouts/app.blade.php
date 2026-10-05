@@ -1033,12 +1033,16 @@
                         Sản phẩm
                     </a>
                 </li>
+                @auth
+                @if(auth()->user()->isAdmin())
                 <li>
-                    <a href="{{ url('/admin/products') }}"
+                    <a href="{{ route('admin.products.index') }}"
                         class="nav-link-item {{ request()->is('admin*') ? 'active' : '' }}">
                         Quản trị
                     </a>
                 </li>
+                @endif
+                @endauth
                 {{-- Người 2 sẽ thêm route đăng nhập vào đây nếu cần --}}
             </ul>
 
@@ -1109,6 +1113,9 @@
 
                         <a href="{{ route('profile.edit') }}">
                             Thông tin cá nhân
+                        </a>
+                        <a href="{{ route('profile.password.edit') }}">
+                            Đổi mật khẩu
                         </a>
 
                         <form action="{{ route('logout') }}"
