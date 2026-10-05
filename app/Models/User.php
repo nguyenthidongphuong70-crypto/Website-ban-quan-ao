@@ -31,6 +31,9 @@ class User extends Authenticatable
         ];
     }
 
+    // Bảng users hiện không có updated_at
+    public $timestamps = false;
+
     public function cartItems()
     {
         return $this->hasMany(CartItem::class);
