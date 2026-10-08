@@ -64,53 +64,36 @@ Route::middleware('auth')->group(function () {
 */
 
 Route::middleware('guest')->group(function () {
-
-    // Trang nhập số điện thoại
     Route::get(
         '/forgot-password',
         [ForgotPasswordController::class, 'showPhoneForm']
     )->name('password.request');
 
-
-    // Gửi OTP ảo
     Route::post(
         '/forgot-password/send-otp',
         [ForgotPasswordController::class, 'sendOtp']
-    )
-        ->middleware('throttle:3,1')
-        ->name('password.otp.send');
+    )->middleware('throttle:3,1')->name('password.otp.send');
 
-
-    // Trang nhập OTP
     Route::get(
         '/forgot-password/verify-otp',
         [ForgotPasswordController::class, 'showOtpForm']
     )->name('password.otp.form');
 
-
-    // Kiểm tra OTP
     Route::post(
         '/forgot-password/verify-otp',
         [ForgotPasswordController::class, 'verifyOtp']
-    )
-        ->middleware('throttle:10,1')
-        ->name('password.otp.verify');
+    )->middleware('throttle:10,1')->name('password.otp.verify');
 
-
-    // Trang nhập mật khẩu mới
     Route::get(
         '/forgot-password/reset',
         [ForgotPasswordController::class, 'showResetForm']
     )->name('password.reset.form');
 
-
-    // Lưu mật khẩu mới
     Route::post(
         '/forgot-password/reset',
         [ForgotPasswordController::class, 'resetPassword']
     )->name('password.reset.phone');
 });
-
 
 /*
 |--------------------------------------------------------------------------

@@ -333,6 +333,90 @@
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .badge-role-admin {
+            display: inline-block;
+            font-size: 9px;
+            font-weight: 500;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            padding: 2px 6px;
+            border-radius: 4px;
+            background: #111110;
+            color: #c9a96e;
+            margin-left: 6px;
+            vertical-align: middle;
+        }
+
+        .account-admin-section {
+            padding: 4px 0;
+            border-bottom: 1px solid var(--clr-beige);
+            background: rgba(201, 169, 110, 0.05);
+        }
+
+        .account-section-title {
+            display: block;
+            padding: 6px 16px 2px;
+            font-size: 10px;
+            font-weight: 500;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            color: #c9a96e;
+        }
+
+        .admin-nav-dropdown-wrap {
+            position: relative;
+        }
+
+        .admin-nav-dropdown {
+            position: absolute;
+            top: 28px;
+            left: 0;
+            min-width: 210px;
+            background: var(--clr-white);
+            border: 1px solid var(--clr-beige);
+            border-radius: 10px;
+            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.12);
+            padding: 6px 0;
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(8px);
+            transition: all 0.2s ease;
+            z-index: 2000;
+        }
+
+        .admin-nav-dropdown-wrap:hover .admin-nav-dropdown {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+
+        .admin-nav-dropdown a {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 16px;
+            font-size: 12px;
+            color: var(--clr-black);
+            text-decoration: none;
+            transition: background var(--transition-base), color var(--transition-base);
+            letter-spacing: 0.04em;
+        }
+
+        .admin-nav-dropdown a:hover,
+        .admin-nav-dropdown a.active {
+            background: var(--clr-offwhite);
+            color: #c9a96e;
+        }
+
+        .admin-nav-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
         }
 
         .nav-link-item.active::after {
@@ -1029,21 +1113,50 @@
             <ul class="nav-links-left">
                 <li>
                     <a href="{{ route('products.index') }}"
-                        class="nav-link-item {{ request()->routeIs('products.index') ? 'active' : '' }}">
-                        Sản phẩm
+                        class="nav-link-item {{ request()->routeIs('products.index') && !request()->has('view') && !request()->filled('category') && !request()->filled('search') && !request()->filled('sort') && !request()->filled('size') && !request()->filled('min_price') && !request()->filled('max_price') && !request()->is('admin*') ? 'active' : '' }}">
+                        Trang chủ
                     </a>
                 </li>
-                @auth
-                @if(auth()->user()->isAdmin())
                 <li>
-                    <a href="{{ route('admin.products.index') }}"
-                        class="nav-link-item {{ request()->is('admin*') ? 'active' : '' }}">
-                        Quản trị
+                    <a href="{{ route('products.index', ['view' => 'all']) }}"
+                        class="nav-link-item {{ request()->routeIs('products.index') && (request()->has('view') || request()->filled('category') || request()->filled('search') || request()->filled('sort') || request()->filled('size') || request()->filled('min_price') || request()->filled('max_price')) && !request()->is('admin*') ? 'active' : '' }}">
+                        Tất cả sản phẩm
                     </a>
                 </li>
-                @endif
+
+                {{-- Khu vực chức năng Admin — Chỉ Admin mới nhìn thấy --}}
+                @auth
+                    @if(auth()->user()->isAdmin())
+                        <li class="admin-nav-dropdown-wrap">
+                            <a href="{{ route('admin.products.index') }}"
+                                class="nav-link-item admin-nav-badge {{ request()->is('admin*') ? 'active' : '' }}">
+                                Quản trị <span style="font-size: 8px; margin-left: 2px;">▼</span>
+                            </a>
+                            <div class="admin-nav-dropdown">
+                                @if(Route::has('admin.dashboard'))
+                                    <a href="{{ route('admin.dashboard') }}" class="{{ request()->routeIs('admin.dashboard') ? 'active' : '' }}">
+                                        📊 Dashboard
+                                    </a>
+                                @endif
+                                <a href="{{ route('admin.products.index') }}" class="{{ request()->is('admin/products*') ? 'active' : '' }}">
+                                    👕 Quản lý sản phẩm
+                                </a>
+                                <a href="{{ route('admin.categories.index') }}" class="{{ request()->is('admin/categories*') ? 'active' : '' }}">
+                                    📁 Quản lý danh mục
+                                </a>
+                                @if(Route::has('admin.orders.index'))
+                                    <a href="{{ route('admin.orders.index') }}" class="{{ request()->is('admin/orders*') ? 'active' : '' }}">
+                                        📦 Quản lý đơn hàng
+                                    </a>
+                                @elseif(Route::has('admin.orders'))
+                                    <a href="{{ route('admin.orders') }}" class="{{ request()->is('admin/orders*') ? 'active' : '' }}">
+                                        📦 Quản lý đơn hàng
+                                    </a>
+                                @endif
+                            </div>
+                        </li>
+                    @endif
                 @endauth
-                {{-- Người 2 sẽ thêm route đăng nhập vào đây nếu cần --}}
             </ul>
 
             {{-- Brand / Logo --}}
@@ -1074,7 +1187,6 @@
                     </svg>
                 </a>
 
-                {{-- Account icon — UI hook cho Người 2 (chỉ icon, không có auth logic) --}}
                 {{-- Account icon — Người 2 --}}
                 <div class="account-menu">
 
@@ -1088,7 +1200,6 @@
                         </svg>
 
                     </button>
-
 
                     <div class="account-dropdown">
 
@@ -1104,12 +1215,31 @@
 
                         @endguest
 
-
                         @auth
 
                         <div class="account-name">
-                            {{ auth()->user()->full_name }}
+                            <span>{{ auth()->user()->full_name }}</span>
+                            @if(auth()->user()->isAdmin())
+                                <span class="badge-role-admin">Admin</span>
+                            @endif
                         </div>
+
+                        {{-- Menu quản trị nhanh dành riêng cho Admin trong Account Dropdown --}}
+                        @if(auth()->user()->isAdmin())
+                            <div class="account-admin-section">
+                                <span class="account-section-title">Quản trị hệ thống</span>
+                                @if(Route::has('admin.dashboard'))
+                                    <a href="{{ route('admin.dashboard') }}">📊 Dashboard</a>
+                                @endif
+                                <a href="{{ route('admin.products.index') }}">👕 Quản lý sản phẩm</a>
+                                <a href="{{ route('admin.categories.index') }}">📁 Quản lý danh mục</a>
+                                @if(Route::has('admin.orders.index'))
+                                    <a href="{{ route('admin.orders.index') }}">📦 Quản lý đơn hàng</a>
+                                @elseif(Route::has('admin.orders'))
+                                    <a href="{{ route('admin.orders') }}">📦 Quản lý đơn hàng</a>
+                                @endif
+                            </div>
+                        @endif
 
                         <a href="{{ route('profile.edit') }}">
                             Thông tin cá nhân
@@ -1148,10 +1278,35 @@
     {{-- ======================== MOBILE DRAWER ======================== --}}
     <nav class="mobile-drawer" id="mobile-drawer" aria-hidden="true" role="navigation">
         <ul class="mobile-nav-list">
-            <li><a href="{{ route('products.index') }}" class="mobile-nav-link">Sản phẩm</a></li>
-            <li><a href="{{ url('/admin/products') }}" class="mobile-nav-link">Quản trị</a></li>
-            <li><a href="{{ url('/login') }}" class="mobile-nav-link">Đăng nhập</a></li>
-            {{-- Người 2 có thể bổ sung thêm link vào đây --}}
+            <li><a href="{{ route('products.index') }}" class="mobile-nav-link">Trang chủ</a></li>
+            <li><a href="{{ route('products.index', ['view' => 'all']) }}" class="mobile-nav-link">Tất cả sản phẩm</a></li>
+
+            {{-- Chỉ Admin mới thấy menu quản trị trên mobile --}}
+            @auth
+                @if(auth()->user()->isAdmin())
+                    <li style="margin-top: 14px; padding-top: 14px; border-top: 1px solid var(--clr-beige);">
+                        <span style="font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--clr-warm-gray); display: block; margin-bottom: 8px;">Quản trị (Admin)</span>
+                    </li>
+                    @if(Route::has('admin.dashboard'))
+                        <li><a href="{{ route('admin.dashboard') }}" class="mobile-nav-link" style="font-size: 18px;">📊 Dashboard</a></li>
+                    @endif
+                    <li><a href="{{ route('admin.products.index') }}" class="mobile-nav-link" style="font-size: 18px;">👕 Quản lý sản phẩm</a></li>
+                    <li><a href="{{ route('admin.categories.index') }}" class="mobile-nav-link" style="font-size: 18px;">📁 Quản lý danh mục</a></li>
+                    @if(Route::has('admin.orders.index'))
+                        <li><a href="{{ route('admin.orders.index') }}" class="mobile-nav-link" style="font-size: 18px;">📦 Quản lý đơn hàng</a></li>
+                    @elseif(Route::has('admin.orders'))
+                        <li><a href="{{ route('admin.orders') }}" class="mobile-nav-link" style="font-size: 18px;">📦 Quản lý đơn hàng</a></li>
+                    @endif
+                @endif
+            @endauth
+
+            @guest
+                <li><a href="{{ route('login') }}" class="mobile-nav-link">Đăng nhập</a></li>
+                <li><a href="{{ route('register') }}" class="mobile-nav-link">Đăng ký</a></li>
+            @endguest
+            @auth
+                <li><a href="{{ route('profile.edit') }}" class="mobile-nav-link">Tài khoản</a></li>
+            @endauth
         </ul>
     </nav>
 
