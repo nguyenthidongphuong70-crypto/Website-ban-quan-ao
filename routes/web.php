@@ -87,6 +87,10 @@ Route::middleware('guest')->group(function () {
         [ForgotPasswordController::class, 'showOtpForm']
     )->name('password.otp.form');
 
+Route::get('/products/{product}', [
+    ProductController::class,
+    'show',
+])->name('products.show');
 
     // Kiểm tra OTP
     Route::post(
@@ -105,6 +109,79 @@ Route::middleware('guest')->group(function () {
 
 
     // Lưu mật khẩu mới
+    Route::post(
+        '/forgot-password/reset',
+        [ForgotPasswordController::class, 'resetPassword']
+    )->name('password.reset.phone');
+/*
+|--------------------------------------------------------------------------
+| HỒ SƠ CÁ NHÂN
+|--------------------------------------------------------------------------
+*/
+
+Route::middleware('auth')->group(function () {
+
+    Route::get('/profile', [
+        ProfileController::class,
+        'edit'
+    ])->name('profile.edit');
+
+    Route::put('/profile', [
+        ProfileController::class,
+        'update'
+    ])->name('profile.update');
+
+
+    // Đổi mật khẩu
+    Route::get(
+        '/profile/change-password',
+        [ProfileController::class, 'showChangePassword']
+    )->name('profile.password.edit');
+
+    Route::put(
+        '/profile/change-password',
+        [ProfileController::class, 'changePassword']
+    )->name('profile.password.update');
+});
+
+
+/*
+|--------------------------------------------------------------------------
+| QUÊN MẬT KHẨU BẰNG OTP ẢO
+|--------------------------------------------------------------------------
+*/
+
+Route::middleware('guest')->group(function () {
+
+    Route::get(
+        '/forgot-password',
+        [ForgotPasswordController::class, 'showPhoneForm']
+    )->name('password.request');
+
+    Route::post(
+        '/forgot-password/send-otp',
+        [ForgotPasswordController::class, 'sendOtp']
+    )
+        ->middleware('throttle:3,1')
+        ->name('password.otp.send');
+
+    Route::get(
+        '/forgot-password/verify-otp',
+        [ForgotPasswordController::class, 'showOtpForm']
+    )->name('password.otp.form');
+
+    Route::post(
+        '/forgot-password/verify-otp',
+        [ForgotPasswordController::class, 'verifyOtp']
+    )
+        ->middleware('throttle:10,1')
+        ->name('password.otp.verify');
+
+    Route::get(
+        '/forgot-password/reset',
+        [ForgotPasswordController::class, 'showResetForm']
+    )->name('password.reset.form');
+
     Route::post(
         '/forgot-password/reset',
         [ForgotPasswordController::class, 'resetPassword']
