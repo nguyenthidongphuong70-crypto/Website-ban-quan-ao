@@ -6,40 +6,42 @@ use App\Http\Controllers\Controller;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Mail;
 
 class ForgotPasswordController extends Controller
 {
-    // =========================
-    // 1. TRANG NHẬP SỐ ĐIỆN THOẠI
-    // =========================
+    // ==============================
+    // 1. TRANG NHẬP EMAIL
+    // ==============================
     public function showPhoneForm()
     {
+        // Giữ tên hàm này để không phải sửa route hiện tại
         return view('auth.forgot-password');
     }
 
 
-    // =========================
-    // 2. TẠO VÀ "GỬI" OTP ẢO
-    // =========================
+    // ==============================
+    // 2. TẠO VÀ GỬI OTP QUA GMAIL
+    // ==============================
     public function sendOtp(Request $request)
     {
         $request->validate([
-            'phone' => 'required|string|max:20',
+            'email' => ['required', 'email'],
         ], [
-            'phone.required' => 'Vui lòng nhập số điện thoại.',
+            'email.required' => 'Vui lòng nhập email.',
+            'email.email' => 'Email không hợp lệ.',
         ]);
 
-        // Chuẩn hóa số điện thoại
-        $phone = $this->normalizePhone($request->phone);
+        // Chuẩn hóa email
+        $email = strtolower(trim($request->email));
 
-        // Tìm tài khoản theo số điện thoại
-        $user = User::where('phone', $phone)->first();
+        // Tìm user theo email
+        $user = User::where('email', $email)->first();
 
         if (!$user) {
             return back()
                 ->withErrors([
-                    'phone' => 'Số điện thoại chưa được đăng ký.'
+                    'email' => 'Email chưa được đăng ký.'
                 ])
                 ->withInput();
         }
@@ -47,47 +49,76 @@ class ForgotPasswordController extends Controller
         // Tạo OTP 6 số
         $otp = random_int(100000, 999999);
 
-        // Lưu OTP vào session, hiệu lực 5 phút
+        // Lưu OTP vào session
+        // OTP có hiệu lực 5 phút
         session([
             'reset_user_id' => $user->id,
-            'reset_phone' => $phone,
+            'reset_email' => $user->email,
             'reset_otp' => (string) $otp,
             'reset_otp_expire' => now()->addMinutes(5)->timestamp,
             'otp_verified' => false,
         ]);
 
-        // Ghi OTP vào laravel.log
-        Log::info('OTP QUEN MAT KHAU', [
-            'phone' => $phone,
-            'otp' => $otp,
-        ]);
+        // ==============================
+        // GỬI OTP THẬT QUA GMAIL
+        // ==============================
+        try {
 
-        /*
-         * Khi chạy local để demo:
-         * OTP sẽ hiện ngay trên trang nhập OTP.
-         */
-        if (app()->environment('local')) {
-            session()->flash('demo_otp', $otp);
+            Mail::raw(
+                "Xin chào {$user->full_name},\n\n"
+                . "Mã OTP đặt lại mật khẩu AUREN của bạn là:\n\n"
+                . "{$otp}\n\n"
+                . "Mã OTP có hiệu lực trong 5 phút.\n\n"
+                . "Nếu bạn không yêu cầu đặt lại mật khẩu, "
+                . "vui lòng bỏ qua email này.",
+                function ($message) use ($user) {
+
+                    $message
+                        ->to($user->email)
+                        ->subject('Mã OTP đặt lại mật khẩu - AUREN');
+                }
+            );
+
+        } catch (\Throwable $e) {
+
+            // Nếu gửi mail thất bại thì xóa OTP
+            session()->forget([
+                'reset_user_id',
+                'reset_email',
+                'reset_otp',
+                'reset_otp_expire',
+                'otp_verified',
+            ]);
+
+            return back()
+                ->withErrors([
+                    'email' => 'Không thể gửi mã OTP. Vui lòng thử lại.'
+                ])
+                ->withInput();
         }
 
         return redirect()
             ->route('password.otp.form')
-            ->with('success', 'Mã OTP đã được tạo. Mã có hiệu lực trong 5 phút.');
+            ->with(
+                'success',
+                'Mã OTP đã được gửi đến Gmail của bạn.'
+            );
     }
 
 
-    // =========================
+    // ==============================
     // 3. TRANG NHẬP OTP
-    // =========================
+    // ==============================
     public function showOtpForm()
     {
-        if (!session()->has('reset_user_id') ||
-            !session()->has('reset_otp')) {
-
+        if (
+            !session()->has('reset_user_id') ||
+            !session()->has('reset_otp')
+        ) {
             return redirect()
                 ->route('password.request')
                 ->withErrors([
-                    'phone' => 'Vui lòng yêu cầu mã OTP trước.'
+                    'email' => 'Vui lòng yêu cầu mã OTP trước.'
                 ]);
         }
 
@@ -95,28 +126,28 @@ class ForgotPasswordController extends Controller
     }
 
 
-    // =========================
+    // ==============================
     // 4. KIỂM TRA OTP
-    // =========================
+    // ==============================
     public function verifyOtp(Request $request)
     {
         $request->validate([
-            'otp' => 'required|digits:6',
+            'otp' => ['required', 'digits:6'],
         ], [
             'otp.required' => 'Vui lòng nhập mã OTP.',
             'otp.digits' => 'OTP phải gồm đúng 6 chữ số.',
         ]);
 
-        // Không tồn tại OTP
+        // Không có OTP trong session
         if (!session()->has('reset_otp')) {
             return redirect()
                 ->route('password.request')
                 ->withErrors([
-                    'phone' => 'Phiên OTP không tồn tại. Vui lòng gửi lại OTP.'
+                    'email' => 'Phiên OTP không tồn tại. Vui lòng gửi lại OTP.'
                 ]);
         }
 
-        // OTP hết hạn
+        // Kiểm tra OTP hết hạn
         if (
             !session()->has('reset_otp_expire') ||
             now()->timestamp > session('reset_otp_expire')
@@ -130,15 +161,19 @@ class ForgotPasswordController extends Controller
             return redirect()
                 ->route('password.request')
                 ->withErrors([
-                    'phone' => 'Mã OTP đã hết hạn. Vui lòng lấy mã mới.'
+                    'email' => 'Mã OTP đã hết hạn. Vui lòng lấy mã mới.'
                 ]);
         }
 
-        // OTP sai
-        if ((string) $request->otp !== (string) session('reset_otp')) {
-            return back()->withErrors([
-                'otp' => 'Mã OTP không chính xác.'
-            ]);
+        // Kiểm tra OTP sai
+        if (
+            (string) $request->otp !==
+            (string) session('reset_otp')
+        ) {
+            return back()
+                ->withErrors([
+                    'otp' => 'Mã OTP không chính xác.'
+                ]);
         }
 
         // OTP đúng
@@ -146,7 +181,7 @@ class ForgotPasswordController extends Controller
             'otp_verified' => true,
         ]);
 
-        // Không cần giữ OTP nữa
+        // OTP chỉ được dùng 1 lần
         session()->forget([
             'reset_otp',
             'reset_otp_expire',
@@ -154,22 +189,26 @@ class ForgotPasswordController extends Controller
 
         return redirect()
             ->route('password.reset.form')
-            ->with('success', 'Xác nhận OTP thành công.');
+            ->with(
+                'success',
+                'Xác nhận OTP thành công.'
+            );
     }
 
 
-    // =========================
-    // 5. TRANG NHẬP MẬT KHẨU MỚI
-    // =========================
+    // ==============================
+    // 5. TRANG ĐẶT MẬT KHẨU MỚI
+    // ==============================
     public function showResetForm()
     {
-        if (!session('otp_verified') ||
-            !session()->has('reset_user_id')) {
-
+        if (
+            !session('otp_verified') ||
+            !session()->has('reset_user_id')
+        ) {
             return redirect()
                 ->route('password.request')
                 ->withErrors([
-                    'phone' => 'Bạn cần xác nhận OTP trước.'
+                    'email' => 'Bạn cần xác nhận OTP trước.'
                 ]);
         }
 
@@ -177,53 +216,76 @@ class ForgotPasswordController extends Controller
     }
 
 
-    // =========================
-    // 6. ĐỔI MẬT KHẨU
-    // =========================
+    // ==============================
+    // 6. CẬP NHẬT MẬT KHẨU MỚI
+    // ==============================
     public function resetPassword(Request $request)
     {
-        if (!session('otp_verified') ||
-            !session()->has('reset_user_id')) {
-
+        // Không được đổi mật khẩu nếu chưa xác minh OTP
+        if (
+            !session('otp_verified') ||
+            !session()->has('reset_user_id')
+        ) {
             return redirect()
                 ->route('password.request')
                 ->withErrors([
-                    'phone' => 'Phiên đặt lại mật khẩu không hợp lệ.'
+                    'email' => 'Phiên đặt lại mật khẩu không hợp lệ.'
                 ]);
         }
 
         $request->validate([
-            'password' => 'required|string|min:6|confirmed',
+            'password' => [
+                'required',
+                'string',
+                'min:6',
+                'confirmed'
+            ],
         ], [
-            'password.required' => 'Vui lòng nhập mật khẩu mới.',
-            'password.min' => 'Mật khẩu phải có ít nhất 6 ký tự.',
-            'password.confirmed' => 'Mật khẩu xác nhận không trùng khớp.',
+            'password.required' =>
+                'Vui lòng nhập mật khẩu mới.',
+
+            'password.min' =>
+                'Mật khẩu phải có ít nhất 6 ký tự.',
+
+            'password.confirmed' =>
+                'Mật khẩu xác nhận không trùng khớp.',
         ]);
 
-        $user = User::find(session('reset_user_id'));
+        // Tìm user
+        $user = User::find(
+            session('reset_user_id')
+        );
 
         if (!$user) {
+
             session()->forget([
                 'reset_user_id',
-                'reset_phone',
+                'reset_email',
+                'reset_otp',
+                'reset_otp_expire',
                 'otp_verified',
             ]);
 
             return redirect()
                 ->route('password.request')
                 ->withErrors([
-                    'phone' => 'Không tìm thấy tài khoản.'
+                    'email' => 'Không tìm thấy tài khoản.'
                 ]);
         }
 
-        // Mã hóa mật khẩu mới
-        $user->password = Hash::make($request->password);
+        // ==============================
+        // HASH MẬT KHẨU TRƯỚC KHI LƯU
+        // ==============================
+        $user->password = Hash::make(
+            $request->password
+        );
+
         $user->save();
 
-        // Xóa toàn bộ session reset password
+        // Xóa toàn bộ session quên mật khẩu
         session()->forget([
             'reset_user_id',
-            'reset_phone',
+            'reset_email',
             'reset_otp',
             'reset_otp_expire',
             'otp_verified',
@@ -233,23 +295,8 @@ class ForgotPasswordController extends Controller
             ->route('login')
             ->with(
                 'success',
-                'Đổi mật khẩu thành công. Vui lòng đăng nhập bằng mật khẩu mới.'
+                'Đổi mật khẩu thành công. '
+                . 'Vui lòng đăng nhập bằng mật khẩu mới.'
             );
-    }
-
-
-    // =========================
-    // CHUẨN HÓA SỐ ĐIỆN THOẠI
-    // +84901234567 -> 0901234567
-    // =========================
-    private function normalizePhone(string $phone): string
-    {
-        $phone = preg_replace('/[^0-9]/', '', $phone);
-
-        if (str_starts_with($phone, '84')) {
-            return '0' . substr($phone, 2);
-        }
-
-        return $phone;
     }
 }

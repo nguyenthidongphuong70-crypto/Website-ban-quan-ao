@@ -11,11 +11,18 @@ use Illuminate\Validation\ValidationException;
 
 class LoginRequest extends FormRequest
 {
+    /**
+     * Cho phép request đăng nhập.
+     */
     public function authorize(): bool
     {
         return true;
     }
 
+    /**
+     * Validate dữ liệu đăng nhập.
+     * Form AUREN dùng field "login" để nhập email hoặc số điện thoại.
+     */
     public function rules(): array
     {
         return [
@@ -24,21 +31,29 @@ class LoginRequest extends FormRequest
         ];
     }
 
+    /**
+     * Xác thực bằng email hoặc số điện thoại.
+     *
+     * @throws ValidationException
+     */
     public function authenticate(): void
     {
         $this->ensureIsNotRateLimited();
 
         $login = trim((string) $this->input('login'));
 
+        // Nếu nhập đúng định dạng email thì tìm theo email,
+        // ngược lại sẽ tìm theo số điện thoại.
         $field = filter_var($login, FILTER_VALIDATE_EMAIL)
             ? 'email'
             : 'phone';
 
-        if (! Auth::attempt([
+        $credentials = [
             $field => $login,
             'password' => (string) $this->input('password'),
-        ], $this->boolean('remember'))) {
+        ];
 
+        if (! Auth::attempt($credentials, $this->boolean('remember'))) {
             RateLimiter::hit($this->throttleKey());
 
             throw ValidationException::withMessages([
@@ -49,6 +64,11 @@ class LoginRequest extends FormRequest
         RateLimiter::clear($this->throttleKey());
     }
 
+    /**
+     * Giới hạn số lần đăng nhập sai.
+     *
+     * @throws ValidationException
+     */
     public function ensureIsNotRateLimited(): void
     {
         if (! RateLimiter::tooManyAttempts($this->throttleKey(), 5)) {
@@ -67,6 +87,9 @@ class LoginRequest extends FormRequest
         ]);
     }
 
+    /**
+     * Khóa theo giá trị đăng nhập + địa chỉ IP.
+     */
     public function throttleKey(): string
     {
         return Str::transliterate(

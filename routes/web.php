@@ -62,7 +62,6 @@ Route::middleware('auth')->group(function () {
 */
 
 Route::middleware('guest')->group(function () {
-
     Route::get(
         '/forgot-password',
         [ForgotPasswordController::class, 'showPhoneForm']
@@ -71,9 +70,7 @@ Route::middleware('guest')->group(function () {
     Route::post(
         '/forgot-password/send-otp',
         [ForgotPasswordController::class, 'sendOtp']
-    )
-        ->middleware('throttle:3,1')
-        ->name('password.otp.send');
+    )->middleware('throttle:3,1')->name('password.otp.send');
 
     Route::get(
         '/forgot-password/verify-otp',
@@ -83,9 +80,7 @@ Route::middleware('guest')->group(function () {
     Route::post(
         '/forgot-password/verify-otp',
         [ForgotPasswordController::class, 'verifyOtp']
-    )
-        ->middleware('throttle:10,1')
-        ->name('password.otp.verify');
+    )->middleware('throttle:10,1')->name('password.otp.verify');
 
     Route::get(
         '/forgot-password/reset',
@@ -97,7 +92,6 @@ Route::middleware('guest')->group(function () {
         [ForgotPasswordController::class, 'resetPassword']
     )->name('password.reset.phone');
 });
-
 
 /*
 |--------------------------------------------------------------------------
