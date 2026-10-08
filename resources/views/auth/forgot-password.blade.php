@@ -3,6 +3,7 @@
 
 <head>
     <meta charset="UTF-8">
+
     <meta name="viewport"
           content="width=device-width, initial-scale=1.0">
 
@@ -162,7 +163,7 @@
     <h1>Quên mật khẩu</h1>
 
     <p class="subtitle">
-        Nhập số điện thoại đã đăng ký để nhận mã OTP.
+        Nhập email đã đăng ký để nhận mã OTP.
     </p>
 
 
@@ -181,20 +182,22 @@
     @endif
 
 
-    <form action="{{ route('password.otp.send') }}"
-          method="POST">
+    <form
+        action="{{ route('password.otp.send') }}"
+        method="POST"
+    >
 
         @csrf
 
         <label>
-            Số điện thoại
+            Email
         </label>
 
         <input
-            type="text"
-            name="phone"
-            value="{{ old('phone') }}"
-            placeholder="Ví dụ: 0901234567"
+            type="email"
+            name="email"
+            value="{{ old('email') }}"
+            placeholder="Ví dụ: example@gmail.com"
             required
             autofocus
         >
