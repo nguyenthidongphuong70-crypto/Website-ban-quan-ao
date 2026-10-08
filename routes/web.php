@@ -1,15 +1,14 @@
 <?php
 
-use Illuminate\Support\Facades\Route;
-
+use App\Http\Controllers\Admin\DashboardController;
+use App\Http\Controllers\Admin\OrderController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProfileController;
-
 use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\Auth\ForgotPasswordController;
-
 use App\Http\Controllers\Admin\ProductController as AdminProductController;
 use App\Http\Controllers\Admin\CategoryController as AdminCategoryController;
+use Illuminate\Support\Facades\Route;
 
 
 /*
@@ -43,7 +42,6 @@ Route::middleware('auth')->group(function () {
     Route::put('/profile', [ProfileController::class, 'update'])
         ->name('profile.update');
 
-
     // Đổi mật khẩu
     Route::get(
         '/profile/change-password',
@@ -65,14 +63,11 @@ Route::middleware('auth')->group(function () {
 
 Route::middleware('guest')->group(function () {
 
-    // Trang nhập số điện thoại
     Route::get(
         '/forgot-password',
         [ForgotPasswordController::class, 'showPhoneForm']
     )->name('password.request');
 
-
-    // Gửi OTP ảo
     Route::post(
         '/forgot-password/send-otp',
         [ForgotPasswordController::class, 'sendOtp']
@@ -80,15 +75,11 @@ Route::middleware('guest')->group(function () {
         ->middleware('throttle:3,1')
         ->name('password.otp.send');
 
-
-    // Trang nhập OTP
     Route::get(
         '/forgot-password/verify-otp',
         [ForgotPasswordController::class, 'showOtpForm']
     )->name('password.otp.form');
 
-
-    // Kiểm tra OTP
     Route::post(
         '/forgot-password/verify-otp',
         [ForgotPasswordController::class, 'verifyOtp']
@@ -96,15 +87,11 @@ Route::middleware('guest')->group(function () {
         ->middleware('throttle:10,1')
         ->name('password.otp.verify');
 
-
-    // Trang nhập mật khẩu mới
     Route::get(
         '/forgot-password/reset',
         [ForgotPasswordController::class, 'showResetForm']
     )->name('password.reset.form');
 
-
-    // Lưu mật khẩu mới
     Route::post(
         '/forgot-password/reset',
         [ForgotPasswordController::class, 'resetPassword']
@@ -142,15 +129,33 @@ Route::prefix('admin')
     ->middleware(['auth', 'admin'])
     ->group(function () {
 
+        // Quản lý danh mục
         Route::resource(
             'categories',
             AdminCategoryController::class
         );
 
+        // Quản lý sản phẩm
         Route::resource(
             'products',
             AdminProductController::class
         );
+
+        // Dashboard
+        Route::get('/dashboard', [DashboardController::class, 'index'])
+            ->name('dashboard');
+
+        // Danh sách đơn hàng
+        Route::get('/orders', [OrderController::class, 'index'])
+            ->name('orders');
+
+        // Chi tiết đơn hàng
+        Route::get('/orders/{id}', [OrderController::class, 'show'])
+            ->name('orders.show');
+
+        // Cập nhật trạng thái đơn hàng
+        Route::put('/orders/{id}/status', [OrderController::class, 'updateStatus'])
+            ->name('orders.updateStatus');
     });
 
 
