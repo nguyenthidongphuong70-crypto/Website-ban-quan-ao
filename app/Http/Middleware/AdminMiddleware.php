@@ -24,13 +24,3 @@ class AdminMiddleware
         return $next($request);
     }
 }
-
-        // Đã đăng nhập nhưng không phải admin
-        if (!auth()->user()->isAdmin()) {
-            abort(403, 'Bạn không có quyền truy cập trang quản trị.');
-        }
-
-        // Là admin thì cho đi tiếp
-        return $next($request);
-    }
-}
