@@ -1089,6 +1089,284 @@
             border-color: #991b1b;
         }
 
+        /* ======================== SEARCH OVERLAY & AUTOCOMPLETE ======================== */
+        #auren-search-overlay {
+            position: fixed;
+            top: var(--nav-height);
+            left: 0;
+            width: 100%;
+            background: rgba(248, 245, 240, 0.98);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--clr-beige);
+            box-shadow: 0 16px 32px rgba(10, 10, 10, 0.06);
+            z-index: 990;
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(-8px);
+            transition: opacity var(--transition-base), transform var(--transition-base), visibility var(--transition-base);
+        }
+
+        #auren-search-overlay.is-active {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+
+        .auren-search-inner {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 16px 20px 20px;
+            position: relative;
+        }
+
+        .auren-search-input-wrap {
+            display: flex;
+            align-items: center;
+            background: var(--clr-white);
+            border: 1px solid var(--clr-beige);
+            border-radius: 999px;
+            padding: 4px 6px 4px 16px;
+            transition: border-color var(--transition-base), box-shadow var(--transition-base);
+            box-shadow: 0 2px 8px rgba(10, 10, 10, 0.03);
+        }
+
+        .auren-search-input-wrap:focus-within {
+            border-color: var(--clr-black);
+            box-shadow: 0 4px 16px rgba(10, 10, 10, 0.08);
+        }
+
+        .auren-search-icon-sm {
+            width: 18px;
+            height: 18px;
+            stroke: var(--clr-mid-gray);
+            fill: none;
+            stroke-width: 1.8;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+            flex-shrink: 0;
+            margin-right: 10px;
+        }
+
+        #auren-search-input {
+            flex: 1;
+            border: none;
+            outline: none;
+            background: transparent;
+            font-family: var(--font-body);
+            font-size: 15px;
+            color: var(--clr-black);
+            padding: 8px 4px;
+        }
+
+        #auren-search-input::placeholder {
+            color: var(--clr-warm-gray);
+            font-weight: 300;
+        }
+
+        .auren-search-btn-icon {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            border: none;
+            background: var(--clr-offwhite);
+            color: var(--clr-dark-gray);
+            margin: 0 4px;
+            cursor: pointer;
+            transition: background var(--transition-base);
+            flex-shrink: 0;
+        }
+
+        .auren-search-btn-icon:hover {
+            background: var(--clr-beige);
+        }
+
+        .auren-search-btn-icon svg {
+            width: 14px;
+            height: 14px;
+            stroke: currentColor;
+            stroke-width: 2;
+            fill: none;
+        }
+
+        .auren-search-btn-submit {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: var(--clr-black);
+            color: var(--clr-white);
+            border: none;
+            border-radius: 999px;
+            padding: 8px 18px;
+            font-family: var(--font-body);
+            font-size: 13px;
+            font-weight: 500;
+            letter-spacing: 0.03em;
+            cursor: pointer;
+            transition: background var(--transition-base), transform var(--transition-base);
+            flex-shrink: 0;
+            margin-left: 4px;
+        }
+
+        .auren-search-btn-submit:hover {
+            background: var(--clr-dark-gray);
+        }
+
+        .auren-search-btn-submit svg {
+            width: 14px;
+            height: 14px;
+            stroke: currentColor;
+            stroke-width: 2;
+            fill: none;
+        }
+
+        .auren-search-btn-close {
+            background: transparent;
+            border: none;
+            color: var(--clr-mid-gray);
+            font-family: var(--font-body);
+            font-size: 13px;
+            padding: 8px 12px;
+            cursor: pointer;
+            transition: color var(--transition-base);
+            flex-shrink: 0;
+        }
+
+        .auren-search-btn-close:hover {
+            color: var(--clr-black);
+        }
+
+        #auren-search-suggestions {
+            list-style: none;
+            margin: 12px 0 0;
+            padding: 8px;
+            background: var(--clr-white);
+            border: 1px solid var(--clr-beige);
+            border-radius: 14px;
+            max-height: 380px;
+            overflow-y: auto;
+            box-shadow: 0 10px 24px rgba(10, 10, 10, 0.05);
+            display: none;
+        }
+
+        #auren-search-suggestions.has-items {
+            display: block;
+        }
+
+        .auren-search-item {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            padding: 8px 12px;
+            border-radius: 8px;
+            text-decoration: none;
+            color: inherit;
+            cursor: pointer;
+            transition: background var(--transition-base);
+        }
+
+        .auren-search-item:hover,
+        .auren-search-item.is-selected {
+            background: var(--clr-ivory);
+        }
+
+        .auren-search-item-thumb {
+            width: 48px;
+            height: 48px;
+            border-radius: 6px;
+            object-fit: cover;
+            background: var(--clr-offwhite);
+            flex-shrink: 0;
+        }
+
+        .auren-search-item-info {
+            flex: 1;
+            min-width: 0;
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+        }
+
+        .auren-search-item-name {
+            font-size: 14px;
+            font-weight: 400;
+            color: var(--clr-black);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .auren-search-item-meta {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 12px;
+        }
+
+        .auren-search-item-price {
+            font-weight: 500;
+            color: var(--clr-black);
+        }
+
+        .auren-search-item-cat {
+            color: var(--clr-warm-gray);
+        }
+
+        .auren-search-item-badge {
+            font-size: 11px;
+            color: var(--clr-warm-gray);
+            margin-left: auto;
+            flex-shrink: 0;
+        }
+
+        .auren-search-empty {
+            padding: 24px 16px;
+            text-align: center;
+            color: var(--clr-mid-gray);
+            font-size: 14px;
+        }
+
+        .auren-search-empty p {
+            margin-bottom: 6px;
+        }
+
+        .auren-search-view-all {
+            display: block;
+            text-align: center;
+            padding: 10px;
+            margin-top: 6px;
+            border-top: 1px dashed var(--clr-beige);
+            font-size: 13px;
+            font-weight: 500;
+            color: var(--clr-black);
+            cursor: pointer;
+            border-radius: 6px;
+            transition: background var(--transition-base);
+        }
+
+        .auren-search-view-all:hover {
+            background: var(--clr-ivory);
+            text-decoration: underline;
+        }
+
+        @media (max-width: 640px) {
+            .auren-search-inner {
+                padding: 12px 14px;
+            }
+            .auren-search-btn-text {
+                display: none;
+            }
+            .auren-search-btn-submit {
+                padding: 8px 12px;
+            }
+            .auren-search-btn-close {
+                padding: 8px 6px;
+            }
+        }
+
         @yield('extra-css')
     </style>
 
@@ -1167,14 +1445,17 @@
             {{-- Right actions --}}
             <div class="nav-actions">
                 {{-- Search icon --}}
-                <a href="{{ route('products.index', ['search' => '']) }}"
+                <button type="button"
+                    id="auren-search-toggle"
                     class="nav-icon-btn"
-                    aria-label="Tìm kiếm">
+                    aria-label="Tìm kiếm"
+                    aria-expanded="false"
+                    aria-controls="auren-search-overlay">
                     <svg viewBox="0 0 24 24">
                         <circle cx="11" cy="11" r="8" />
                         <path d="m21 21-4.35-4.35" />
                     </svg>
-                </a>
+                </button>
 
                 {{-- Cart icon — UI hook cho Người 3 (chỉ icon, không có cart logic) --}}
                 <a href="{{ Route::has('cart.index') ? route('cart.index') : '#' }}"
@@ -1274,6 +1555,62 @@
             </div>
         </div>
     </header>
+
+    {{-- ======================== SEARCH OVERLAY ======================== --}}
+    {{-- Embed product data for client-side autocomplete --}}
+    @php
+        try {
+            $headerSearchProducts = \App\Models\Product::select('id','name','price','image','category_id')
+                ->with('category:id,name')
+                ->get()
+                ->map(fn($p) => [
+                    'id'        => $p->id,
+                    'name'      => $p->name,
+                    'price_raw' => (int)$p->price,
+                    'price'     => number_format((float)$p->price, 0, ',', '.') . '₫',
+                    'image_url' => method_exists($p, 'getImageUrlAttribute') ? $p->image_url : ($p->image ?? ''),
+                    'category'  => $p->category?->name ?? '',
+                ]);
+        } catch (\Throwable $e) {
+            $headerSearchProducts = collect([]);
+        }
+    @endphp
+    <script>
+        window.AUREN_PRODUCTS = @json($headerSearchProducts);
+        window.AUREN_SEARCH_URL = '{{ route('products.index') }}';
+    </script>
+
+    <div id="auren-search-overlay" role="search" aria-hidden="true" aria-label="Tìm kiếm sản phẩm">
+        <div class="auren-search-inner">
+            <div class="auren-search-input-wrap">
+                <svg class="auren-search-icon-sm" viewBox="0 0 24 24" aria-hidden="true">
+                    <circle cx="11" cy="11" r="8" />
+                    <path d="m21 21-4.35-4.35" />
+                </svg>
+                <input
+                    type="text"
+                    id="auren-search-input"
+                    placeholder="Tìm kiếm sản phẩm..."
+                    autocomplete="off"
+                    spellcheck="false"
+                    aria-autocomplete="list"
+                    aria-controls="auren-search-suggestions"
+                    aria-activedescendant=""
+                >
+                <button type="button" id="auren-search-clear" class="auren-search-btn-icon" aria-label="Xóa từ khóa" hidden>
+                    <svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+                </button>
+                <button type="button" id="auren-search-submit" class="auren-search-btn-submit" aria-label="Tìm kiếm">
+                    <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+                    <span class="auren-search-btn-text">Tìm</span>
+                </button>
+                <button type="button" id="auren-search-close" class="auren-search-btn-close" aria-label="Đóng tìm kiếm">
+                    Đóng
+                </button>
+            </div>
+            <ul id="auren-search-suggestions" role="listbox" aria-label="Gợi ý sản phẩm"></ul>
+        </div>
+    </div>
 
     {{-- ======================== MOBILE DRAWER ======================== --}}
     <nav class="mobile-drawer" id="mobile-drawer" aria-hidden="true" role="navigation">
@@ -1535,6 +1872,276 @@
 
             document.addEventListener('keydown', e => {
                 if (e.key === 'Escape' && drawerOpen) toggleDrawer(false);
+            });
+
+            // ======================== AUREN HEADER SEARCH LOGIC ========================
+            const searchToggle = document.getElementById('auren-search-toggle');
+            const searchOverlay = document.getElementById('auren-search-overlay');
+            const searchInput = document.getElementById('auren-search-input');
+            const searchClear = document.getElementById('auren-search-clear');
+            const searchSubmit = document.getElementById('auren-search-submit');
+            const searchClose = document.getElementById('auren-search-close');
+            const searchSuggestions = document.getElementById('auren-search-suggestions');
+            const productsList = Array.isArray(window.AUREN_PRODUCTS) ? window.AUREN_PRODUCTS : [];
+            const searchBaseUrl = window.AUREN_SEARCH_URL || '/products';
+
+            let selectedIndex = -1;
+            let debounceTimer = null;
+
+            function removeVietnameseTones(str) {
+                if (!str) return '';
+                return str
+                    .normalize('NFD')
+                    .replace(/[\u0300-\u036f]/g, '')
+                    .replace(/đ/g, 'd')
+                    .replace(/Đ/g, 'D')
+                    .toLowerCase()
+                    .trim();
+            }
+
+            function escapeHtml(str) {
+                if (!str) return '';
+                return String(str)
+                    .replace(/&/g, '&amp;')
+                    .replace(/</g, '&lt;')
+                    .replace(/>/g, '&gt;')
+                    .replace(/"/g, '&quot;')
+                    .replace(/'/g, '&#039;');
+            }
+
+            function openSearch() {
+                if (!searchOverlay) return;
+                searchOverlay.classList.add('is-active');
+                searchOverlay.setAttribute('aria-hidden', 'false');
+                searchToggle && searchToggle.setAttribute('aria-expanded', 'true');
+                setTimeout(() => {
+                    searchInput && searchInput.focus();
+                }, 100);
+            }
+
+            function closeSearch() {
+                if (!searchOverlay) return;
+                searchOverlay.classList.remove('is-active');
+                searchOverlay.setAttribute('aria-hidden', 'true');
+                searchToggle && searchToggle.setAttribute('aria-expanded', 'false');
+                clearSuggestions();
+                selectedIndex = -1;
+            }
+
+            function clearSuggestions() {
+                if (!searchSuggestions) return;
+                searchSuggestions.innerHTML = '';
+                searchSuggestions.classList.remove('has-items');
+                selectedIndex = -1;
+            }
+
+            function executeSearch(query) {
+                const term = (query !== undefined ? query : (searchInput ? searchInput.value : '')).trim();
+                const url = new URL(searchBaseUrl, window.location.origin);
+                url.searchParams.set('view', 'all');
+                if (term) {
+                    url.searchParams.set('search', term);
+                }
+                window.location.href = url.toString();
+            }
+
+            function renderSuggestions(query) {
+                if (!searchSuggestions) return;
+                const cleanQuery = removeVietnameseTones(query);
+                if (!cleanQuery) {
+                    clearSuggestions();
+                    return;
+                }
+
+                const matches = productsList.filter(p => {
+                    const cleanName = removeVietnameseTones(p.name);
+                    const cleanCategory = removeVietnameseTones(p.category);
+                    return cleanName.includes(cleanQuery) || cleanCategory.includes(cleanQuery);
+                }).slice(0, 6);
+
+                searchSuggestions.innerHTML = '';
+                selectedIndex = -1;
+
+                if (matches.length === 0) {
+                    const emptyItem = document.createElement('li');
+                    emptyItem.className = 'auren-search-empty';
+                    emptyItem.innerHTML = `<p>Không tìm thấy sản phẩm nào khớp với <strong>"${escapeHtml(query)}"</strong></p><span style="font-size:12px;color:var(--clr-warm-gray);">Nhấn Enter để tìm kiếm trên toàn bộ danh mục</span>`;
+                    searchSuggestions.appendChild(emptyItem);
+                } else {
+                    matches.forEach((item, index) => {
+                        const li = document.createElement('li');
+                        li.setAttribute('role', 'option');
+                        li.id = 'search-item-' + index;
+
+                        const a = document.createElement('a');
+                        a.className = 'auren-search-item';
+                        const itemUrl = new URL(searchBaseUrl, window.location.origin);
+                        itemUrl.searchParams.set('view', 'all');
+                        itemUrl.searchParams.set('search', item.name);
+                        a.href = itemUrl.toString();
+
+                        const img = document.createElement('img');
+                        img.className = 'auren-search-item-thumb';
+                        img.src = item.image_url || '/placeholder.png';
+                        img.alt = item.name;
+                        img.loading = 'lazy';
+                        img.onerror = () => { img.src = 'data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2248%22%20height%3D%2248%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%3Crect%20width%3D%22100%25%22%20height%3D%22100%25%22%20fill%3D%22%23f2ede8%22%2F%3E%3C%2Fsvg%3E'; };
+
+                        const info = document.createElement('div');
+                        info.className = 'auren-search-item-info';
+
+                        const nameSpan = document.createElement('span');
+                        nameSpan.className = 'auren-search-item-name';
+                        nameSpan.textContent = item.name;
+
+                        const meta = document.createElement('div');
+                        meta.className = 'auren-search-item-meta';
+
+                        const priceSpan = document.createElement('span');
+                        priceSpan.className = 'auren-search-item-price';
+                        priceSpan.textContent = item.price;
+
+                        meta.appendChild(priceSpan);
+                        if (item.category) {
+                            const catSpan = document.createElement('span');
+                            catSpan.className = 'auren-search-item-cat';
+                            catSpan.textContent = '• ' + item.category;
+                            meta.appendChild(catSpan);
+                        }
+
+                        info.appendChild(nameSpan);
+                        info.appendChild(meta);
+
+                        const badge = document.createElement('span');
+                        badge.className = 'auren-search-item-badge';
+                        badge.textContent = 'Xem →';
+
+                        a.appendChild(img);
+                        a.appendChild(info);
+                        a.appendChild(badge);
+
+                        a.addEventListener('click', (e) => {
+                            e.preventDefault();
+                            executeSearch(item.name);
+                        });
+
+                        li.appendChild(a);
+                        searchSuggestions.appendChild(li);
+                    });
+
+                    // Add "Xem tất cả kết quả" option at bottom
+                    const viewAllLi = document.createElement('li');
+                    const viewAllBtn = document.createElement('a');
+                    viewAllBtn.className = 'auren-search-view-all';
+                    viewAllBtn.textContent = `Xem tất cả kết quả cho "${query}" →`;
+                    viewAllBtn.href = '#';
+                    viewAllBtn.addEventListener('click', (e) => {
+                        e.preventDefault();
+                        executeSearch(query);
+                    });
+                    viewAllLi.appendChild(viewAllBtn);
+                    searchSuggestions.appendChild(viewAllLi);
+                }
+
+                searchSuggestions.classList.add('has-items');
+            }
+
+            if (searchToggle) {
+                searchToggle.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    const isOpen = searchOverlay && searchOverlay.classList.contains('is-active');
+                    if (isOpen) {
+                        closeSearch();
+                    } else {
+                        openSearch();
+                    }
+                });
+            }
+
+            if (searchClose) {
+                searchClose.addEventListener('click', closeSearch);
+            }
+
+            if (searchInput) {
+                searchInput.addEventListener('input', () => {
+                    const val = searchInput.value;
+                    if (searchClear) {
+                        searchClear.hidden = val.trim().length === 0;
+                    }
+                    clearTimeout(debounceTimer);
+                    debounceTimer = setTimeout(() => {
+                        renderSuggestions(val);
+                    }, 250);
+                });
+
+                searchInput.addEventListener('keydown', (e) => {
+                    const items = searchSuggestions ? searchSuggestions.querySelectorAll('.auren-search-item') : [];
+                    if (e.key === 'ArrowDown') {
+                        e.preventDefault();
+                        if (items.length > 0) {
+                            selectedIndex = (selectedIndex + 1) % items.length;
+                            updateActiveDescendant(items);
+                        }
+                    } else if (e.key === 'ArrowUp') {
+                        e.preventDefault();
+                        if (items.length > 0) {
+                            selectedIndex = (selectedIndex - 1 + items.length) % items.length;
+                            updateActiveDescendant(items);
+                        }
+                    } else if (e.key === 'Enter') {
+                        e.preventDefault();
+                        if (selectedIndex >= 0 && items[selectedIndex]) {
+                            items[selectedIndex].click();
+                        } else {
+                            executeSearch();
+                        }
+                    } else if (e.key === 'Escape') {
+                        closeSearch();
+                    }
+                });
+            }
+
+            function updateActiveDescendant(items) {
+                items.forEach((item, idx) => {
+                    if (idx === selectedIndex) {
+                        item.classList.add('is-selected');
+                        item.scrollIntoView({ block: 'nearest' });
+                    } else {
+                        item.classList.remove('is-selected');
+                    }
+                });
+            }
+
+            if (searchClear) {
+                searchClear.addEventListener('click', () => {
+                    if (searchInput) {
+                        searchInput.value = '';
+                        searchInput.focus();
+                    }
+                    searchClear.hidden = true;
+                    clearSuggestions();
+                });
+            }
+
+            if (searchSubmit) {
+                searchSubmit.addEventListener('click', () => {
+                    executeSearch();
+                });
+            }
+
+            // Click outside to close search overlay
+            document.addEventListener('click', (e) => {
+                if (searchOverlay && searchOverlay.classList.contains('is-active')) {
+                    if (!searchOverlay.contains(e.target) && !searchToggle.contains(e.target)) {
+                        closeSearch();
+                    }
+                }
+            });
+
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape' && searchOverlay && searchOverlay.classList.contains('is-active')) {
+                    closeSearch();
+                }
             });
 
         })();

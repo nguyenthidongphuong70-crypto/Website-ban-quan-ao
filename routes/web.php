@@ -1,15 +1,15 @@
 <?php
 
-use Illuminate\Support\Facades\Route;
-
+use App\Http\Controllers\Admin\DashboardController;
+use App\Http\Controllers\Admin\OrderController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProfileController;
-
 use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\Auth\ForgotPasswordController;
-
 use App\Http\Controllers\Admin\ProductController as AdminProductController;
 use App\Http\Controllers\Admin\CategoryController as AdminCategoryController;
+use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Auth;
 
 
 /*
@@ -42,7 +42,6 @@ Route::middleware('auth')->group(function () {
 
     Route::put('/profile', [ProfileController::class, 'update'])
         ->name('profile.update');
-
 
     // Đổi mật khẩu
     Route::get(
@@ -125,15 +124,33 @@ Route::prefix('admin')
     ->middleware(['auth', 'admin'])
     ->group(function () {
 
+        // Quản lý danh mục
         Route::resource(
             'categories',
             AdminCategoryController::class
         );
 
+        // Quản lý sản phẩm
         Route::resource(
             'products',
             AdminProductController::class
         );
+
+        // Dashboard
+        Route::get('/dashboard', [DashboardController::class, 'index'])
+            ->name('dashboard');
+
+        // Danh sách đơn hàng
+        Route::get('/orders', [OrderController::class, 'index'])
+            ->name('orders.index');
+
+        // Chi tiết đơn hàng
+        Route::get('/orders/{id}', [OrderController::class, 'show'])
+            ->name('orders.show');
+
+        // Cập nhật trạng thái đơn hàng
+        Route::put('/orders/{id}/status', [OrderController::class, 'updateStatus'])
+            ->name('orders.updateStatus');
     });
 
 
