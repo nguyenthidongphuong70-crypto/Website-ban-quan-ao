@@ -1,89 +1,205 @@
-@extends('admin.layout')
+<!DOCTYPE html>
+<html lang="vi">
 
-@section('title', 'Chi tiết đơn hàng #' . $order->id)
+<head>
+    <meta charset="UTF-8">
+    <title>Chi tiết đơn hàng</title>
 
-@section('content')
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 30px;
+            background: #f5f5f5;
+        }
 
-<div class="admin-card">
-    <div class="card-top" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
-        <h2 class="card-top-title">Chi tiết đơn hàng #{{ $order->id }}</h2>
-        <a href="{{ route('admin.orders.index') }}" class="btn-ad btn-ad-outline">
-            ← Quay lại danh sách
-        </a>
-    </div>
+        .container {
+            max-width: 900px;
+            margin: auto;
+            background: white;
+            padding: 25px;
+        }
 
-    {{-- Thông báo cập nhật thành công --}}
-    @if (session('success'))
-        <div style="padding: 12px; background-color: #d4edda; color: #155724; border-radius: 4px; margin-bottom: 20px;">
+        h1 {
+            margin-bottom: 20px;
+        }
+
+        .info {
+            margin-bottom: 20px;
+        }
+
+        .info p {
+            margin: 8px 0;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        th,
+        td {
+            padding: 12px;
+            border: 1px solid #ddd;
+            text-align: left;
+        }
+
+        th {
+            background: #333;
+            color: white;
+        }
+
+        select,
+        button {
+            padding: 8px 12px;
+            margin-top: 10px;
+        }
+
+        button {
+            cursor: pointer;
+        }
+
+        .success {
+            color: green;
+            margin-bottom: 15px;
+        }
+
+        a {
+            color: blue;
+            text-decoration: none;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="container">
+
+        <h1>Chi tiết đơn hàng #{{ $order->id }}</h1>
+
+        {{-- Thông báo cập nhật thành công --}}
+        @if (session('success'))
+        <div class="success">
             {{ session('success') }}
         </div>
-    @endif
+        @endif
 
-    {{-- Thông tin khách hàng --}}
-    <div style="background: #fafafa; padding: 20px; border-radius: 6px; margin-bottom: 25px; border: 1px solid #eee;">
-        <h3 style="font-size: 16px; margin-bottom: 12px; font-weight: 600;">Thông tin khách hàng</h3>
-        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 12px; font-size: 14px;">
-            <p><strong>Khách hàng:</strong> {{ $order->user->full_name ?? $order->receiver_name }}</p>
-            <p><strong>Số điện thoại:</strong> {{ $order->phone }}</p>
-            <p><strong>Địa chỉ:</strong> {{ $order->address }}</p>
-            <p><strong>Ngày đặt:</strong> {{ $order->created_at }}</p>
-            <p><strong>Tổng tiền:</strong> <strong style="color: #d9534f;">{{ number_format($order->total_price, 0, ',', '.') }} VNĐ</strong></p>
+        {{-- Thông tin khách hàng --}}
+        <div class="info">
+            <h2>Thông tin khách hàng</h2>
+
+            <p>
+                <strong>Khách hàng:</strong>
+                {{ $order->user->full_name ?? $order->receiver_name }}
+            </p>
+
+            <p>
+                <strong>Số điện thoại:</strong>
+                {{ $order->phone }}
+            </p>
+
+            <p>
+                <strong>Địa chỉ:</strong>
+                {{ $order->address }}
+            </p>
+
+            <p>
+                <strong>Ngày đặt:</strong>
+                {{ $order->created_at }}
+            </p>
+
+            <p>
+                <strong>Tổng tiền:</strong>
+                {{ number_format($order->total_price, 0, ',', '.') }} VNĐ
+            </p>
         </div>
-    </div>
 
-    {{-- Bảng danh sách sản phẩm trong đơn hàng --}}
-    <h3 style="font-size: 16px; margin-bottom: 12px; font-weight: 600;">Sản phẩm trong đơn hàng</h3>
-    <table class="admin-table" style="margin-bottom: 25px;">
-        <thead>
-            <tr>
-                <th>Sản phẩm</th>
-                <th style="width: 100px; text-align: center;">Số lượng</th>
-                <th style="width: 150px;">Đơn giá</th>
-                <th style="width: 150px; text-align: right;">Thành tiền</th>
-            </tr>
-        </thead>
-        <tbody>
-            @forelse ($order->details as $detail)
+        {{-- Chi tiết sản phẩm --}}
+        <h2>Sản phẩm trong đơn hàng</h2>
+
+        <table>
+            <thead>
                 <tr>
-                    <td style="font-weight: 400;">
+                    <th>Sản phẩm</th>
+                    <th>Số lượng</th>
+                    <th>Đơn giá</th>
+                    <th>Thành tiền</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                @forelse ($order->details as $detail)
+                <tr>
+                    <td>
                         {{ $detail->product->name ?? 'Sản phẩm không tồn tại' }}
                     </td>
-                    <td style="text-align: center;">{{ $detail->quantity }}</td>
-                    <td>{{ number_format($detail->price, 0, ',', '.') }} VNĐ</td>
-                    <td style="text-align: right; font-weight: 500;">
+
+                    <td>
+                        {{ $detail->quantity }}
+                    </td>
+
+                    <td>
+                        {{ number_format($detail->price, 0, ',', '.') }} VNĐ
+                    </td>
+
+                    <td>
                         {{ number_format($detail->price * $detail->quantity, 0, ',', '.') }} VNĐ
                     </td>
                 </tr>
-            @empty
+                @empty
                 <tr>
-                    <td colspan="4" style="text-align: center; color: var(--ad-muted); padding: 30px;">
+                    <td colspan="4">
                         Đơn hàng chưa có sản phẩm.
                     </td>
                 </tr>
-            @endforelse
-        </tbody>
-    </table>
+                @endforelse
+            </tbody>
+        </table>
 
-    {{-- Cập nhật trạng thái --}}
-    <div style="background: #fafafa; padding: 20px; border-radius: 6px; border: 1px solid #eee;">
-        <h3 style="font-size: 16px; margin-bottom: 12px; font-weight: 600;">Cập nhật trạng thái đơn hàng</h3>
-        <form method="POST" action="{{ route('admin.orders.updateStatus', $order->id) }}" style="display: flex; gap: 12px; align-items: center; flex-wrap: wrap;">
+        {{-- Cập nhật trạng thái --}}
+        <h2>Cập nhật trạng thái đơn hàng</h2>
+
+        <form method="POST" action="{{ route('admin.orders.updateStatus', $order->id) }}">
             @csrf
             @method('PUT')
 
-           <select name="status" class="form-select">
-    <option value="Chờ xử lý" {{ $order->status == 'Chờ xử lý' ? 'selected' : '' }}>Chờ xử lý</option>
-    <option value="Đang xử lý" {{ $order->status == 'Đang xử lý' ? 'selected' : '' }}>Đang xử lý</option>
-    <option value="Đang giao" {{ $order->status == 'Đang giao' ? 'selected' : '' }}>Đang giao</option>
-    <option value="Hoàn thành" {{ $order->status == 'Hoàn thành' ? 'selected' : '' }}>Hoàn thành</option>
-    <option value="Đã hủy" {{ $order->status == 'Đã hủy' ? 'selected' : '' }}>Đã hủy</option>
+            <select name="status">
+                <option value="pending" {{ $order->status == 'pending' ? 'selected' : '' }}>
+                    Chờ xử lý
+                </option>
+
+                <option value="processing" {{ $order->status == 'processing' ? 'selected' : '' }}>
+                    Đang xử lý
+                </option>
+
+                <option value="shipped" {{ $order->status == 'shipped' ? 'selected' : '' }}>
+                    Đang giao
+                </option>
+
+                <option value="completed" {{ $order->status == 'completed' ? 'selected' : '' }}>
+                    Hoàn thành
+                </option>
+
+                <option value="cancelled" {{ $order->status == 'cancelled' ? 'selected' : '' }}>
+                    Đã hủy
+                </option>
             </select>
 
-            <button type="submit" class="btn-ad btn-ad-dark">
+            <br>
+
+            <button type="submit">
                 Cập nhật trạng thái
             </button>
         </form>
-    </div>
-</div>
 
-@endsection
+        <br>
+
+        <a href="{{ route('admin.orders.index') }}">
+            ← Quay lại danh sách đơn hàng
+        </a>
+
+    </div>
+
+</body>
+
+</html>

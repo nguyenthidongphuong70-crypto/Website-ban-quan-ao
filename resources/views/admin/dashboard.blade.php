@@ -1,53 +1,161 @@
-@extends('admin.layout')
+<!DOCTYPE html>
+<html lang="vi">
 
-@section('title', 'Dashboard Admin')
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-@section('content')
+    <title>Admin Dashboard</title>
 
-{{-- Thống kê dạng Card --}}
-<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; margin-bottom: 30px;">
-    
-    <div class="admin-card" style="margin: 0;">
-        <p style="color: var(--ad-muted); font-size: 14px; font-weight: 500; margin-bottom: 8px;">Tổng sản phẩm</p>
-        <h2 style="font-size: 28px; font-weight: 600; color: #111;">{{ $totalProducts ?? 0 }}</h2>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background: #f5f6fa;
+        }
+
+        .header {
+            background: #111827;
+            color: white;
+            padding: 20px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .header h1 {
+            font-size: 24px;
+        }
+
+        .container {
+            padding: 30px 40px;
+        }
+
+        .cards {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px;
+        }
+
+        .card {
+            background: white;
+            padding: 25px;
+            border-radius: 10px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+        }
+
+        .card h3 {
+            color: #6b7280;
+            font-size: 15px;
+            margin-bottom: 10px;
+        }
+
+        .card .number {
+            font-size: 30px;
+            font-weight: bold;
+            color: #111827;
+        }
+
+        .menu {
+            margin-top: 30px;
+            background: white;
+            padding: 25px;
+            border-radius: 10px;
+        }
+
+        .menu h2 {
+            margin-bottom: 20px;
+        }
+
+        .menu a {
+            display: inline-block;
+            padding: 12px 20px;
+            background: #2563eb;
+            color: white;
+            text-decoration: none;
+            border-radius: 6px;
+            margin-right: 10px;
+        }
+
+        .menu a:hover {
+            background: #1d4ed8;
+        }
+
+        .logout {
+            color: white;
+            text-decoration: none;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="header">
+        <h1>Trang quản trị</h1>
+
+        <div>
+            Xin chào, Admin
+        </div>
     </div>
 
-    <div class="admin-card" style="margin: 0;">
-        <p style="color: var(--ad-muted); font-size: 14px; font-weight: 500; margin-bottom: 8px;">Tổng đơn hàng</p>
-        <h2 style="font-size: 28px; font-weight: 600; color: #111;">{{ $totalOrders ?? 0 }}</h2>
+    <div class="container">
+
+        <div class="cards">
+
+            <div class="card">
+                <h3>Tổng sản phẩm</h3>
+                <div class="number">
+                    {{ $totalProducts }}
+                </div>
+            </div>
+
+            <div class="card">
+                <h3>Tổng đơn hàng</h3>
+                <div class="number">
+                    {{ $totalOrders }}
+                </div>
+            </div>
+
+            <div class="card">
+                <h3>Đơn chờ xử lý</h3>
+                <div class="number">
+                    {{ $pendingOrders }}
+                </div>
+            </div>
+
+            <div class="card">
+                <h3>Đơn hoàn thành</h3>
+                <div class="number">
+                    {{ $completedOrders }}
+                </div>
+            </div>
+
+            <div class="card">
+                <h3>Tổng doanh thu</h3>
+                <div class="number">
+                    {{ number_format($totalRevenue, 0, ',', '.') }} VNĐ
+                </div>
+            </div>
+
+        </div>
+
+        <div class="menu">
+
+            <h2>Quản lý</h2>
+
+            <a href="{{ route('admin.orders.index') }}">
+                Quản lý đơn hàng
+            </a>
+
+        </div>
+
     </div>
 
-    <div class="admin-card" style="margin: 0;">
-        <p style="color: var(--ad-muted); font-size: 14px; font-weight: 500; margin-bottom: 8px;">Đơn chờ xử lý</p>
-        <h2 style="font-size: 28px; font-weight: 600; color: #111;">{{ $pendingOrders ?? 0 }}</h2>
-    </div>
+</body>
 
-    <div class="admin-card" style="margin: 0;">
-        <p style="color: var(--ad-muted); font-size: 14px; font-weight: 500; margin-bottom: 8px;">Đơn hoàn thành</p>
-        <h2 style="font-size: 28px; font-weight: 600; color: #111;">{{ $completedOrders ?? 0 }}</h2>
-    </div>
-
-    <div class="admin-card" style="margin: 0;">
-        <p style="color: var(--ad-muted); font-size: 14px; font-weight: 500; margin-bottom: 8px;">Tổng doanh thu</p>
-        <h2 style="font-size: 28px; font-weight: 600; color: #111;">{{ number_format($totalRevenue ?? 0, 0, ',', '.') }} VNĐ</h2>
-    </div>
-
-</div>
-
-{{-- Khối chức năng quản lý --}}
-<div class="admin-card">
-    <div class="card-top" style="margin-bottom: 20px;">
-        <h2 class="card-top-title">Quản lý hệ thống</h2>
-    </div>
-
-    <div style="display: flex; gap: 15px; flex-wrap: wrap;">
-        <a href="{{ route('admin.orders.index') }}" class="btn-ad btn-ad-dark" style="padding: 12px 24px; font-size: 14px;">
-            📦 Quản lý đơn hàng
-        </a>
-        <a href="{{ route('admin.categories.index') }}" class="btn-ad btn-ad-outline" style="padding: 12px 24px; font-size: 14px;">
-            📁 Quản lý danh mục
-        </a>
-    </div>
-</div>
-
-@endsection
+</html>
