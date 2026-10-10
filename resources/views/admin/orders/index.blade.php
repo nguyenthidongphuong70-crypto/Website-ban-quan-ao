@@ -35,7 +35,7 @@
                 <th style="width:180px;">Tổng tiền</th>
                 <th style="width:150px;">Trạng thái</th>
                 <th style="width:180px;">Ngày đặt</th>
-                <th style="width:180px; text-align:right;">Hành động</th>
+                <th style="width:240px; text-align:right;">Hành động</th>
             </tr>
         </thead>
         <tbody>
@@ -48,9 +48,12 @@
                     </td>
                     <td style="font-weight:400;" class="status">{{ $order->status }}</td>
                     <td style="color:var(--ad-muted); font-size:12px;">{{ $order->created_at }}</td>
-                    <td style="text-align:right;">
-                        <a href="{{ route('admin.orders.show', $order->id) }}" class="btn-ad btn-ad-outline">
+                    <td style="text-align:right; white-space:nowrap;">
+                        <a href="{{ route('admin.orders.show', $order->id) }}" class="btn-ad btn-ad-outline" style="margin-right:4px;">
                             Xem chi tiết
+                        </a>
+                        <a href="{{ route('admin.orders.print', $order->id) }}" target="_blank" class="btn-ad">
+                            🖨️ In hóa đơn
                         </a>
                     </td>
                 </tr>

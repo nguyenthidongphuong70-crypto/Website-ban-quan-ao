@@ -50,4 +50,14 @@ class OrderController extends Controller
             ->route('admin.orders.show', $id)
             ->with('success', 'Cập nhật trạng thái đơn hàng thành công.');
     }
+    /**
+     * Hiển thị trang in hóa đơn đơn hàng
+     */
+    public function printInvoice($id)
+    {
+        // Sử dụng đúng tên quan hệ 'details' đã khai báo trong Order.php
+        $order = Order::with(['user', 'details.product'])->findOrFail($id);
+
+        return view('admin.orders.print', compact('order'));
+    }
 }
