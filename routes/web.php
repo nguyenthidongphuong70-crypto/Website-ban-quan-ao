@@ -9,6 +9,7 @@ use App\Http\Controllers\Auth\ForgotPasswordController;
 use App\Http\Controllers\Admin\ProductController as AdminProductController;
 use App\Http\Controllers\Admin\CategoryController as AdminCategoryController;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Auth;
 
 
 /*
@@ -141,7 +142,7 @@ Route::prefix('admin')
 
         // Danh sách đơn hàng
         Route::get('/orders', [OrderController::class, 'index'])
-            ->name('orders');
+            ->name('orders.index');
 
         // Chi tiết đơn hàng
         Route::get('/orders/{id}', [OrderController::class, 'show'])
