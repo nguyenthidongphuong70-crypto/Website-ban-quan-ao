@@ -13,20 +13,16 @@ return new class extends Migration
 {
     if (!Schema::hasTable('order_details')) {
         Schema::create('order_details', function (Blueprint $table) {
-            $table->id();
+    $table->id();
+    $table->unsignedBigInteger('order_id');
+    $table->unsignedBigInteger('product_id');
+    $table->integer('quantity');
+    $table->decimal('price', 10, 2);
+    $table->timestamps();
 
-            $table->foreignId('order_id')
-                ->constrained('orders')
-                ->cascadeOnDelete();
-
-            $table->foreignId('product_id')
-                ->constrained('products')
-                ->cascadeOnDelete();
-
-            $table->unsignedInteger('quantity')->default(1);
-            $table->decimal('price', 10, 2);
-            $table->timestamps();
-        });
+    // Thiết lập khóa ngoại
+    $table->foreign('order_id')->references('id')->on('orders')->onDelete('cascade');
+});
     }
 }
 
