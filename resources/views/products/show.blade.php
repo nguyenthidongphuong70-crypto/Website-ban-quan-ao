@@ -370,7 +370,7 @@
         {{-- ======================== CART FORM ========================--}}
         <div class="cart-action">
             @if ($product->stock > 0)
-                <form method="POST" action="{{ Route::has('cart.add') ? route('cart.add') : '#' }}">
+                <form method="POST" action="{{ Route::has('cart.store') ? route('cart.store', $product->id) : '#' }}">
                     @csrf
                     <input type="hidden" name="product_id" value="{{ $product->id }}">
 
