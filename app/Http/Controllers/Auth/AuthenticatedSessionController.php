@@ -34,9 +34,9 @@ class AuthenticatedSessionController extends Controller
         /** @var User|null $user */
         $user = Auth::user();
 
-        // Admin -> trang quản trị
+        // SỬA CHỖ NÀY: Nếu là Admin -> Chuyển thẳng vào Dashboard quản trị
         if ($user && $user->isAdmin()) {
-            return redirect()->intended(route('admin.products.index'));
+            return redirect()->intended(route('admin.dashboard', absolute: false));
         }
 
         // Customer -> trang sản phẩm AUREN

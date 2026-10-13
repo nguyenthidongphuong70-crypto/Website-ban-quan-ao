@@ -11,7 +11,6 @@ use App\Http\Controllers\Admin\CategoryController as AdminCategoryController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
 
-
 /*
 |--------------------------------------------------------------------------
 | TRANG CHÍNH / SẢN PHẨM
@@ -36,7 +35,6 @@ Route::get('/products/{product}', [ProductController::class, 'show'])
 */
 
 Route::middleware('auth')->group(function () {
-
     Route::get('/profile', [ProfileController::class, 'edit'])
         ->name('profile.edit');
 
@@ -94,6 +92,7 @@ Route::middleware('guest')->group(function () {
     )->name('password.reset.phone');
 });
 
+
 /*
 |--------------------------------------------------------------------------
 | ĐĂNG NHẬP MẠNG XÃ HỘI
@@ -115,14 +114,19 @@ Route::get(
 |--------------------------------------------------------------------------
 | QUẢN TRỊ
 |--------------------------------------------------------------------------
-| Chỉ tài khoản đã đăng nhập + role admin mới được truy cập
+| Chỉ tài khoản đã đăng nhập mới được truy cập (phân quyền check trong Controller)
 |--------------------------------------------------------------------------
 */
 
 Route::prefix('admin')
     ->name('admin.')
-    ->middleware(['auth', 'admin'])
+    ->middleware(['auth'])
     ->group(function () {
+
+        // Dashboard & Xuất báo cáo (Excel / PDF)
+        Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+        Route::get('/export-excel', [DashboardController::class, 'exportExcel'])->name('export.excel');
+        Route::get('/export-pdf', [DashboardController::class, 'exportPdf'])->name('export.pdf');
 
         // Quản lý danh mục
         Route::resource(
@@ -136,10 +140,6 @@ Route::prefix('admin')
             AdminProductController::class
         );
 
-        // Dashboard
-        Route::get('/dashboard', [DashboardController::class, 'index'])
-            ->name('dashboard');
-
         // Danh sách đơn hàng
         Route::get('/orders', [OrderController::class, 'index'])
             ->name('orders.index');
@@ -147,6 +147,9 @@ Route::prefix('admin')
         // Chi tiết đơn hàng
         Route::get('/orders/{id}', [OrderController::class, 'show'])
             ->name('orders.show');
+            // ROUTE IN HÓA ĐƠN TRỰC TIẾP
+        Route::get('/orders/{id}/print', [OrderController::class, 'printInvoice'])
+            ->name('orders.print');
 
         // Cập nhật trạng thái đơn hàng
         Route::put('/orders/{id}/status', [OrderController::class, 'updateStatus'])
