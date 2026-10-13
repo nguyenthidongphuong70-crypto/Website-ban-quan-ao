@@ -12,17 +12,19 @@ class CartController extends Controller
 {
 
     public function index()
-    {
-        $userId = Auth::id();
+{
+    $cartItems = CartItem::where('user_id', Auth::id())->with('product')->get();
 
-        $cartItems = CartItem::with('product')->where('user_id', $userId)->get();
+    $subtotal = $cartItems->sum(function($item) {
+        return $item->quantity * ($item->product->sale_price ?? $item->product->price ?? 0);
+    });
 
-        $total = $cartItems->sum(function ($item) {
-            return $item->quantity * ($item->product->sale_price ?? $item->product->price);
-        });
+    $shippingFee = ($subtotal >= 500000 || $subtotal == 0) ? 0 : 30000;
 
-        return view('cart.index', compact('cartItems', 'total'));
-    }
+    $total = $subtotal + $shippingFee;
+
+    return view('cart.index', compact('cartItems', 'subtotal', 'shippingFee', 'total'));
+}
 
 
     public function store(AddToCartRequest $request, Product $product)
