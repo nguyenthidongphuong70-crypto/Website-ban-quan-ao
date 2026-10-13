@@ -86,7 +86,7 @@ class CheckoutController extends Controller
 
         DB::commit();
 
-        return redirect()->route('admin.orders.index')->with('success', 'Đặt hàng thành công!');
+        return redirect()->route('cart.index')->with('success', 'Đặt hàng thành công!');
 
     } catch (\Exception $e) {
         DB::rollBack();
