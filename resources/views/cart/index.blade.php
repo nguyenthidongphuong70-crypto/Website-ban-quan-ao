@@ -107,7 +107,14 @@
 
                         <div class="d-flex justify-content-between mb-4 pb-2 border-bottom">
                             <span class="text-muted" style="font-size: 13px;">Phí vận chuyển</span>
-                            <span class="text-success fw-medium" style="font-size: 13px;">Miễn phí</span>
+                            <span>
+                                @if(($shippingFee ?? 0) > 0)
+                            {{ number_format($shippingFee) }} đ
+                                 @else
+                                <span class="text-success fw-medium" style="font-size: 13px;">Miễn phí</span>
+                                @endif
+                            </span>
+                            
                         </div>
 
                         <div class="d-flex justify-content-between align-items-center mb-4">
