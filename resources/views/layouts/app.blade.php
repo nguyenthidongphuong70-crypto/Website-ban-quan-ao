@@ -1457,16 +1457,43 @@
                     </svg>
                 </button>
 
-                {{-- Cart icon — UI hook cho Người 3 (chỉ icon, không có cart logic) --}}
-                <a href="{{ Route::has('cart.index') ? route('cart.index') : '#' }}"
-                    class="nav-icon-btn"
-                    aria-label="Giỏ hàng">
-                    <svg viewBox="0 0 24 24">
-                        <path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z" />
-                        <line x1="3" y1="6" x2="21" y2="6" />
-                        <path d="M16 10a4 4 0 0 1-8 0" />
-                    </svg>
-                </a>
+                {{-- Cart icon – UI hook cho Người 3 (chỉ icon, không có cart logic) --}}
+                    <a href="{{ Route::has('cart.index') ? route('cart.index') : '#' }}"
+                        class="nav-icon-btn"
+                        aria-label="Giỏ hàng"
+                        style="position: relative; display: inline-flex; align-items: center;"> {{-- Thêm style relative để định vị badge --}}
+                        
+                        <svg viewBox="0 0 24 24">
+                            <path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z" />
+                            <line x1="3" y1="6" x2="21" y2="6" />
+                            <path d="M16 10a4 4 0 0 1-8 0" />
+                        </svg>
+
+                        {{-- THÊM Ô HIỂN THỊ SỐ LƯỢNG Ở ĐÂY --}}
+                        @if(isset($cartCount) && $cartCount > 0)
+                            <span class="cart-count-badge">
+                                {{ $cartCount }}
+                            </span>
+                        @endif
+                    </a>
+
+                    {{-- Bổ sung đoạn CSS này vào file CSS chung hoặc đặt trực tiếp vào thẻ <style> --}}
+                    <style>
+                        .cart-count-badge {
+                            position: absolute;
+                            top: 2px;
+                            right: 4px;
+                            background: #e53935;
+                            color: #fff;
+                            font-size: 10px;
+                            font-weight: bold;
+                            padding: 1px 5px;
+                            border-radius: 50%;
+                            line-height: 1;
+                            min-width: 16px;
+                            text-align: center;
+                        }
+                    </style>
 
                 {{-- Account icon — Người 2 --}}
                 <div class="account-menu">
