@@ -13,15 +13,19 @@ return new class extends Migration
 {
     if (!Schema::hasTable('orders')) {
         Schema::create('orders', function (Blueprint $table) {
-    $table->id();
-    $table->unsignedBigInteger('user_id');
-    $table->string('receiver_name');
-    $table->string('phone');
-    $table->text('address');
-    $table->decimal('total_price', 10, 2);
-    $table->string('status')->default('pending');
-    $table->timestamps();
-});
+            $table->id();
+
+            $table->foreignId('user_id')
+                ->constrained('users')
+                ->cascadeOnDelete();
+
+            $table->decimal('total_price', 12, 2)->default(0);
+            $table->string('status')->default('pending');
+            $table->string('receiver_name', 100);
+            $table->string('phone', 20);
+            $table->string('address', 255);
+            $table->timestamps();
+        });
     }
 }
 
