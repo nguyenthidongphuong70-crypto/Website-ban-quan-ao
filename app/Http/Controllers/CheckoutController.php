@@ -21,19 +21,22 @@ class CheckoutController extends Controller
     }
 
     public function index()
-    {
+{
+    $cartItems = CartItem::where('user_id', Auth::id())->with('product')->get();
 
-        $cartItems = CartItem::where('user_id', Auth::id())->with('product')->get();
-
-        if ($cartItems->isEmpty()) {
-            return redirect()->route('cart.index')->with('error', 'Giỏ hàng của bạn đang trống!');
-        }
-        $total = $cartItems->sum(function($item) {
-            return $item->quantity * ($item->product->sale_price ?? $item->product->price ?? 0);
-        });
-
-        return view('checkout.index', compact('cartItems', 'total'));
+    if ($cartItems->isEmpty()) {
+        return redirect()->route('cart.index')->with('error', 'Giỏ hàng của bạn đang trống!');
     }
+
+    $subtotal = $cartItems->sum(function($item) {
+        return $item->quantity * ($item->product->sale_price ?? $item->product->price ?? 0);
+    });
+
+    $shippingFee = ($subtotal >= 500000 || $subtotal == 0) ? 0 : 30000;
+    $total = $subtotal + $shippingFee;
+
+    return view('checkout.index', compact('cartItems', 'subtotal', 'shippingFee', 'total'));
+}
 
     public function store(Request $request)
 {
@@ -93,4 +96,5 @@ class CheckoutController extends Controller
         return redirect()->back()->with('error', 'Lỗi: ' . $e->getMessage());
     }
 }
+
 }
