@@ -27,27 +27,38 @@ class CartController extends Controller
 }
 
 
-    public function store(AddToCartRequest $request, Product $product)
-    {
-        $userId = Auth::id();
-        $quantity = $request->input('quantity', 1);
+    public function store(Request $request)
+{
+    $request->validate([
+        'product_id' => 'required|exists:products,id',
+        'quantity'   => 'required|integer|min:1',
+    ]);
 
-        $cartItem = CartItem::where('user_id', $userId)
-            ->where('product_id', $product->id)
-            ->first();
+    $userId = Auth::id();
+    $productId = $request->product_id;
+    $quantity = $request->quantity;
 
-        if ($cartItem) {
-            $cartItem->increment('quantity', $quantity);
-        } else {
-            CartItem::create([
-                'user_id' => $userId,
-                'product_id' => $product->id,
-                'quantity' => $quantity,
-            ]);
-        }
+    // Lấy thông tin sản phẩm để có thể gọi tên sản phẩm
+    $product = \App\Models\Product::findOrFail($productId);
 
-        return redirect()->route('cart.index')->with('success', 'Đã thêm sản phẩm vào giỏ hàng thành công!');
+    $cartItem = CartItem::where('user_id', $userId)
+                        ->where('product_id', $productId)
+                        ->first();
+
+    if ($cartItem) {
+        $cartItem->quantity += $quantity;
+        $cartItem->save();
+    } else {
+        CartItem::create([
+            'user_id'    => $userId,
+            'product_id' => $productId,
+            'quantity'   => $quantity,
+        ]);
     }
+
+    // Đưa tên sản phẩm vào câu thông báo
+    return back()->with('success', 'Đã thêm "' . $product->name . '" vào giỏ hàng thành công!');
+}
 
     public function update(Request $request, $id)
 {
