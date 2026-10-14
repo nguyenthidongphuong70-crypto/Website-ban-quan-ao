@@ -77,5 +77,12 @@ class OrderController extends Controller
         return redirect()->back()->with('error', 'Lỗi: ' . $e->getMessage());
     }
     }
+    public function printInvoice($id)
+    {
+        // Sử dụng đúng tên quan hệ 'details' đã khai báo trong Order.php
+        $order = Order::with(['user', 'details.product'])->findOrFail($id);
+
+        return view('admin.orders.print', compact('order'));
+    }
     
 }
