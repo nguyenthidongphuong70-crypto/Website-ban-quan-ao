@@ -12,7 +12,7 @@ use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\CheckoutController;
 use App\Http\Controllers\CartController;
-
+use App\Http\Controllers\MomoController;
 
 /*
 |--------------------------------------------------------------------------
@@ -49,6 +49,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/checkout', [CheckoutController::class, 'index'])->name('checkout.index');
 
     Route::post('/checkout', [CheckoutController::class, 'store'])->name('checkout.process');
+    
     Route::get('/checkout/success/{id}', [OrderController::class, 'success'])->name('orders.success');
 
     Route::match(['put', 'patch'], '/cart/{id}', [CartController::class, 'update'])->name('cart.update');

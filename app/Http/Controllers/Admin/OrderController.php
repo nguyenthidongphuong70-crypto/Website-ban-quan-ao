@@ -85,4 +85,5 @@ class OrderController extends Controller
         return view('admin.orders.print', compact('order'));
     }
     
+    
 }

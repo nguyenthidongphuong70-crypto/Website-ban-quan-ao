@@ -22,11 +22,12 @@
 
         <form action="{{ route('checkout.process') }}" method="POST">
             @csrf
+            
             <div class="row g-5">
                 {{-- Cột trái: Form nhập thông tin người nhận --}}
                 <div class="col-lg-7">
                     <div class="mb-4">
-                        <h5 class="text-uppercase fw-bold mb-4" style="font-size: 11px; letter-spacing: 1.5px; color: #555;">Địa chỉ nhận hàng</h5>
+                    
                         
                         <div class="mb-4">
                             <label class="form-label text-uppercase fw-bold" style="font-size: 11px; letter-spacing: 1px; color: #444;">
