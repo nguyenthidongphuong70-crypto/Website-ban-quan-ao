@@ -18,7 +18,7 @@
         body {
             min-height: 100vh;
             background: #f5efe8;
-            font-family: Arial, sans-serif;
+            font-family: "Aptos", "Segoe UI", Arial, sans-serif;
             display: flex;
             justify-content: center;
             align-items: center;
@@ -43,7 +43,7 @@
         }
 
         .logo {
-            font-family: Georgia, serif;
+            font-family: "Aptos", "Segoe UI", Arial, sans-serif;
             letter-spacing: 3px;
             font-size: 25px;
             margin-bottom: 45px;
@@ -64,7 +64,7 @@
         }
 
         .left h3 {
-            font-family: Georgia, serif;
+            font-family: "Aptos", "Segoe UI", Arial, sans-serif;
             font-size: 21px;
             font-weight: normal;
             margin-bottom: 8px;
@@ -109,7 +109,7 @@
         }
 
         .right h1 {
-            font-family: Georgia, serif;
+            font-family: "Aptos", "Segoe UI", Arial, sans-serif;
             font-size: 34px;
             font-weight: normal;
             margin-bottom: 8px;

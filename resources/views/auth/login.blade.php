@@ -18,7 +18,7 @@
 
         body {
             min-height: 100vh;
-            font-family: Arial, sans-serif;
+            font-family: "Aptos", "Segoe UI", Arial, sans-serif;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -68,7 +68,7 @@
         }
 
         .logo {
-            font-family: Georgia, serif;
+            font-family: "Aptos", "Segoe UI", Arial, sans-serif;
             letter-spacing: 3px;
             font-size: 22px;
         }
@@ -90,7 +90,7 @@
         }
 
         .hero h1 {
-            font-family: "Times New Roman", Times, serif;
+            font-family: "Aptos", "Segoe UI", Arial, sans-serif;
             font-size: 47px;
             font-weight: 400;
             line-height: 1.12;
@@ -173,7 +173,7 @@
         }
 
         .form-box h2 {
-            font-family: Georgia, serif;
+            font-family: "Aptos", "Segoe UI", Arial, sans-serif;
             font-size: 38px;
             font-weight: normal;
             margin-bottom: 8px;

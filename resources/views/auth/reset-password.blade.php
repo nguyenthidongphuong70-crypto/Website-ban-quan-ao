@@ -30,7 +30,7 @@
 
             background: #f8f5f0;
 
-            font-family: 'DM Sans', sans-serif;
+            font-family: "Aptos", "Segoe UI", Arial, sans-serif;
         }
 
         .box {
@@ -49,7 +49,7 @@
         .brand {
             text-align: center;
 
-            font-family: 'Cormorant Garamond', serif;
+            font-family: "Aptos", "Segoe UI", Arial, sans-serif;
 
             font-size: 27px;
 
@@ -61,7 +61,7 @@
         h1 {
             text-align: center;
 
-            font-family: 'Cormorant Garamond', serif;
+            font-family: "Aptos", "Segoe UI", Arial, sans-serif;
 
             font-size: 31px;
 

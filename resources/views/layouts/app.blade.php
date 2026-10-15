@@ -23,8 +23,8 @@
             --clr-mid-gray: #6b6560;
             --clr-dark-gray: #2e2b28;
 
-            --font-display: 'Cormorant Garamond', Georgia, serif;
-            --font-body: 'DM Sans', -apple-system, sans-serif;
+            --font-display: "Aptos", "Segoe UI", Arial, sans-serif;
+            --font-body: "Aptos", "Segoe UI", Arial, sans-serif;
 
             --nav-height: 72px;
             --transition-base: 300ms cubic-bezier(0.25, 0.46, 0.45, 0.94);
