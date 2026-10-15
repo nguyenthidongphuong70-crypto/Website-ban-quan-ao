@@ -53,6 +53,9 @@ class Product extends Model
         if (str_starts_with($this->image, 'http://') || str_starts_with($this->image, 'https://')) {
             return $this->image;
         }
+        if (file_exists(public_path('images/products/' . $this->image))) {
+            return asset('images/products/' . $this->image);
+        }
 
         if (str_contains($this->image, '/')) {
             return asset('storage/' . ltrim($this->image, '/'));
