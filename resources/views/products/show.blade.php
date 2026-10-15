@@ -312,7 +312,7 @@
 {{-- ================= POPUP THÔNG BÁO CÓ TÊN SẢN PHẨM ================= --}}
     @if(session('success'))
         <div id="cart-popup-alert" class="cart-popup-toast">
-            <span>✅ {{ session('success') }}</span>
+            <span> {{ session('success') }}</span>
         </div>
 
         <style>
@@ -320,7 +320,7 @@
                 position: fixed;
                 top: 20px;
                 right: 20px;
-                background: #111;
+                background: #2e2b28;
                 color: #fff;
                 padding: 12px 20px;
                 border-radius: 6px;
