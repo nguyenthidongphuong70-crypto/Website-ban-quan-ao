@@ -9,10 +9,15 @@ class OrderDetail extends Model
 {
     use HasFactory;
 
-    protected $table = 'order_details'; // Trỏ đúng bảng order_details
+    protected $table = 'order_details';
+
+    public $timestamps = false; 
 
     protected $fillable = [
-        'order_id', 'product_id', 'quantity', 'price'
+        'order_id',
+        'product_id',
+        'quantity',
+        'price'
     ];
 
     public function order()

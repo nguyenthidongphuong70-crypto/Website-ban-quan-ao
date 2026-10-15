@@ -63,7 +63,6 @@ Route::middleware(['auth'])->group(function () {
 */
 
 Route::middleware('auth')->group(function () {
-
     Route::get('/profile', [ProfileController::class, 'edit'])
         ->name('profile.edit');
 
@@ -121,6 +120,7 @@ Route::middleware('guest')->group(function () {
     )->name('password.reset.phone');
 });
 
+
 /*
 |--------------------------------------------------------------------------
 | ĐĂNG NHẬP MẠNG XÃ HỘI
@@ -167,10 +167,6 @@ Route::prefix('admin')
             'products',
             AdminProductController::class
         );
-
-
-
-
 
         // Danh sách đơn hàng
         Route::get('/orders', [OrderController::class, 'index'])
