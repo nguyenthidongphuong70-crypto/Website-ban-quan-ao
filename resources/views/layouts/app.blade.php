@@ -1677,12 +1677,6 @@
     {{-- ======================== MAIN CONTENT ======================== --}}
     <main class="page-main" id="main-content">
         {{-- Flash messages from any controller --}}
-        @if(session('success'))
-        <div class="auren-container" style="padding-top: 24px;">
-            <div class="auren-alert success" role="alert">{{ session('success') }}</div>
-        </div>
-        @endif
-
         @if(session('error'))
         <div class="auren-container" style="padding-top: 24px;">
             <div class="auren-alert error" role="alert">{{ session('error') }}</div>
