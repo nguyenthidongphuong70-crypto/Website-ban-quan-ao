@@ -92,15 +92,14 @@ class OrderController extends Controller
         return redirect()->back()->with('error', 'Có lỗi xảy ra, vui lòng thử lại! ' . $e->getMessage());
     }
 }
-public function history() // hoặc danh sách đơn hàng của khách/admin
-{
-    // Lấy danh sách đơn hàng của user đang đăng nhập (kèm theo chi tiết sản phẩm nếu cần hiển thị bên trong)
-    $orders = Order::where('user_id', auth()->id())
-                    ->with('orderDetails.product') // Eager load để lấy sản phẩm nếu cần hiển thị
-                    ->latest()
-                    ->get();
+    public function history() // hoặc danh sách đơn hàng của khách/admin
+    {
+        $orders = Order::where('user_id', auth()->id())
+                        ->with('orderDetails.product')
+                        ->latest()
+                        ->get();
 
-    return view('orders.index', compact('orders')); 
-}
+        return view('orders.index', compact('orders')); 
+    }
 
 }
