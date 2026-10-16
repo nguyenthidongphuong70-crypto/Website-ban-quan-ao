@@ -10,33 +10,50 @@
         <div class="alert alert-danger">{{ session('error') }}</div>
     @endif
 
-    <form action="{{ route('checkout.store') }}" method="POST">
-        @csrf
-        <div class="row">
-            <!-- Cột bên trái: Nhập thông tin giao hàng -->
-            <div class="col-md-7">
-                <h4>Địa chỉ nhận hàng</h4>
-                
-                <div class="mb-3">
-                    <label>Họ và tên người nhận *</label>
-                    <input type="text" name="name" class="form-control" value="{{ old('name', Auth::user()->name ?? '') }}" required>
-                </div>
+    <form action="{{ route('checkout.process') }}" method="POST">
+    @csrf
+    
+    <div style="margin-bottom: 15px;">
+        <label style="font-weight: 500; display: block; margin-bottom: 5px;">HỌ VÀ TÊN NGƯỜI NHẬN *</label>
+        <input type="text" name="receiver_name" value="{{ old('receiver_name') }}" required 
+               style="width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 4px;" placeholder="Ví dụ: Nguyen Van A">
+        @error('receiver_name') <span style="color: red; font-size: 12px;">{{ $message }}</span> @enderror
+    </div>
 
-                <div class="mb-3">
-                    <label>Số điện thoại *</label>
-                    <input type="text" name="phone" class="form-control" value="{{ old('phone', Auth::user()->phone ?? '') }}" required>
-                </div>
+    <div style="margin-bottom: 15px;">
+        <label style="font-weight: 500; display: block; margin-bottom: 5px;">SỐ ĐIỆN THOẠI *</label>
+        <input type="text" name="phone" value="{{ old('phone') }}" required maxlength="10" 
+               style="width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 4px;" placeholder="Ví dụ: 0912345678">
+        @error('phone') <span style="color: red; font-size: 12px;">{{ $message }}</span> @enderror
+    </div>
 
-                <div class="mb-3">
-                    <label>Địa chỉ giao hàng cụ thể *</label>
-                    <input type="text" name="address" class="form-control" value="{{ old('address') }}" required>
-                </div>
+    {{-- Ô địa chỉ chung đơn giản gọn gàng --}}
+    <div style="margin-bottom: 15px;">
+        <label style="font-weight: 500; display: block; margin-bottom: 5px;">ĐỊA CHỈ NHẬN HÀNG *</label>
+        <input type="text" name="address" value="{{ old('address') }}" required 
+            style="width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 4px;" placeholder="Ví dụ: 123 Điện Biên Phủ, Phường 25, Bình Thạnh, TP.HCM">
+        @error('address') <span style="color: red; font-size: 12px;">{{ $message }}</span> @enderror
+    </div>
 
-                <div class="mb-3">
-                    <label>Ghi chú đơn hàng (tùy chọn)</label>
-                    <textarea name="note" class="form-control">{{ old('note') }}</textarea>
-                </div>
-            </div>
+    <div style="display: flex; gap: 10px; margin-bottom: 15px;">
+        <div style="flex: 1;">
+            <label style="font-weight: 500; display: block; margin-bottom: 5px;">XÃ / PHƯỜNG *</label>
+            <input type="text" name="ward" value="{{ old('ward') }}" required 
+                   style="width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 4px;" placeholder="Ví dụ: Phường 25">
+            @error('ward') <span style="color: red; font-size: 12px;">{{ $message }}</span> @enderror
+        </div>
+        <div style="flex: 1;">
+            <label style="font-weight: 500; display: block; margin-bottom: 5px;">ĐỊA CHỈ CỤ THỂ (Số nhà, tên đường) *</label>
+            <input type="text" name="address_detail" value="{{ old('address_detail') }}" required 
+                   style="width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 4px;" placeholder="Ví dụ: 123 Điện Biên Phủ">
+            @error('address_detail') <span style="color: red; font-size: 12px;">{{ $message }}</span> @enderror
+        </div>
+    </div>
+
+    <div style="margin-bottom: 15px;">
+        <label style="font-weight: 500; display: block; margin-bottom: 5px;">GHI CHÚ ĐƠN HÀNG (TÙY CHỌN)</label>
+        <textarea name="note" style="width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 4px;" rows="3">{{ old('note') }}</textarea>
+    </div>
 
             <!-- Cột bên phải: Tóm tắt đơn hàng và sản phẩm -->
             <div class="col-md-5">

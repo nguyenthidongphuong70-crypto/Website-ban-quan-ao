@@ -3,24 +3,51 @@
 @section('title', 'Đặt hàng thành công')
 
 @section('content')
-<div class="container py-5 text-center">
-    <div class="card border-0 shadow-sm p-5 mx-auto" style="max-width: 600px;">
-        <div class="mb-4 text-success fs-1">✔</div>
-        <h2 class="fw-bold mb-3">Đặt hàng thành công!</h2>
-        <p class="text-muted mb-4">Cảm ơn bạn đã mua hàng. Mã đơn hàng của bạn là: <strong>#{{ $order->id }}</strong></p>
-        
-        <div class="text-start border-top pt-3 mb-4">
-            <p><strong>Người nhận:</strong> {{ $order->name }}</p>
-            <p><strong>Số điện thoại:</strong> {{ $order->phone }}</p>
-            <p><strong>Địa chỉ:</strong> {{ $order->address }}</p>
-            <p><strong>Tổng tiền:</strong> <span class="text-danger fw-bold">{{ number_format($order->total_price) }} đ</span></p>
-        </div>
+<div class="container" style="max-width: 800px; margin: 40px auto; padding: 20px; background: #fff; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
+    <div style="text-align: center; margin-bottom: 30px;">
+        <h2 style="color: #28a745;">Đặt hàng thành công!</h2>
+        <p style="color: #666;">Cảm ơn bạn đã mua hàng. Dưới đây là thông tin chi tiết đơn hàng của bạn:</p>
+    </div>
 
-        <div class="d-flex justify-content-between">
-            <a href="{{ route('products.index') }}" class="btn btn-outline-dark py-2">Tiếp tục mua sắm</a>
-            <!-- Nếu bạn sau này có trang lịch sử đơn hàng -->
-            <a href="#" class="btn btn-dark py-2">Xem lịch sử đơn hàng</a>
+    <div style="margin-bottom: 20px; border-bottom: 1px solid #eee; padding-bottom: 15px;">
+        <h4>Thông tin nhận hàng</h4>
+        <p><strong>Họ tên:</strong> {{ $order->receiver_name }}</p>
+        <p><strong>Số điện thoại:</strong> {{ $order->phone }}</p>
+        <p><strong>Địa chỉ giao hàng:</strong> {{ $order->address }}</p>
+        <p><strong>Phương thức thanh toán:</strong> {{ strtoupper($order->payment_method) }}</p>
+        <p><strong>Trạng thái đơn hàng:</strong> <span style="color: orange; font-weight: bold;">{{ ucfirst($order->status) }}</span></p>
+    </div>
+
+    <div>
+        <h4>Danh sách sản phẩm đã mua</h4>
+        <table style="width: 100%; border-collapse: collapse; margin-top: 10px;">
+            <thead>
+                <tr style="background: #f8f9fa; text-align: left;">
+                    <th style="padding: 10px; border-bottom: 1px solid #ddd;">Sản phẩm</th>
+                    <th style="padding: 10px; border-bottom: 1px solid #ddd;">Số lượng</th>
+                    <th style="padding: 10px; border-bottom: 1px solid #ddd;">Giá</th>
+                    <th style="padding: 10px; border-bottom: 1px solid #ddd; text-align: right;">Thành tiền</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach($order->orderDetails as $detail)
+                <tr>
+                    <td style="padding: 10px; border-bottom: 1px solid #eee;">{{ $detail->product->name ?? 'Sản phẩm' }}</td>
+                    <td style="padding: 10px; border-bottom: 1px solid #eee;">{{ $detail->quantity }}</td>
+                    <td style="padding: 10px; border-bottom: 1px solid #eee;">{{ number_format($detail->price) }} đ</td>
+                    <td style="padding: 10px; border-bottom: 1px solid #eee; text-align: right;">{{ number_format($detail->price * $detail->quantity) }} đ</td>
+                </tr>
+                @endforeach
+            </tbody>
+        </table>
+
+        <div style="text-align: right; margin-top: 20px;">
+            <h3>Tổng thanh toán: <span style="color: #d9534f;">{{ number_format($order->total_price) }} đ</span></h3>
         </div>
+    </div>
+
+    <div style="text-align: center; margin-top: 30px;">
+        <a href="{{ url('/') }}" class="btn" style="background: #000; color: #fff; padding: 10px 20px; text-decoration: none; border-radius: 4px;">TIẾP TỤC MUA SẮM</a>
     </div>
 </div>
 @endsection
