@@ -10,6 +10,9 @@ use App\Http\Controllers\Admin\ProductController as AdminProductController;
 use App\Http\Controllers\Admin\CategoryController as AdminCategoryController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
+use App\Http\Controllers\CheckoutController;
+use App\Http\Controllers\CartController;
+use App\Http\Controllers\MomoController;
 
 /*
 |--------------------------------------------------------------------------
@@ -27,7 +30,32 @@ Route::get('/products', [ProductController::class, 'index'])
 Route::get('/products/{product}', [ProductController::class, 'show'])
     ->name('products.show');
 
+/*
+|--------------------------------------------------------------------------
+| GIỎ HÀNG / ĐẶT HÀNG
+|--------------------------------------------------------------------------
+*/
+Route::middleware(['auth'])->group(function () {
+    Route::get('/cart', [CartController::class, 'index'])->name('cart.index');
+    Route::put('/cart/{cartItem}', [CartController::class, 'update'])->name('cart.update');
+    Route::delete('/cart/{cartItem}', [CartController::class, 'destroy'])->name('cart.destroy');
+    Route::post('/cart/{product}', [CartController::class, 'store'])->name('cart.store');
+    Route::put('/cart/update/{id}', [CartController::class, 'update'])->name('cart.update');
 
+    Route::get('/products/{id}', [ProductController::class, 'show'])->name('products.show');
+    Route::post('/products/{id}', [CartController::class, 'store'])->name('cart.store');
+    Route::post('/products/{product}/cart', [CartController::class, 'store'])->name('cart.store');
+
+    Route::get('/checkout', [CheckoutController::class, 'index'])->name('checkout.index');
+
+    Route::post('/checkout', [CheckoutController::class, 'store'])->name('checkout.process');
+    
+    Route::get('/checkout/success/{id}', [OrderController::class, 'success'])->name('orders.success');
+
+    Route::match(['put', 'patch'], '/cart/{id}', [CartController::class, 'update'])->name('cart.update');
+    
+    
+});
 /*
 |--------------------------------------------------------------------------
 | HỒ SƠ CÁ NHÂN

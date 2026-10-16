@@ -19,7 +19,7 @@
 
 {{-- Thống kê dạng Card (Đã tính doanh thu thực tế) --}}
 <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; margin-bottom: 30px;">
-    
+
     <div class="admin-card" style="margin: 0;">
         <p style="color: var(--ad-muted); font-size: 14px; font-weight: 500; margin-bottom: 8px;">Tổng sản phẩm</p>
         <h2 style="font-size: 28px; font-weight: 600; color: #111;">{{ $totalProducts ?? 0 }}</h2>
@@ -102,9 +102,7 @@
 </div>
 
 {{-- Khối chức năng quản lý --}}
-<div class="admin-card">
-    <div class="card-top" style="margin-bottom: 20px;">
-        <h2 class="card-top-title">Quản lý hệ thống</h2>
+@@ -41,13 +108,42 @@
     </div>
 
     <div style="display: flex; gap: 15px; flex-wrap: wrap;">

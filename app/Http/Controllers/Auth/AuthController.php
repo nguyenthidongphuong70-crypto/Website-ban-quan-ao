@@ -79,12 +79,10 @@ class AuthController extends Controller
             /** @var User $user */
             $user = Auth::user();
 
-            // Nếu là Admin -> Vào thẳng trang Dashboard quản trị
             if ($user && $user->isAdmin()) {
-                return redirect('/admin/dashboard');
+                return redirect('/admin');
             }
 
-            // Nếu là Khách hàng -> Về trang chủ
             return redirect('/');
         }
 
@@ -106,117 +104,116 @@ class AuthController extends Controller
         return redirect()->route('login');
     }
 
-    public function redirectToProvider(string $provider)
-    {
-        if (!in_array($provider, ['google', 'facebook', 'instagram'])) {
-            abort(404);
-        }
+public function redirectToProvider(string $provider)
+{
+    if (!in_array($provider, ['google', 'facebook', 'instagram'])) {
+        abort(404);
+    }
 
-        return Socialite::driver($provider)->redirect();
+    return Socialite::driver($provider)->redirect();
+}
+
+
+public function handleProviderCallback(Request $request, string $provider)
+{
+    if (!in_array($provider, ['google', 'facebook', 'instagram'])) {
+        abort(404);
+    }
+
+    try {
+        $socialUser = Socialite::driver($provider)->user();
+    } catch (\Throwable $e) {
+
+        return redirect()
+            ->route('login')
+            ->withErrors([
+                'login' => 'Đăng nhập bằng ' . ucfirst($provider) . ' thất bại.'
+            ]);
     }
 
 
-    public function handleProviderCallback(Request $request, string $provider)
-    {
-        if (!in_array($provider, ['google', 'facebook', 'instagram'])) {
-            abort(404);
-        }
+    /*
+    |--------------------------------------------------------------------------
+    | INSTAGRAM
+    |--------------------------------------------------------------------------
+    |
+    | Instagram provider không trả email như Google/Facebook,
+    | nên dùng ID Instagram để tạo email nội bộ trong hệ thống.
+    |
+    */
 
-        try {
-            $socialUser = Socialite::driver($provider)->user();
-        } catch (\Throwable $e) {
+    if ($provider === 'instagram') {
+
+        $email = 'instagram_'
+            . $socialUser->getId()
+            . '@auren.local';
+
+        $user = User::firstOrCreate(
+            [
+                'email' => $email,
+            ],
+            [
+                'full_name' =>
+                    $socialUser->getNickname()
+                    ?: 'Instagram User',
+
+                'password' => Str::random(40),
+
+                'role' => 'customer',
+            ]
+        );
+
+    }
+
+    /*
+    |--------------------------------------------------------------------------
+    | GOOGLE / FACEBOOK
+    |--------------------------------------------------------------------------
+    */
+
+    else {
+
+        $email = $socialUser->getEmail();
+
+        if (!$email) {
 
             return redirect()
                 ->route('login')
                 ->withErrors([
-                    'login' => 'Đăng nhập bằng ' . ucfirst($provider) . ' thất bại.'
+                    'login' => 'Không lấy được email từ tài khoản.'
                 ]);
         }
 
 
-        /*
-        |--------------------------------------------------------------------------
-        | INSTAGRAM
-        |--------------------------------------------------------------------------
-        */
+        $user = User::firstOrCreate(
+            [
+                'email' => $email,
+            ],
+            [
+                'full_name' =>
+                    $socialUser->getName()
+                    ?: $socialUser->getNickname()
+                    ?: 'Khách hàng',
 
-        if ($provider === 'instagram') {
+                'password' => Str::random(40),
 
-            $email = 'instagram_'
-                . $socialUser->getId()
-                . '@auren.local';
-
-            $user = User::firstOrCreate(
-                [
-                    'email' => $email,
-                ],
-                [
-                    'full_name' =>
-                        $socialUser->getNickname()
-                        ?: 'Instagram User',
-
-                    'password' => Str::random(40),
-
-                    'role' => 'customer',
-                ]
-            );
-
-        }
-
-        /*
-        |--------------------------------------------------------------------------
-        | GOOGLE / FACEBOOK
-        |--------------------------------------------------------------------------
-        */
-
-        else {
-
-            $email = $socialUser->getEmail();
-
-            if (!$email) {
-
-                return redirect()
-                    ->route('login')
-                    ->withErrors([
-                        'login' => 'Không lấy được email từ tài khoản.'
-                    ]);
-            }
-
-
-            $user = User::firstOrCreate(
-                [
-                    'email' => $email,
-                ],
-                [
-                    'full_name' =>
-                        $socialUser->getName()
-                        ?: $socialUser->getNickname()
-                        ?: 'Khách hàng',
-
-                    'password' => Str::random(40),
-
-                    'role' => 'customer',
-                ]
-            );
-        }
-
-
-        Auth::login($user, true);
-
-        $request->session()->regenerate();
-
-        // Nếu tài khoản mạng xã hội đăng nhập vào là Admin -> Vào thẳng Dashboard
-        if ($user && $user->isAdmin()) {
-            return redirect('/admin/dashboard')
-                ->with('success', 'Đăng nhập bằng ' . ucfirst($provider) . ' thành công.');
-        }
-
-        return redirect('/products')
-            ->with(
-                'success',
-                'Đăng nhập bằng '
-                . ucfirst($provider)
-                . ' thành công.'
-            );
+                'role' => 'customer',
+            ]
+        );
     }
+
+
+    Auth::login($user, true);
+
+    $request->session()->regenerate();
+
+
+    return redirect('/products')
+        ->with(
+            'success',
+            'Đăng nhập bằng '
+            . ucfirst($provider)
+            . ' thành công.'
+        );
+}
 }
