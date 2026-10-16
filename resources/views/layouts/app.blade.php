@@ -11,7 +11,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500&display=swap" rel="stylesheet">
-
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
         :root {
             --clr-black: #0a0a0a;
@@ -23,8 +23,8 @@
             --clr-mid-gray: #6b6560;
             --clr-dark-gray: #2e2b28;
 
-            --font-display: 'Cormorant Garamond', Georgia, serif;
-            --font-body: 'DM Sans', -apple-system, sans-serif;
+            --font-display: "Aptos", "Segoe UI", Arial, sans-serif;
+            --font-body: "Aptos", "Segoe UI", Arial, sans-serif;
 
             --nav-height: 72px;
             --transition-base: 300ms cubic-bezier(0.25, 0.46, 0.45, 0.94);
@@ -1457,16 +1457,43 @@
                     </svg>
                 </button>
 
-                {{-- Cart icon — UI hook cho Người 3 (chỉ icon, không có cart logic) --}}
-                <a href="{{ Route::has('cart.index') ? route('cart.index') : '#' }}"
-                    class="nav-icon-btn"
-                    aria-label="Giỏ hàng">
-                    <svg viewBox="0 0 24 24">
-                        <path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z" />
-                        <line x1="3" y1="6" x2="21" y2="6" />
-                        <path d="M16 10a4 4 0 0 1-8 0" />
-                    </svg>
-                </a>
+                {{-- Cart icon – UI hook cho Người 3 (chỉ icon, không có cart logic) --}}
+                    <a href="{{ Route::has('cart.index') ? route('cart.index') : '#' }}"
+                        class="nav-icon-btn"
+                        aria-label="Giỏ hàng"
+                        style="position: relative; display: inline-flex; align-items: center;"> {{-- Thêm style relative để định vị badge --}}
+                        
+                        <svg viewBox="0 0 24 24">
+                            <path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z" />
+                            <line x1="3" y1="6" x2="21" y2="6" />
+                            <path d="M16 10a4 4 0 0 1-8 0" />
+                        </svg>
+
+                        {{-- THÊM Ô HIỂN THỊ SỐ LƯỢNG Ở ĐÂY --}}
+                        @if(isset($cartCount) && $cartCount > 0)
+                            <span class="cart-count-badge">
+                                {{ $cartCount }}
+                            </span>
+                        @endif
+                    </a>
+
+                    {{-- Bổ sung đoạn CSS này vào file CSS chung hoặc đặt trực tiếp vào thẻ <style> --}}
+                    <style>
+                        .cart-count-badge {
+                            position: absolute;
+                            top: 2px;
+                            right: 4px;
+                            background: #e53935;
+                            color: #fff;
+                            font-size: 10px;
+                            font-weight: bold;
+                            padding: 1px 5px;
+                            border-radius: 50%;
+                            line-height: 1;
+                            min-width: 16px;
+                            text-align: center;
+                        }
+                    </style>
 
                 {{-- Account icon — Người 2 --}}
                 <div class="account-menu">
@@ -1650,12 +1677,6 @@
     {{-- ======================== MAIN CONTENT ======================== --}}
     <main class="page-main" id="main-content">
         {{-- Flash messages from any controller --}}
-        @if(session('success'))
-        <div class="auren-container" style="padding-top: 24px;">
-            <div class="auren-alert success" role="alert">{{ session('success') }}</div>
-        </div>
-        @endif
-
         @if(session('error'))
         <div class="auren-container" style="padding-top: 24px;">
             <div class="auren-alert error" role="alert">{{ session('error') }}</div>

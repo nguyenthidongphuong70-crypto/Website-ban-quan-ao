@@ -12,10 +12,9 @@ class OrderController extends Controller
     // Hiển thị tất cả đơn hàng
     public function index()
     {
-        // Sắp xếp theo 'id' giảm dần để tránh lỗi nếu CSDL không có cột 'created_at'
         $orders = Order::with('user')
-            ->orderBy('id', 'desc')
-            ->get();
+            ->latest()
+            ->paginate(10);
 
         return view('admin.orders.index', compact('orders'));
     }
@@ -35,28 +34,74 @@ class OrderController extends Controller
     public function updateStatus(Request $request, $id)
     {
         $request->validate([
-            'status' => 'required|string'
+            'status' => 'required|in:pending,processing,shipped,completed,cancelled',
         ]);
 
-        // Dùng DB::table để update trực tiếp duy nhất cột 'status',
-        // bỏ qua Eloquent Model nên KHÔNG bị dính lỗi thiếu cột 'updated_at'
-        DB::table('orders')
-            ->where('id', $id)
-            ->update([
-                'status' => $request->status
+        $order = Order::with('orderDetails.product')->findOrFail($id);
+
+        $oldStatus = $order->status;
+        $newStatus = $request->input('status');
+
+        DB::beginTransaction();
+
+        try {
+            // Hủy đơn: hoàn lại số lượng tồn kho
+            if ($oldStatus !== 'cancelled' && $newStatus === 'cancelled') {
+                foreach ($order->orderDetails as $detail) {
+                    $product = $detail->product;
+
+                    if ($product) {
+                        $product->stock += $detail->quantity;
+                        $product->save();
+                    }
+                }
+            }
+
+            // Khôi phục đơn đã hủy: trừ lại tồn kho
+            if ($oldStatus === 'cancelled' && $newStatus !== 'cancelled') {
+                foreach ($order->orderDetails as $detail) {
+                    $product = $detail->product;
+
+                    if ($product) {
+                        if ($product->stock < $detail->quantity) {
+                            throw new \Exception(
+                                'Không đủ tồn kho để khôi phục đơn hàng.'
+                            );
+                        }
+
+                        $product->stock -= $detail->quantity;
+                        $product->save();
+                    }
+                }
+            }
+
+            $order->update([
+                'status' => $newStatus,
             ]);
 
-        return redirect()
-            ->route('admin.orders.show', $id)
-            ->with('success', 'Cập nhật trạng thái đơn hàng thành công.');
+            DB::commit();
+
+            return redirect()->back()->with(
+                'success',
+                'Cập nhật trạng thái đơn hàng thành công!'
+            );
+        } catch (\Throwable $e) {
+            DB::rollBack();
+
+            return redirect()->back()->with(
+                'error',
+                'Lỗi: ' . $e->getMessage()
+            );
+        }
     }
-    /**
-     * Hiển thị trang in hóa đơn đơn hàng
-     */
+
+    // Hiển thị trang in hóa đơn đơn hàng
     public function printInvoice($id)
     {
-        // Sử dụng đúng tên quan hệ 'details' đã khai báo trong Order.php
-        $order = Order::with(['user', 'details.product'])->findOrFail($id);
+        $order = Order::with([
+            'user',
+            'details.product'
+        ])->findOrFail($id);
 
         return view('admin.orders.print', compact('order'));
     }
