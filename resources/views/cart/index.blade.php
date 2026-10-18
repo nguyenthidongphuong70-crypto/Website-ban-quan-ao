@@ -13,7 +13,8 @@
             <a href="{{ route('products.index') }}" class="btn btn-outline-dark px-4 py-2 text-uppercase" style="font-size: 11px; letter-spacing: 1.5px; border-radius: 6px; border-color: #000;">
                 &lt; Tiếp tục mua sắm
             </a>
-        </div>
+            
+        </div>  
 
         @if(session('success'))
             <div class="alert alert-success mb-4 border-0 rounded-3 shadow-sm bg-white text-dark" style="border-left: 4px solid #000 !important;">
@@ -49,8 +50,7 @@
                                             <td class="py-3">
                                                 <div class="d-flex align-items-center">
                                                     @if(isset($item->product->image))
-                                                        <img src="{{ $item->product->image }}" alt="{{ $item->product->name }}" 
-                                                             class="rounded-2 me-3" style="width: 60px; height: 60px; object-fit: cover; background-color: #f7f5f0;">
+                                                    <img src="{{ asset('images/products/' . $item->product->image) }}" alt="{{ $item->product->name }}" class="rounded-2 me-3" style="width: 60px; height: 60px; object-fit: cover; background-color: #f7f5f0;">
                                                     @endif
                                                     <div>
                                                         <h6 class="mb-1 fw-bold text-dark" style="font-size: 14px;">{{ $item->product->name ?? $item['name'] }}</h6>

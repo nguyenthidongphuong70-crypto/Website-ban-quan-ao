@@ -7,6 +7,8 @@ use App\Models\CartItem;
 use App\Models\Product;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
+
 
 class CartController extends Controller
 {
@@ -27,37 +29,68 @@ class CartController extends Controller
 }
 
 
-    public function store(Request $request)
+    public function store(Request $request, $id)
+    {
+        try {
+            // Sử dụng Auth::check() và Auth::id()
+            if (!Auth::check()) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Vui lòng đăng nhập để thêm sản phẩm vào giỏ hàng!'
+                ], 401);
+            }
+
+            $quantity = $request->input('quantity', 1);
+
+            $cartItem = CartItem::where('user_id', Auth::id())
+                                ->where('product_id', $id)
+                                ->first();
+
+            if ($cartItem) {
+                $cartItem->quantity +=  $quantity;
+                $cartItem->save();
+            } else {
+                CartItem::create([
+                    'user_id'    => Auth::id(),
+                    'product_id' => $id,
+                    'quantity'   => $quantity
+                ]);
+            }
+
+            $cartCount = CartItem::where('user_id', Auth::id())->sum('quantity');
+
+            return response()->json([
+                'success'   => true,
+                'message'   => 'Đã thêm sản phẩm vào giỏ hàng!',
+                'cartCount' => $cartCount
+            ]);
+
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Lỗi server: ' . $e->getMessage()
+            ], 500);
+        }
+    }
+    public function addToCart(Request $request)
 {
-    $request->validate([
-        'product_id' => 'required|exists:products,id',
-        'quantity'   => 'required|integer|min:1',
-    ]);
+    // Xử lý thêm sản phẩm vào database/session của bạn ở đây...
+    // Ví dụ:
+    // $cartItem = ...;
 
-    $userId = Auth::id();
-    $productId = $request->product_id;
-    $quantity = $request->quantity;
+    // Tính tổng số lượng sản phẩm trong giỏ hàng hiện tại của user
+    $cartCount = CartItem::where('user_id', Auth::id())->sum('quantity');
 
-    // Lấy thông tin sản phẩm để có thể gọi tên sản phẩm
-    $product = \App\Models\Product::findOrFail($productId);
-
-    $cartItem = CartItem::where('user_id', $userId)
-                        ->where('product_id', $productId)
-                        ->first();
-
-    if ($cartItem) {
-        $cartItem->quantity += $quantity;
-        $cartItem->save();
-    } else {
-        CartItem::create([
-            'user_id'    => $userId,
-            'product_id' => $productId,
-            'quantity'   => $quantity,
+    // Nếu là request từ AJAX, trả về JSON
+    if ($request->ajax() || $request->wantsJson()) {
+        return response()->json([
+            'success' => true,
+            'message' => 'Đã thêm sản phẩm vào giỏ hàng!',
+            'cartCount' => $cartCount // Số lượng mới để cập nhật lên icon giỏ hàng
         ]);
     }
 
-    // Đưa tên sản phẩm vào câu thông báo
-    return back()->with('success', 'Đã thêm "' . $product->name . '" vào giỏ hàng thành công!');
+    return redirect()->back()->with('success', 'Thêm vào giỏ hàng thành công!');
 }
 
     public function update(Request $request, $id)
