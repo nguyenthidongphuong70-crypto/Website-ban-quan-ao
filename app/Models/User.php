@@ -10,6 +10,8 @@ class User extends Authenticatable
 {
     use HasFactory, Notifiable;
 
+    public $timestamps = false;
+
     protected $fillable = [
         'full_name',
         'email',
@@ -28,11 +30,9 @@ class User extends Authenticatable
     {
         return [
             'password' => 'hashed',
+            'is_blocked' => 'boolean',
         ];
     }
-
-    // Bảng users hiện không có updated_at
-    public $timestamps = false;
 
     public function cartItems()
     {
@@ -41,11 +41,16 @@ class User extends Authenticatable
 
     public function orders()
     {
-        return $this->hasMany(Order::class);
+        return $this->hasMany(Order::class, 'user_id', 'id');
     }
 
     public function isAdmin(): bool
     {
         return $this->role === 'admin';
+    }
+
+    public function isBlocked(): bool
+    {
+        return (bool) $this->is_blocked;
     }
 }
