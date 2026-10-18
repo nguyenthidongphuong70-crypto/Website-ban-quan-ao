@@ -53,7 +53,7 @@
                             Xem chi tiết
                         </a>
                         <a href="{{ route('admin.orders.print', $order->id) }}" target="_blank" class="btn-ad">
-                            🖨️ In hóa đơn
+                             In hóa đơn
                         </a>
                     </td>
                 </tr>

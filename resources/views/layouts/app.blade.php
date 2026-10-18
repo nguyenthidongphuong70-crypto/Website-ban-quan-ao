@@ -1413,22 +1413,22 @@
                             <div class="admin-nav-dropdown">
                                 @if(Route::has('admin.dashboard'))
                                     <a href="{{ route('admin.dashboard') }}" class="{{ request()->routeIs('admin.dashboard') ? 'active' : '' }}">
-                                        📊 Dashboard
+                                         Dashboard
                                     </a>
                                 @endif
                                 <a href="{{ route('admin.products.index') }}" class="{{ request()->is('admin/products*') ? 'active' : '' }}">
-                                    👕 Quản lý sản phẩm
+                                     Quản lý sản phẩm
                                 </a>
                                 <a href="{{ route('admin.categories.index') }}" class="{{ request()->is('admin/categories*') ? 'active' : '' }}">
-                                    📁 Quản lý danh mục
+                                     Quản lý danh mục
                                 </a>
                                 @if(Route::has('admin.orders.index'))
                                     <a href="{{ route('admin.orders.index') }}" class="{{ request()->is('admin/orders*') ? 'active' : '' }}">
-                                        📦 Quản lý đơn hàng
+                                         Quản lý đơn hàng
                                     </a>
                                 @elseif(Route::has('admin.orders'))
                                     <a href="{{ route('admin.orders') }}" class="{{ request()->is('admin/orders*') ? 'active' : '' }}">
-                                        📦 Quản lý đơn hàng
+                                         Quản lý đơn hàng
                                     </a>
                                 @endif
                             </div>
@@ -1537,14 +1537,14 @@
                             <div class="account-admin-section">
                                 <span class="account-section-title">Quản trị hệ thống</span>
                                 @if(Route::has('admin.dashboard'))
-                                    <a href="{{ route('admin.dashboard') }}">📊 Dashboard</a>
+                                    <a href="{{ route('admin.dashboard') }}"> Dashboard</a>
                                 @endif
-                                <a href="{{ route('admin.products.index') }}">👕 Quản lý sản phẩm</a>
-                                <a href="{{ route('admin.categories.index') }}">📁 Quản lý danh mục</a>
+                                <a href="{{ route('admin.products.index') }}"> Quản lý sản phẩm</a>
+                                <a href="{{ route('admin.categories.index') }}"> Quản lý danh mục</a>
                                 @if(Route::has('admin.orders.index'))
-                                    <a href="{{ route('admin.orders.index') }}">📦 Quản lý đơn hàng</a>
+                                    <a href="{{ route('admin.orders.index') }}"> Quản lý đơn hàng</a>
                                 @elseif(Route::has('admin.orders'))
-                                    <a href="{{ route('admin.orders') }}">📦 Quản lý đơn hàng</a>
+                                    <a href="{{ route('admin.orders') }}"> Quản lý đơn hàng</a>
                                 @endif
                             </div>
                         @endif
@@ -1652,14 +1652,14 @@
                         <span style="font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--clr-warm-gray); display: block; margin-bottom: 8px;">Quản trị (Admin)</span>
                     </li>
                     @if(Route::has('admin.dashboard'))
-                        <li><a href="{{ route('admin.dashboard') }}" class="mobile-nav-link" style="font-size: 18px;">📊 Dashboard</a></li>
+                        <li><a href="{{ route('admin.dashboard') }}" class="mobile-nav-link" style="font-size: 18px;"> Dashboard</a></li>
                     @endif
-                    <li><a href="{{ route('admin.products.index') }}" class="mobile-nav-link" style="font-size: 18px;">👕 Quản lý sản phẩm</a></li>
-                    <li><a href="{{ route('admin.categories.index') }}" class="mobile-nav-link" style="font-size: 18px;">📁 Quản lý danh mục</a></li>
+                    <li><a href="{{ route('admin.products.index') }}" class="mobile-nav-link" style="font-size: 18px;"> Quản lý sản phẩm</a></li>
+                    <li><a href="{{ route('admin.categories.index') }}" class="mobile-nav-link" style="font-size: 18px;"> Quản lý danh mục</a></li>
                     @if(Route::has('admin.orders.index'))
-                        <li><a href="{{ route('admin.orders.index') }}" class="mobile-nav-link" style="font-size: 18px;">📦 Quản lý đơn hàng</a></li>
+                        <li><a href="{{ route('admin.orders.index') }}" class="mobile-nav-link" style="font-size: 18px;"> Quản lý đơn hàng</a></li>
                     @elseif(Route::has('admin.orders'))
-                        <li><a href="{{ route('admin.orders') }}" class="mobile-nav-link" style="font-size: 18px;">📦 Quản lý đơn hàng</a></li>
+                        <li><a href="{{ route('admin.orders') }}" class="mobile-nav-link" style="font-size: 18px;"> Quản lý đơn hàng</a></li>
                     @endif
                 @endif
             @endauth

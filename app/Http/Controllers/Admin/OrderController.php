@@ -10,11 +10,27 @@ use Illuminate\Support\Facades\DB;
 class OrderController extends Controller
 {
     // Hiển thị tất cả đơn hàng
-    public function index()
+    // Hiển thị danh sách đơn hàng (có hỗ trợ lọc theo trạng thái)
+    public function index(Request $request)
     {
-        $orders = Order::with('user')
-            ->latest()
-            ->paginate(10);
+        $query = Order::with('user');
+
+        // Kiểm tra nếu trên URL có truyền tham số status (ví dụ: ?status=pending hoặc ?status=completed)
+        if ($request->has('status') && $request->status != '') {
+            $status = $request->status;
+
+            // Xử lý map giá trị trạng thái cho khớp với CSDL của bạn
+            if ($status === 'pending') {
+                // Tùy theo CSDL bạn lưu là 'pending' hay tiếng Việt, hãy thêm vào mảng bên dưới
+                $query->whereIn('status', ['pending', 'Đang xử lý', 'Chờ xử lý']);
+            } elseif ($status === 'completed') {
+                $query->whereIn('status', ['completed', 'Hoàn thành', 'Đã hoàn thành']);
+            } else {
+                $query->where('status', $status);
+            }
+        }
+
+        $orders = $query->latest()->paginate(10)->appends($request->query());
 
         return view('admin.orders.index', compact('orders'));
     }
@@ -34,7 +50,7 @@ class OrderController extends Controller
     public function updateStatus(Request $request, $id)
     {
         $request->validate([
-            'status' => 'required|in:pending,processing,shipped,completed,cancelled',
+            'status' => 'required|in:pending,processing,shipped,completed,cancelled,Chờ xử lý,Đang xử lý,Đang giao,Hoàn thành,Đã hủy',
         ]);
 
         $order = Order::with('orderDetails.product')->findOrFail($id);

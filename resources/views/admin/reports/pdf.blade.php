@@ -29,7 +29,7 @@
         <h2 class="card-top-title" style="margin: 0;">Báo Cáo Doanh Thu & Hệ Thống</h2>
         <div>
             <button onclick="window.print()" class="btn-ad" style="cursor: pointer;">
-                🖨️ Lưu thành PDF / In Báo Cáo
+                 Lưu thành PDF / In Báo Cáo
             </button>
             <a href="{{ route('admin.dashboard') }}" class="btn-ad btn-ad-outline" style="margin-left: 10px; text-decoration: none;">
                 ← Quay lại Dashboard
@@ -48,7 +48,7 @@
         </div>
     </div>
 
-    <h3 style="margin-bottom: 10px; font-size: 15px; text-transform: uppercase;">📊 Tổng quan chỉ số hệ thống</h3>
+    <h3 style="margin-bottom: 10px; font-size: 15px; text-transform: uppercase;"> Tổng quan chỉ số hệ thống</h3>
     <table class="admin-table" style="margin-bottom: 25px;">
         <tr>
             <th style="width: 40%;">Tổng sản phẩm kho</th>
@@ -68,7 +68,7 @@
         </tr>
     </table>
 
-    <h3 style="margin-bottom: 10px; font-size: 15px; text-transform: uppercase;">📋 Chi tiết danh sách đơn hàng gần đây</h3>
+    <h3 style="margin-bottom: 10px; font-size: 15px; text-transform: uppercase;"> Chi tiết danh sách đơn hàng gần đây</h3>
     <table class="admin-table">
         <thead>
             <tr>
@@ -86,7 +86,13 @@
                 <td>{{ $orderItem->user->full_name ?? 'Khách vãng lai' }}</td>
                 <td>{{ number_format($orderItem->total_price, 0, ',', '.') }} VNĐ</td>
                 <td><span class="badge-ad neutral">{{ ucfirst($orderItem->status) }}</span></td>
-                <td>{{ $orderItem->created_at ? $orderItem->created_at->format('d/m/Y H:i') : 'N/A' }}</td>
+                <td>
+    @if($orderItem->created_at)
+        {{ is_object($orderItem->created_at) ? $orderItem->created_at->format('d/m/Y H:i') : \Carbon\Carbon::parse($orderItem->created_at)->format('d/m/Y H:i') }}
+    @else
+        N/A
+    @endif
+</td>
             </tr>
             @endforeach
         </tbody>
