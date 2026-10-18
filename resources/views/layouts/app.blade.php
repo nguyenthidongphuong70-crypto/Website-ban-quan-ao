@@ -1356,12 +1356,15 @@
             .auren-search-inner {
                 padding: 12px 14px;
             }
+
             .auren-search-btn-text {
                 display: none;
             }
+
             .auren-search-btn-submit {
                 padding: 8px 12px;
             }
+
             .auren-search-btn-close {
                 padding: 8px 6px;
             }
@@ -1404,36 +1407,42 @@
 
                 {{-- Khu vực chức năng Admin — Chỉ Admin mới nhìn thấy --}}
                 @auth
-                    @if(auth()->user()->isAdmin())
-                        <li class="admin-nav-dropdown-wrap">
-                            <a href="{{ route('admin.products.index') }}"
-                                class="nav-link-item admin-nav-badge {{ request()->is('admin*') ? 'active' : '' }}">
-                                Quản trị <span style="font-size: 8px; margin-left: 2px;">▼</span>
-                            </a>
-                            <div class="admin-nav-dropdown">
-                                @if(Route::has('admin.dashboard'))
-                                    <a href="{{ route('admin.dashboard') }}" class="{{ request()->routeIs('admin.dashboard') ? 'active' : '' }}">
-                                        📊 Dashboard
-                                    </a>
-                                @endif
-                                <a href="{{ route('admin.products.index') }}" class="{{ request()->is('admin/products*') ? 'active' : '' }}">
-                                    👕 Quản lý sản phẩm
-                                </a>
-                                <a href="{{ route('admin.categories.index') }}" class="{{ request()->is('admin/categories*') ? 'active' : '' }}">
-                                    📁 Quản lý danh mục
-                                </a>
-                                @if(Route::has('admin.orders.index'))
-                                    <a href="{{ route('admin.orders.index') }}" class="{{ request()->is('admin/orders*') ? 'active' : '' }}">
-                                        📦 Quản lý đơn hàng
-                                    </a>
-                                @elseif(Route::has('admin.orders'))
-                                    <a href="{{ route('admin.orders') }}" class="{{ request()->is('admin/orders*') ? 'active' : '' }}">
-                                        📦 Quản lý đơn hàng
-                                    </a>
-                                @endif
-                            </div>
-                        </li>
-                    @endif
+                @if(auth()->user()->isAdmin())
+                <li class="admin-nav-dropdown-wrap">
+                    <a href="{{ route('admin.products.index') }}"
+                        class="nav-link-item admin-nav-badge {{ request()->is('admin*') ? 'active' : '' }}">
+                        Quản trị <span style="font-size: 8px; margin-left: 2px;">▼</span>
+                    </a>
+                    <div class="admin-nav-dropdown">
+                        @if(Route::has('admin.dashboard'))
+                        <a href="{{ route('admin.dashboard') }}" class="{{ request()->routeIs('admin.dashboard') ? 'active' : '' }}">
+                            📊 Dashboard
+                        </a>
+                        @endif
+                        <a href="{{ route('admin.products.index') }}" class="{{ request()->is('admin/products*') ? 'active' : '' }}">
+                            👕 Quản lý sản phẩm
+                        </a>
+                        <a href="{{ route('admin.categories.index') }}" class="{{ request()->is('admin/categories*') ? 'active' : '' }}">
+                            📁 Quản lý danh mục
+                        </a>
+                        @if(Route::has('admin.orders.index'))
+                        <a href="{{ route('admin.orders.index') }}" class="{{ request()->is('admin/orders*') ? 'active' : '' }}">
+                            📦 Quản lý đơn hàng
+                        </a>
+                        @elseif(Route::has('admin.orders'))
+                        <a href="{{ route('admin.orders') }}" class="{{ request()->is('admin/orders*') ? 'active' : '' }}">
+                            📦 Quản lý đơn hàng
+                        </a>
+                        @endif
+                        @if(Route::has('admin.users.index'))
+                        <a href="{{ route('admin.users.index') }}"
+                            class="{{ request()->routeIs('admin.users.*') ? 'active' : '' }}">
+                            👥 Quản lý người dùng
+                        </a>
+                        @endif
+                    </div>
+                </li>
+                @endif
                 @endauth
             </ul>
 
@@ -1457,43 +1466,43 @@
                     </svg>
                 </button>
 
-                {{-- Cart icon – UI hook cho Người 3 (chỉ icon, không có cart logic) --}}
-                    <a href="{{ Route::has('cart.index') ? route('cart.index') : '#' }}"
-                        class="nav-icon-btn"
-                        aria-label="Giỏ hàng"
-                        style="position: relative; display: inline-flex; align-items: center;"> {{-- Thêm style relative để định vị badge --}}
-                        
-                        <svg viewBox="0 0 24 24">
-                            <path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z" />
-                            <line x1="3" y1="6" x2="21" y2="6" />
-                            <path d="M16 10a4 4 0 0 1-8 0" />
-                        </svg>
 
-                        {{-- THÊM Ô HIỂN THỊ SỐ LƯỢNG Ở ĐÂY --}}
-                        @if(isset($cartCount) && $cartCount > 0)
-                            <span class="cart-count-badge">
-                                {{ $cartCount }}
-                            </span>
-                        @endif
-                    </a>
+                <a href="{{ Route::has('cart.index') ? route('cart.index') : '#' }}"
+                    class="nav-icon-btn"
+                    aria-label="Giỏ hàng"
+                    style="position: relative; display: inline-flex; align-items: center;">
 
-                    {{-- Bổ sung đoạn CSS này vào file CSS chung hoặc đặt trực tiếp vào thẻ <style> --}}
-                    <style>
-                        .cart-count-badge {
-                            position: absolute;
-                            top: 2px;
-                            right: 4px;
-                            background: #e53935;
-                            color: #fff;
-                            font-size: 10px;
-                            font-weight: bold;
-                            padding: 1px 5px;
-                            border-radius: 50%;
-                            line-height: 1;
-                            min-width: 16px;
-                            text-align: center;
-                        }
-                    </style>
+                    <svg viewBox="0 0 24 24">
+                        <path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z" />
+                        <line x1="3" y1="6" x2="21" y2="6" />
+                        <path d="M16 10a4 4 0 0 1-8 0" />
+                    </svg>
+
+                    {{-- THÊM Ô HIỂN THỊ SỐ LƯỢNG Ở ĐÂY --}}
+                    @if(isset($cartCount) && $cartCount > 0)
+                    <span class="cart-count-badge">
+                        {{ $cartCount }}
+                    </span>
+                    @endif
+                </a>
+
+                {{-- Bổ sung đoạn CSS này vào file CSS chung hoặc đặt trực tiếp vào thẻ <style> --}}
+                <style>
+                    .cart-count-badge {
+                        position: absolute;
+                        top: 2px;
+                        right: 4px;
+                        background: #e53935;
+                        color: #fff;
+                        font-size: 10px;
+                        font-weight: bold;
+                        padding: 1px 5px;
+                        border-radius: 50%;
+                        line-height: 1;
+                        min-width: 16px;
+                        text-align: center;
+                    }
+                </style>
 
                 {{-- Account icon — Người 2 --}}
                 <div class="account-menu">
@@ -1528,25 +1537,28 @@
                         <div class="account-name">
                             <span>{{ auth()->user()->full_name }}</span>
                             @if(auth()->user()->isAdmin())
-                                <span class="badge-role-admin">Admin</span>
+                            <span class="badge-role-admin">Admin</span>
                             @endif
                         </div>
 
                         {{-- Menu quản trị nhanh dành riêng cho Admin trong Account Dropdown --}}
                         @if(auth()->user()->isAdmin())
-                            <div class="account-admin-section">
-                                <span class="account-section-title">Quản trị hệ thống</span>
-                                @if(Route::has('admin.dashboard'))
-                                    <a href="{{ route('admin.dashboard') }}">📊 Dashboard</a>
-                                @endif
-                                <a href="{{ route('admin.products.index') }}">👕 Quản lý sản phẩm</a>
-                                <a href="{{ route('admin.categories.index') }}">📁 Quản lý danh mục</a>
-                                @if(Route::has('admin.orders.index'))
-                                    <a href="{{ route('admin.orders.index') }}">📦 Quản lý đơn hàng</a>
-                                @elseif(Route::has('admin.orders'))
-                                    <a href="{{ route('admin.orders') }}">📦 Quản lý đơn hàng</a>
-                                @endif
-                            </div>
+                        <div class="account-admin-section">
+                            <span class="account-section-title">Quản trị hệ thống</span>
+                            @if(Route::has('admin.dashboard'))
+                            <a href="{{ route('admin.dashboard') }}">📊 Dashboard</a>
+                            @endif
+                            <a href="{{ route('admin.products.index') }}">👕 Quản lý sản phẩm</a>
+                            <a href="{{ route('admin.categories.index') }}">📁 Quản lý danh mục</a>
+                            @if(Route::has('admin.orders.index'))
+                            <a href="{{ route('admin.orders.index') }}">📦 Quản lý đơn hàng</a>
+                            @elseif(Route::has('admin.orders'))
+                            <a href="{{ route('admin.orders') }}">📦 Quản lý đơn hàng</a>
+                            @endif
+                            @if(Route::has('admin.users.index'))
+                            <a href="{{ route('admin.users.index') }}">👥 Quản lý người dùng</a>
+                            @endif
+                        </div>
                         @endif
 
                         <a href="{{ route('profile.edit') }}">
@@ -1586,25 +1598,25 @@
     {{-- ======================== SEARCH OVERLAY ======================== --}}
     {{-- Embed product data for client-side autocomplete --}}
     @php
-        try {
-            $headerSearchProducts = \App\Models\Product::select('id','name','price','image','category_id')
-                ->with('category:id,name')
-                ->get()
-                ->map(fn($p) => [
-                    'id'        => $p->id,
-                    'name'      => $p->name,
-                    'price_raw' => (int)$p->price,
-                    'price'     => number_format((float)$p->price, 0, ',', '.') . '₫',
-                    'image_url' => method_exists($p, 'getImageUrlAttribute') ? $p->image_url : ($p->image ?? ''),
-                    'category'  => $p->category?->name ?? '',
-                ]);
-        } catch (\Throwable $e) {
-            $headerSearchProducts = collect([]);
-        }
+    try {
+    $headerSearchProducts = \App\Models\Product::select('id','name','price','image','category_id')
+    ->with('category:id,name')
+    ->get()
+    ->map(fn($p) => [
+    'id' => $p->id,
+    'name' => $p->name,
+    'price_raw' => (int)$p->price,
+    'price' => number_format((float)$p->price, 0, ',', '.') . '₫',
+    'image_url' => method_exists($p, 'getImageUrlAttribute') ? $p->image_url : ($p->image ?? ''),
+    'category' => $p->category?->name ?? '',
+    ]);
+    } catch (\Throwable $e) {
+    $headerSearchProducts = collect([]);
+    }
     @endphp
     <script>
         window.AUREN_PRODUCTS = @json($headerSearchProducts);
-        window.AUREN_SEARCH_URL = '{{ route('products.index') }}';
+        window.AUREN_SEARCH_URL = @json(route('products.index'));
     </script>
 
     <div id="auren-search-overlay" role="search" aria-hidden="true" aria-label="Tìm kiếm sản phẩm">
@@ -1622,13 +1634,18 @@
                     spellcheck="false"
                     aria-autocomplete="list"
                     aria-controls="auren-search-suggestions"
-                    aria-activedescendant=""
-                >
+                    aria-activedescendant="">
                 <button type="button" id="auren-search-clear" class="auren-search-btn-icon" aria-label="Xóa từ khóa" hidden>
-                    <svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+                    <svg viewBox="0 0 24 24">
+                        <line x1="18" y1="6" x2="6" y2="18" />
+                        <line x1="6" y1="6" x2="18" y2="18" />
+                    </svg>
                 </button>
                 <button type="button" id="auren-search-submit" class="auren-search-btn-submit" aria-label="Tìm kiếm">
-                    <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+                    <svg viewBox="0 0 24 24">
+                        <circle cx="11" cy="11" r="8" />
+                        <path d="m21 21-4.35-4.35" />
+                    </svg>
                     <span class="auren-search-btn-text">Tìm</span>
                 </button>
                 <button type="button" id="auren-search-close" class="auren-search-btn-close" aria-label="Đóng tìm kiếm">
@@ -1647,29 +1664,32 @@
 
             {{-- Chỉ Admin mới thấy menu quản trị trên mobile --}}
             @auth
-                @if(auth()->user()->isAdmin())
-                    <li style="margin-top: 14px; padding-top: 14px; border-top: 1px solid var(--clr-beige);">
-                        <span style="font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--clr-warm-gray); display: block; margin-bottom: 8px;">Quản trị (Admin)</span>
-                    </li>
-                    @if(Route::has('admin.dashboard'))
-                        <li><a href="{{ route('admin.dashboard') }}" class="mobile-nav-link" style="font-size: 18px;">📊 Dashboard</a></li>
-                    @endif
-                    <li><a href="{{ route('admin.products.index') }}" class="mobile-nav-link" style="font-size: 18px;">👕 Quản lý sản phẩm</a></li>
-                    <li><a href="{{ route('admin.categories.index') }}" class="mobile-nav-link" style="font-size: 18px;">📁 Quản lý danh mục</a></li>
-                    @if(Route::has('admin.orders.index'))
-                        <li><a href="{{ route('admin.orders.index') }}" class="mobile-nav-link" style="font-size: 18px;">📦 Quản lý đơn hàng</a></li>
-                    @elseif(Route::has('admin.orders'))
-                        <li><a href="{{ route('admin.orders') }}" class="mobile-nav-link" style="font-size: 18px;">📦 Quản lý đơn hàng</a></li>
-                    @endif
-                @endif
+            @if(auth()->user()->isAdmin())
+            <li style="margin-top: 14px; padding-top: 14px; border-top: 1px solid var(--clr-beige);">
+                <span style="font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--clr-warm-gray); display: block; margin-bottom: 8px;">Quản trị (Admin)</span>
+            </li>
+            @if(Route::has('admin.dashboard'))
+            <li><a href="{{ route('admin.dashboard') }}" class="mobile-nav-link" style="font-size: 18px;">📊 Dashboard</a></li>
+            @endif
+            <li><a href="{{ route('admin.products.index') }}" class="mobile-nav-link" style="font-size: 18px;">👕 Quản lý sản phẩm</a></li>
+            <li><a href="{{ route('admin.categories.index') }}" class="mobile-nav-link" style="font-size: 18px;">📁 Quản lý danh mục</a></li>
+            @if(Route::has('admin.orders.index'))
+            <li><a href="{{ route('admin.orders.index') }}" class="mobile-nav-link" style="font-size: 18px;">📦 Quản lý đơn hàng</a></li>
+            @elseif(Route::has('admin.orders'))
+            <li><a href="{{ route('admin.orders') }}" class="mobile-nav-link" style="font-size: 18px;">📦 Quản lý đơn hàng</a></li>
+            @endif
+            @if(Route::has('admin.users.index'))
+            <li><a href="{{ route('admin.users.index') }}" class="mobile-nav-link" style="font-size: 18px;">👥 Quản lý người dùng</a></li>
+            @endif
+            @endif
             @endauth
 
             @guest
-                <li><a href="{{ route('login') }}" class="mobile-nav-link">Đăng nhập</a></li>
-                <li><a href="{{ route('register') }}" class="mobile-nav-link">Đăng ký</a></li>
+            <li><a href="{{ route('login') }}" class="mobile-nav-link">Đăng nhập</a></li>
+            <li><a href="{{ route('register') }}" class="mobile-nav-link">Đăng ký</a></li>
             @endguest
             @auth
-                <li><a href="{{ route('profile.edit') }}" class="mobile-nav-link">Tài khoản</a></li>
+            <li><a href="{{ route('profile.edit') }}" class="mobile-nav-link">Tài khoản</a></li>
             @endauth
         </ul>
     </nav>
@@ -2006,7 +2026,9 @@
                         img.src = item.image_url || '/placeholder.png';
                         img.alt = item.name;
                         img.loading = 'lazy';
-                        img.onerror = () => { img.src = 'data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2248%22%20height%3D%2248%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%3Crect%20width%3D%22100%25%22%20height%3D%22100%25%22%20fill%3D%22%23f2ede8%22%2F%3E%3C%2Fsvg%3E'; };
+                        img.onerror = () => {
+                            img.src = 'data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2248%22%20height%3D%2248%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%3Crect%20width%3D%22100%25%22%20height%3D%22100%25%22%20fill%3D%22%23f2ede8%22%2F%3E%3C%2Fsvg%3E';
+                        };
 
                         const info = document.createElement('div');
                         info.className = 'auren-search-item-info';
@@ -2126,7 +2148,9 @@
                 items.forEach((item, idx) => {
                     if (idx === selectedIndex) {
                         item.classList.add('is-selected');
-                        item.scrollIntoView({ block: 'nearest' });
+                        item.scrollIntoView({
+                            block: 'nearest'
+                        });
                     } else {
                         item.classList.remove('is-selected');
                     }
