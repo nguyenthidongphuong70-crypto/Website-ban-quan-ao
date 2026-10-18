@@ -46,7 +46,28 @@
                     <td>
                         <span class="badge-ad neutral">{{ number_format($order->total_price, 0, ',', '.') }} VNĐ</span>
                     </td>
-                    <td style="font-weight:400;" class="status">{{ $order->status }}</td>
+                    <td style="font-weight:400;" class="status">
+    @switch($order->status)
+        @case('pending')
+            Chờ xử lý
+            @break
+        @case('processing')
+        @case('confirmed')
+            Đang xử lý
+            @break
+        @case('shipping')
+            Đang giao
+            @break
+        @case('completed')
+            Hoàn thành
+            @break
+        @case('cancelled')
+            Đã hủy
+            @break
+        @default
+            {{ $order->status }}
+    @endswitch
+</td>
                     <td style="color:var(--ad-muted); font-size:12px;">{{ $order->created_at }}</td>
                     <td style="text-align:right; white-space:nowrap;">
                         <a href="{{ route('admin.orders.show', $order->id) }}" class="btn-ad btn-ad-outline" style="margin-right:4px;">

@@ -71,13 +71,13 @@
             @csrf
             @method('PUT')
 
-           <select name="status" class="form-select">
-    <option value="Chờ xử lý" {{ $order->status == 'Chờ xử lý' ? 'selected' : '' }}>Chờ xử lý</option>
-    <option value="Đang xử lý" {{ $order->status == 'Đang xử lý' ? 'selected' : '' }}>Đang xử lý</option>
-    <option value="Đang giao" {{ $order->status == 'Đang giao' ? 'selected' : '' }}>Đang giao</option>
-    <option value="Hoàn thành" {{ $order->status == 'Hoàn thành' ? 'selected' : '' }}>Hoàn thành</option>
-    <option value="Đã hủy" {{ $order->status == 'Đã hủy' ? 'selected' : '' }}>Đã hủy</option>
-            </select>
+           <select name="status" class="form-input" style="width: 100%; max-width: 300px; padding: 10px; border-radius: 6px; border: 1px solid #ccc;">
+    <option value="pending" {{ $order->status == 'pending' ? 'selected' : '' }}>Chờ xử lý</option>
+    <option value="confirmed" {{ in_array($order->status, ['processing', 'confirmed', 'Đang xử lý']) ? 'selected' : '' }}>Đang xử lý</option>
+    <option value="shipping" {{ $order->status == 'shipping' ? 'selected' : '' }}>Đang giao hàng</option>
+    <option value="completed" {{ $order->status == 'completed' ? 'selected' : '' }}>Hoàn thành</option>
+    <option value="cancelled" {{ $order->status == 'cancelled' ? 'selected' : '' }}>Đã hủy</option>
+</select>
 
             <button type="submit" class="btn-ad btn-ad-dark">
                 Cập nhật trạng thái
