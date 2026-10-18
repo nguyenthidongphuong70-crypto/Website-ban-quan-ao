@@ -309,41 +309,6 @@
         Quay lại bộ sưu tập
     </a>
 </div>
-{{-- ================= POPUP THÔNG BÁO CÓ TÊN SẢN PHẨM ================= --}}
-    @if(session('success'))
-        <div id="cart-popup-alert" class="cart-popup-toast">
-            <span> {{ session('success') }}</span>
-        </div>
-
-        <style>
-            .cart-popup-toast {
-                position: fixed;
-                top: 20px;
-                right: 20px;
-                background: #2e2b28;
-                color: #fff;
-                padding: 12px 20px;
-                border-radius: 6px;
-                box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-                z-index: 9999;
-                font-family: inherit;
-                animation: fadeInOut 3s ease forwards;
-            }
-            @keyframes fadeInOut {
-                0% { opacity: 0; transform: translateY(-10px); }
-                15% { opacity: 1; transform: translateY(0); }
-                85% { opacity: 1; transform: translateY(0); }
-                100% { opacity: 0; transform: translateY(-10px); display: none; }
-            }
-        </style>
-
-        <script>
-            setTimeout(function() {
-                let alertBox = document.getElementById('cart-popup-alert');
-                if (alertBox) { alertBox.style.display = 'none'; }
-            }, 3000);
-        </script>
-    @endif
 {{-- ======================== PRODUCT DETAIL ======================== --}}
 <div class="product-detail-layout">
 
@@ -404,7 +369,7 @@
         {{-- ======================== CART FORM ========================--}}
         <div class="cart-action">
             @if ($product->stock > 0)
-                <form method="POST" action="{{ Route::has('cart.store') ? route('cart.store', $product->id) : '#' }}">
+                <<form id="add-to-cart-form" method="POST" action="{{ route('cart.store', $product->id) }}">
                     @csrf
                     <input type="hidden" name="product_id" value="{{ $product->id }}">
 
@@ -467,6 +432,90 @@
         input.value = v;
     });
 })();
+</script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    const form = document.getElementById('add-to-cart-form');
+    
+    if (form) {
+        form.addEventListener('submit', function (e) {
+            e.preventDefault(); // Chặn load lại trang
+
+            let formData = new FormData(form);
+            let url = form.getAttribute('action');
+
+            fetch(url, {
+                method: 'POST',
+                headers: {
+                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
+                    'Accept': 'application/json'
+                },
+                body: formData
+            })
+            .then(async response => {
+                if (!response.ok) {
+                    let text = await response.text();
+                    console.error('Server Error:', text);
+                    throw new Error('Lỗi từ Server');
+                }
+                return response.json();
+            })
+            .then(data => {
+                if (data.success) {
+                    // 1. Hiển thị Pop-up Toast ở góc trên bên phải
+                    showToast(data.message, 'success');
+
+                    // 2. Cập nhật con số trên icon giỏ hàng ở Header
+                    const cartCountEl = document.querySelector('.cart-count');
+                    if (cartCountEl) {
+                        cartCountEl.innerText = data.cartCount;
+                        if (data.cartCount > 0) {
+                            cartCountEl.style.display = 'inline-block';
+                        }
+                    }
+                } else {
+                    showToast(data.message || 'Có lỗi xảy ra!', 'error');
+                }
+            })
+            .catch(error => {
+                console.error('Lỗi AJAX:', error);
+                showToast('Có lỗi xảy ra khi thêm vào giỏ hàng!', 'error');
+            });
+        });
+    }
+});
+
+// Hàm hỗ trợ tạo và hiển thị Toast động
+function showToast(message, type = 'success') {
+    // Tạo container nếu chưa có
+    let container = document.getElementById('toast-container');
+    if (!container) {
+        container = document.createElement('div');
+        container.id = 'toast-container';
+        document.body.appendChild(container);
+    }
+
+    // Tạo phần tử toast mới
+    const toast = document.createElement('div');
+    toast.className = `toast-notification ${type}`;
+    toast.innerText = message;
+
+    container.appendChild(toast);
+
+    // Kích hoạt hiệu ứng hiện lên
+    setTimeout(() => {
+        toast.classList.add('show');
+    }, 10);
+
+    // Tự động ẩn và xóa sau 2.5 giây
+    setTimeout(() => {
+        toast.classList.remove('show');
+        setTimeout(() => {
+            toast.remove();
+        }, 300); // Chờ chạy xong hiệu ứng fade out rồi xóa khỏi DOM
+    }, 2500);
+}
 </script>
 @endpush
 

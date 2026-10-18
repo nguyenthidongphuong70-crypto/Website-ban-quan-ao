@@ -13,6 +13,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500&display=swap" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
+        
         :root {
             --clr-black: #0a0a0a;
             --clr-white: #ffffff;
@@ -1369,6 +1370,39 @@
                 padding: 8px 6px;
             }
         }
+        /* Khung chứa Toast */
+        #toast-container {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 99999;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        /* Kiểu dáng từng ô thông báo */
+        .toast-notification {
+            background: #333;
+            color: #fff;
+            padding: 12px 20px;
+            border-radius: 6px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            font-size: 14px;
+            font-weight: 500;
+            opacity: 0;
+            transform: translateY(-20px);
+            transition: all 0.3s ease;
+        }
+
+        .toast-notification.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .toast-notification.success {
+            background: #6b6560;
+        }
 
         @yield('extra-css')
     </style>
@@ -1466,43 +1500,43 @@
                     </svg>
                 </button>
 
+                {{-- Cart icon – UI hook cho Người 3 (chỉ icon, không có cart logic) --}}
+                    <a href="{{ Route::has('cart.index') ? route('cart.index') : '#' }}"
+                        class="nav-icon-btn"
+                        aria-label="Giỏ hàng"
+                        style="position: relative; display: inline-flex; align-items: center;"> {{-- Thêm style relative để định vị badge --}}
+                        
+                        <svg viewBox="0 0 24 24">
+                            <path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z" />
+                            <line x1="3" y1="6" x2="21" y2="6" />
+                            <path d="M16 10a4 4 0 0 1-8 0" />
+                        </svg>
 
-                <a href="{{ Route::has('cart.index') ? route('cart.index') : '#' }}"
-                    class="nav-icon-btn"
-                    aria-label="Giỏ hàng"
-                    style="position: relative; display: inline-flex; align-items: center;">
+                        {{-- THÊM Ô HIỂN THỊ SỐ LƯỢNG Ở ĐÂY --}}
+                        @if(isset($cartCount) && $cartCount > 0)
+                            <span class="cart-count-badge">
+                                {{ $cartCount }}
+                            </span>
+                        @endif
+                    </a>
 
-                    <svg viewBox="0 0 24 24">
-                        <path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z" />
-                        <line x1="3" y1="6" x2="21" y2="6" />
-                        <path d="M16 10a4 4 0 0 1-8 0" />
-                    </svg>
-
-                    {{-- THÊM Ô HIỂN THỊ SỐ LƯỢNG Ở ĐÂY --}}
-                    @if(isset($cartCount) && $cartCount > 0)
-                    <span class="cart-count-badge">
-                        {{ $cartCount }}
-                    </span>
-                    @endif
-                </a>
-
-                {{-- Bổ sung đoạn CSS này vào file CSS chung hoặc đặt trực tiếp vào thẻ <style> --}}
-                <style>
-                    .cart-count-badge {
-                        position: absolute;
-                        top: 2px;
-                        right: 4px;
-                        background: #e53935;
-                        color: #fff;
-                        font-size: 10px;
-                        font-weight: bold;
-                        padding: 1px 5px;
-                        border-radius: 50%;
-                        line-height: 1;
-                        min-width: 16px;
-                        text-align: center;
-                    }
-                </style>
+                    {{-- Bổ sung đoạn CSS này vào file CSS chung hoặc đặt trực tiếp vào thẻ <style> --}}
+                    <style>
+                        .cart-count-badge {
+                            position: absolute;
+                            top: 2px;
+                            right: 4px;
+                            background: #e53935;
+                            color: #fff;
+                            font-size: 10px;
+                            font-weight: bold;
+                            padding: 1px 5px;
+                            border-radius: 50%;
+                            line-height: 1;
+                            min-width: 16px;
+                            text-align: center;
+                        }
+                    </style>
 
                 {{-- Account icon — Người 2 --}}
                 <div class="account-menu">
@@ -1563,6 +1597,9 @@
 
                         <a href="{{ route('profile.edit') }}">
                             Thông tin cá nhân
+                        </a>
+                        <a href="{{ route('orders.history') }}">
+                            Lịch sử đơn hàng
                         </a>
                         <a href="{{ route('profile.password.edit') }}">
                             Đổi mật khẩu
@@ -2193,6 +2230,9 @@
     </script>
 
     @stack('scripts')
+    <div id="cart-popup" style="display: none; position: fixed; bottom: 20px; right: 20px; background: #000; color: #fff; padding: 15px 25px; border-radius: 5px; z-index: 9999; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
+    <span id="popup-message">Đã thêm sản phẩm vào giỏ hàng!</span>
+</div>
 </body>
 
 </html>
