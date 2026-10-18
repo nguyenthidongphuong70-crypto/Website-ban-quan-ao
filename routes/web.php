@@ -1,16 +1,18 @@
 <?php
 
-use Illuminate\Support\Facades\Route;
-
+use App\Http\Controllers\Admin\DashboardController;
+use App\Http\Controllers\Admin\OrderController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProfileController;
-
 use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\Auth\ForgotPasswordController;
-
 use App\Http\Controllers\Admin\ProductController as AdminProductController;
 use App\Http\Controllers\Admin\CategoryController as AdminCategoryController;
-
+use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Auth;
+use App\Http\Controllers\CheckoutController;
+use App\Http\Controllers\CartController;
+use App\Http\Controllers\MomoController;
 
 /*
 |--------------------------------------------------------------------------
@@ -22,17 +24,38 @@ Route::get('/', function () {
     return redirect()->route('products.index');
 });
 
-Route::get('/products', [
-    ProductController::class,
-    'index',
-])->name('products.index');
+Route::get('/products', [ProductController::class, 'index'])
+    ->name('products.index');
 
-Route::get('/products/{product}', [
-    ProductController::class,
-    'show',
-])->name('products.show');
+Route::get('/products/{product}', [ProductController::class, 'show'])
+    ->name('products.show');
 
+/*
+|--------------------------------------------------------------------------
+| GIỎ HÀNG / ĐẶT HÀNG
+|--------------------------------------------------------------------------
+*/
+Route::middleware(['auth'])->group(function () {
+    Route::get('/cart', [CartController::class, 'index'])->name('cart.index');
+    Route::put('/cart/{cartItem}', [CartController::class, 'update'])->name('cart.update');
+    Route::delete('/cart/{cartItem}', [CartController::class, 'destroy'])->name('cart.destroy');
+    Route::post('/cart/{product}', [CartController::class, 'store'])->name('cart.store');
+    Route::put('/cart/update/{id}', [CartController::class, 'update'])->name('cart.update');
 
+    Route::get('/products/{id}', [ProductController::class, 'show'])->name('products.show');
+    Route::post('/products/{id}', [CartController::class, 'store'])->name('cart.store');
+    Route::post('/products/{product}/cart', [CartController::class, 'store'])->name('cart.store');
+
+    Route::get('/checkout', [CheckoutController::class, 'index'])->name('checkout.index');
+
+    Route::post('/checkout', [CheckoutController::class, 'store'])->name('checkout.process');
+    
+    Route::get('/checkout/success/{id}', [OrderController::class, 'success'])->name('orders.success');
+
+    Route::match(['put', 'patch'], '/cart/{id}', [CartController::class, 'update'])->name('cart.update');
+    
+    
+});
 /*
 |--------------------------------------------------------------------------
 | HỒ SƠ CÁ NHÂN
@@ -40,17 +63,11 @@ Route::get('/products/{product}', [
 */
 
 Route::middleware('auth')->group(function () {
+    Route::get('/profile', [ProfileController::class, 'edit'])
+        ->name('profile.edit');
 
-    Route::get('/profile', [
-        ProfileController::class,
-        'edit'
-    ])->name('profile.edit');
-
-    Route::put('/profile', [
-        ProfileController::class,
-        'update'
-    ])->name('profile.update');
-
+    Route::put('/profile', [ProfileController::class, 'update'])
+        ->name('profile.update');
 
     // Đổi mật khẩu
     Route::get(
@@ -72,7 +89,6 @@ Route::middleware('auth')->group(function () {
 */
 
 Route::middleware('guest')->group(function () {
-
     Route::get(
         '/forgot-password',
         [ForgotPasswordController::class, 'showPhoneForm']
@@ -81,9 +97,7 @@ Route::middleware('guest')->group(function () {
     Route::post(
         '/forgot-password/send-otp',
         [ForgotPasswordController::class, 'sendOtp']
-    )
-        ->middleware('throttle:3,1')
-        ->name('password.otp.send');
+    )->middleware('throttle:3,1')->name('password.otp.send');
 
     Route::get(
         '/forgot-password/verify-otp',
@@ -93,9 +107,7 @@ Route::middleware('guest')->group(function () {
     Route::post(
         '/forgot-password/verify-otp',
         [ForgotPasswordController::class, 'verifyOtp']
-    )
-        ->middleware('throttle:10,1')
-        ->name('password.otp.verify');
+    )->middleware('throttle:10,1')->name('password.otp.verify');
 
     Route::get(
         '/forgot-password/reset',
@@ -130,28 +142,54 @@ Route::get(
 |--------------------------------------------------------------------------
 | QUẢN TRỊ
 |--------------------------------------------------------------------------
+| Chỉ tài khoản đã đăng nhập mới được truy cập (phân quyền check trong Controller)
+|--------------------------------------------------------------------------
 */
 
 Route::prefix('admin')
     ->name('admin.')
-    ->middleware(['auth', 'admin'])
+    ->middleware(['auth'])
     ->group(function () {
 
+        // Dashboard & Xuất báo cáo (Excel / PDF)
+        Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+        Route::get('/export-excel', [DashboardController::class, 'exportExcel'])->name('export.excel');
+        Route::get('/export-pdf', [DashboardController::class, 'exportPdf'])->name('export.pdf');
+
+        // Quản lý danh mục
         Route::resource(
             'categories',
             AdminCategoryController::class
         );
 
+        // Quản lý sản phẩm
         Route::resource(
             'products',
             AdminProductController::class
         );
+
+        // Danh sách đơn hàng
+        Route::get('/orders', [OrderController::class, 'index'])
+            ->name('orders.index');
+
+        // Chi tiết đơn hàng
+        Route::get('/orders/{id}', [OrderController::class, 'show'])
+            ->name('orders.show');
+            // ROUTE IN HÓA ĐƠN TRỰC TIẾP
+        Route::get('/orders/{id}/print', [OrderController::class, 'printInvoice'])
+            ->name('orders.print');
+
+        // Cập nhật trạng thái đơn hàng
+        Route::put('/orders/{id}/status', [OrderController::class, 'updateStatus'])
+            ->name('orders.updateStatus');
     });
 
 
 /*
 |--------------------------------------------------------------------------
 | AUTH BREEZE
+|--------------------------------------------------------------------------
+| Login / Register / Logout
 |--------------------------------------------------------------------------
 */
 

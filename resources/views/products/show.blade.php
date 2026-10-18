@@ -309,7 +309,41 @@
         Quay lại bộ sưu tập
     </a>
 </div>
+{{-- ================= POPUP THÔNG BÁO CÓ TÊN SẢN PHẨM ================= --}}
+    @if(session('success'))
+        <div id="cart-popup-alert" class="cart-popup-toast">
+            <span> {{ session('success') }}</span>
+        </div>
 
+        <style>
+            .cart-popup-toast {
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                background: #2e2b28;
+                color: #fff;
+                padding: 12px 20px;
+                border-radius: 6px;
+                box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+                z-index: 9999;
+                font-family: inherit;
+                animation: fadeInOut 3s ease forwards;
+            }
+            @keyframes fadeInOut {
+                0% { opacity: 0; transform: translateY(-10px); }
+                15% { opacity: 1; transform: translateY(0); }
+                85% { opacity: 1; transform: translateY(0); }
+                100% { opacity: 0; transform: translateY(-10px); display: none; }
+            }
+        </style>
+
+        <script>
+            setTimeout(function() {
+                let alertBox = document.getElementById('cart-popup-alert');
+                if (alertBox) { alertBox.style.display = 'none'; }
+            }, 3000);
+        </script>
+    @endif
 {{-- ======================== PRODUCT DETAIL ======================== --}}
 <div class="product-detail-layout">
 
@@ -370,7 +404,7 @@
         {{-- ======================== CART FORM ========================--}}
         <div class="cart-action">
             @if ($product->stock > 0)
-                <form method="POST" action="{{ Route::has('cart.add') ? route('cart.add') : '#' }}">
+                <form method="POST" action="{{ Route::has('cart.store') ? route('cart.store', $product->id) : '#' }}">
                     @csrf
                     <input type="hidden" name="product_id" value="{{ $product->id }}">
 

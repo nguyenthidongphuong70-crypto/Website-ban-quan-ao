@@ -22,154 +22,21 @@ $selectedCategory = request('category') ? $categories->firstWhere('id', request(
    AUREN & TORANO-INSPIRED STYLES
    ========================================================================== */
 
-    /* -------------------- SECONDARY HORIZONTAL NAVIGATION BAR -------------------- */
-    .auren-secondary-nav {
-        background: var(--clr-white);
-        border-bottom: 1px solid var(--clr-beige);
-        position: relative;
-        z-index: 90;
-        box-shadow: 0 2px 8px rgba(10, 10, 10, 0.03);
-        margin-bottom: 8px;
-    }
-
-    .secondary-nav-inner {
-        max-width: var(--max-width);
-        margin: 0 auto;
-        padding: 0 var(--spacing-sm);
-        display: flex;
-        align-items: center;
-        justify-content: center;
-    }
-
-    .secondary-nav-list {
-        display: flex;
-        align-items: center;
-        list-style: none;
-        margin: 0;
-        padding: 0;
-        gap: 6px;
-        overflow-x: auto;
-        white-space: nowrap;
-        scrollbar-width: none;
-        -ms-overflow-style: none;
-    }
-
-    .secondary-nav-list::-webkit-scrollbar {
-        display: none;
-    }
-
-    .secondary-nav-item {
-        position: relative;
-        flex-shrink: 0;
-    }
-
-    .secondary-nav-link {
-        display: inline-flex;
-        align-items: center;
-        gap: 6px;
-        padding: 12px 14px;
-        font-size: 12px;
-        font-weight: 500;
-        letter-spacing: 0.12em;
-        text-transform: uppercase;
-        color: var(--clr-dark-gray);
-        text-decoration: none;
-        position: relative;
-        transition: color 0.2s ease;
-    }
-
-    .secondary-nav-link::after {
-        content: '';
-        position: absolute;
-        bottom: 0;
-        left: 14px;
-        right: 14px;
-        height: 2px;
-        background: var(--clr-black);
-        transform: scaleX(0);
-        transition: transform 0.25s cubic-bezier(0.25, 1, 0.5, 1);
-        transform-origin: center;
-    }
-
-    .secondary-nav-link:hover,
-    .secondary-nav-link.active {
-        color: var(--clr-black);
-    }
-
-    .secondary-nav-link:hover::after,
-    .secondary-nav-link.active::after {
-        transform: scaleX(1);
-    }
-
-    .secondary-nav-link.highlight {
-        color: #b45309;
-        font-weight: 600;
-    }
-
-    .secondary-nav-separator {
-        width: 1px;
-        height: 14px;
-        background: var(--clr-beige);
-        margin: 0 4px;
-        flex-shrink: 0;
-    }
-
-    .secondary-nav-item.has-dropdown:hover .secondary-dropdown-menu {
-        opacity: 1;
-        visibility: visible;
-        transform: translateY(0);
-    }
-
-    .secondary-dropdown-menu {
-        position: absolute;
-        top: 100%;
-        left: 0;
-        min-width: 190px;
-        background: var(--clr-white);
-        border: 1px solid var(--clr-beige);
-        border-radius: 10px;
-        box-shadow: 0 10px 25px rgba(10, 10, 10, 0.08);
-        padding: 8px 0;
-        opacity: 0;
-        visibility: hidden;
-        transform: translateY(8px);
-        transition: all 0.2s cubic-bezier(0.25, 1, 0.5, 1);
-        z-index: 200;
-    }
-
-    .secondary-dropdown-link {
-        display: block;
-        padding: 8px 18px;
-        font-size: 13px;
-        font-weight: 400;
-        color: var(--clr-dark-gray);
-        text-decoration: none;
-        transition: background 0.15s ease, color 0.15s ease;
-    }
-
-    .secondary-dropdown-link:hover {
-        background: var(--clr-ivory);
-        color: var(--clr-black);
-    }
-
-    /* -------------------- CAROUSEL TRANG CHỦ (~68% desktop, 35-45vh) -------------------- */
+    /* -------------------- CAROUSEL TRANG CHỦ (~70% desktop) -------------------- */
     .homepage-carousel-wrapper {
-        width: 68%;
-        max-width: 980px;
-        margin: 16px auto 36px;
+        width: 72%;
+        max-width: 1180px;
+        margin: 28px auto 44px;
         padding: 0 16px;
     }
 
     .auren-carousel {
         position: relative;
         width: 100%;
-        height: 38vh;
-        max-height: 420px;
-        min-height: 280px;
-        aspect-ratio: 16 / 7;
-        border-radius: 14px;
+        aspect-ratio: 1344 / 768;
+        border-radius: 16px;
         overflow: hidden;
-        box-shadow: 0 10px 28px rgba(10, 10, 10, 0.08);
+        box-shadow: 0 12px 32px rgba(10, 10, 10, 0.08);
         background: var(--clr-offwhite);
     }
 
@@ -703,102 +570,39 @@ $selectedCategory = request('category') ? $categories->firstWhere('id', request(
         color: var(--clr-warm-gray);
     }
 
-    /* NÚT THAO TÁC TRÊN PRODUCT CARD (THÊM VÀO GIỎ HÀNG & MUA NGAY) */
-    .product-card-actions {
-        display: flex;
-        flex-direction: column;
-        gap: 6px;
-        margin-top: 10px;
-    }
-
-    .form-add-to-cart-card {
-        margin: 0;
-        width: 100%;
-        display: block;
-    }
-
-    .btn-card-add-cart {
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        gap: 6px;
-        width: 100%;
-        height: 36px;
-        background: var(--clr-white);
-        color: var(--clr-black);
-        border: 1px solid var(--clr-black);
-        border-radius: 8px;
-        font-family: inherit;
-        font-size: 11px;
-        letter-spacing: 0.1em;
-        text-transform: uppercase;
-        font-weight: 500;
-        text-decoration: none;
-        cursor: pointer;
-        padding: 0 12px;
-        box-sizing: border-box;
-        transition: all 0.22s ease;
-    }
-
-    .btn-card-add-cart:hover {
-        background: var(--clr-black);
-        color: var(--clr-white);
-        box-shadow: 0 3px 10px rgba(10, 10, 10, 0.12);
-    }
-
-    .btn-card-add-cart svg {
-        width: 13px;
-        height: 13px;
-        stroke: currentColor;
-        fill: none;
-        stroke-width: 1.8;
-        flex-shrink: 0;
-    }
-
-    .btn-card-add-cart.sold-out {
-        background: var(--clr-offwhite);
-        color: var(--clr-warm-gray);
-        border-color: var(--clr-beige);
-        cursor: not-allowed;
-        pointer-events: none;
-    }
-
+    /* NÚT MUA NGAY TRÊN CARD */
     .btn-card-buy-now {
-        display: inline-flex;
+        display: flex;
         align-items: center;
         justify-content: center;
-        gap: 6px;
+        gap: 8px;
         width: 100%;
-        height: 34px;
+        height: 38px;
         background: var(--clr-black);
         color: var(--clr-white);
         border: 1px solid var(--clr-black);
         border-radius: 8px;
-        font-family: inherit;
         font-size: 11px;
-        letter-spacing: 0.1em;
+        letter-spacing: 0.14em;
         text-transform: uppercase;
-        font-weight: 500;
+        font-weight: 400;
         text-decoration: none;
-        padding: 0 12px;
-        box-sizing: border-box;
-        transition: all 0.22s ease;
+        transition: all 0.25s ease;
         cursor: pointer;
     }
 
     .btn-card-buy-now:hover {
-        background: var(--clr-dark-gray);
-        border-color: var(--clr-dark-gray);
-        box-shadow: 0 3px 10px rgba(10, 10, 10, 0.12);
+        background: var(--clr-white);
+        color: var(--clr-black);
+        box-shadow: 0 4px 12px rgba(10, 10, 10, 0.15);
     }
 
     .btn-card-buy-now svg {
-        width: 13px;
-        height: 13px;
+        width: 14px;
+        height: 14px;
         stroke: currentColor;
         fill: none;
         stroke-width: 1.8;
-        flex-shrink: 0;
     }
 
     .btn-card-buy-now.sold-out {
@@ -806,7 +610,6 @@ $selectedCategory = request('category') ? $categories->firstWhere('id', request(
         color: var(--clr-warm-gray);
         border-color: var(--clr-beige);
         pointer-events: none;
-        cursor: not-allowed;
     }
 
     /* ==========================================================================
@@ -1269,82 +1072,11 @@ $selectedCategory = request('category') ? $categories->firstWhere('id', request(
         margin-bottom: 48px;
     }
 
-    /* -------------------- PAGINATION (FIX OVERSIZED PREV/NEXT) -------------------- */
+    /* -------------------- PAGINATION -------------------- */
     .listing-pagination {
-        margin-top: 36px;
+        margin-top: 20px;
         display: flex;
         justify-content: center;
-        align-items: center;
-    }
-
-    .listing-pagination nav {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        gap: 6px;
-        flex-wrap: wrap;
-    }
-
-    .listing-pagination nav > div:first-child {
-        display: none !important;
-    }
-
-    .listing-pagination nav > div:last-child {
-        display: flex;
-        align-items: center;
-        gap: 6px;
-    }
-
-    .listing-pagination nav span,
-    .listing-pagination nav a {
-        display: inline-flex !important;
-        align-items: center !important;
-        justify-content: center !important;
-        min-width: 38px !important;
-        height: 38px !important;
-        padding: 0 12px !important;
-        font-family: inherit !important;
-        font-size: 13px !important;
-        font-weight: 500 !important;
-        line-height: 1 !important;
-        border-radius: 8px !important;
-        border: 1px solid var(--clr-beige) !important;
-        background: var(--clr-white) !important;
-        color: var(--clr-black) !important;
-        text-decoration: none !important;
-        transition: all 0.2s ease !important;
-        box-shadow: 0 1px 3px rgba(10, 10, 10, 0.04) !important;
-        box-sizing: border-box !important;
-    }
-
-    .listing-pagination nav a:hover {
-        background: var(--clr-black) !important;
-        color: var(--clr-white) !important;
-        border-color: var(--clr-black) !important;
-    }
-
-    .listing-pagination nav span[aria-current="page"] {
-        background: var(--clr-black) !important;
-        color: var(--clr-white) !important;
-        border-color: var(--clr-black) !important;
-    }
-
-    .listing-pagination nav span[aria-disabled="true"] {
-        opacity: 0.45 !important;
-        cursor: not-allowed !important;
-        background: var(--clr-offwhite) !important;
-        color: var(--clr-warm-gray) !important;
-        border-color: var(--clr-beige) !important;
-    }
-
-    .listing-pagination svg {
-        width: 14px !important;
-        height: 14px !important;
-        max-width: 14px !important;
-        max-height: 14px !important;
-        stroke-width: 2 !important;
-        display: inline-block !important;
-        vertical-align: middle !important;
     }
 
     /* -------------------- LIGHTBOX QUICK VIEW MODAL -------------------- */
@@ -1373,12 +1105,11 @@ $selectedCategory = request('category') ? $categories->firstWhere('id', request(
         background: var(--clr-ivory);
         border-radius: 18px;
         overflow: hidden;
-        max-width: 820px;
+        max-width: 760px;
         width: 100%;
-        max-height: 90vh;
         box-shadow: 0 20px 50px rgba(0, 0, 0, 0.35);
         display: grid;
-        grid-template-columns: 45% 55%;
+        grid-template-columns: 1fr 1fr;
         position: relative;
         transform: scale(0.92);
         transition: transform 0.28s cubic-bezier(0.25, 1, 0.5, 1);
@@ -1392,7 +1123,6 @@ $selectedCategory = request('category') ? $categories->firstWhere('id', request(
         aspect-ratio: 3 / 4;
         background: var(--clr-offwhite);
         overflow: hidden;
-        position: relative;
     }
 
     .lightbox-img-wrap img {
@@ -1402,36 +1132,11 @@ $selectedCategory = request('category') ? $categories->firstWhere('id', request(
         display: block;
     }
 
-    .lightbox-badge-stock {
-        position: absolute;
-        top: 14px;
-        left: 14px;
-        font-size: 10px;
-        font-weight: 600;
-        letter-spacing: 0.1em;
-        text-transform: uppercase;
-        padding: 5px 12px;
-        border-radius: 20px;
-        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
-    }
-
-    .lightbox-badge-stock.in-stock {
-        background: #10b981;
-        color: #ffffff;
-    }
-
-    .lightbox-badge-stock.sold-out {
-        background: #ef4444;
-        color: #ffffff;
-    }
-
     .lightbox-content {
-        padding: 32px 28px;
+        padding: 36px 30px;
         display: flex;
         flex-direction: column;
-        justify-content: flex-start;
-        overflow-y: auto;
-        max-height: 90vh;
+        justify-content: center;
     }
 
     .lightbox-close-btn {
@@ -1441,7 +1146,7 @@ $selectedCategory = request('category') ? $categories->firstWhere('id', request(
         width: 36px;
         height: 36px;
         border-radius: 50%;
-        background: rgba(255, 255, 255, 0.9);
+        background: rgba(255, 255, 255, 0.85);
         border: 1px solid var(--clr-beige);
         color: var(--clr-black);
         display: flex;
@@ -1449,7 +1154,7 @@ $selectedCategory = request('category') ? $categories->firstWhere('id', request(
         justify-content: center;
         cursor: pointer;
         transition: all 0.2s ease;
-        z-index: 10;
+        z-index: 2;
     }
 
     .lightbox-close-btn:hover {
@@ -1465,206 +1170,54 @@ $selectedCategory = request('category') ? $categories->firstWhere('id', request(
         stroke-width: 2;
     }
 
-    .lightbox-meta-top {
-        display: flex;
-        align-items: center;
-        gap: 8px;
-        margin-bottom: 8px;
-        flex-wrap: wrap;
-    }
-
     .lightbox-cat {
-        font-size: 11px;
-        letter-spacing: 0.15em;
-        text-transform: uppercase;
-        font-weight: 600;
-        color: var(--clr-black);
-    }
-
-    .lightbox-meta-divider {
-        color: var(--clr-warm-gray);
-        font-size: 11px;
-    }
-
-    .lightbox-attr-tag {
         font-size: 10px;
-        padding: 2px 8px;
-        background: var(--clr-offwhite);
-        border: 1px solid var(--clr-beige);
-        border-radius: 4px;
-        color: var(--clr-dark-gray);
+        letter-spacing: 0.2em;
+        text-transform: uppercase;
+        color: var(--clr-warm-gray);
+        margin-bottom: 8px;
     }
 
     .lightbox-title {
         font-family: var(--font-display);
-        font-size: 24px;
-        font-weight: 400;
+        font-size: 26px;
+        font-weight: 300;
         color: var(--clr-black);
         line-height: 1.25;
-        margin-bottom: 8px;
+        margin-bottom: 16px;
     }
 
     .lightbox-price {
         font-family: var(--font-display);
         font-size: 22px;
-        font-weight: 500;
         color: var(--clr-black);
-        margin-bottom: 14px;
-        padding-bottom: 12px;
+        margin-bottom: 24px;
+        padding-bottom: 16px;
         border-bottom: 1px solid var(--clr-beige);
-    }
-
-    .lightbox-desc-wrap {
-        margin-bottom: 18px;
-    }
-
-    .lightbox-desc-label {
-        display: block;
-        font-size: 11px;
-        letter-spacing: 0.1em;
-        text-transform: uppercase;
-        color: var(--clr-warm-gray);
-        font-weight: 500;
-        margin-bottom: 4px;
-    }
-
-    .lightbox-desc {
-        font-size: 13px;
-        color: var(--clr-dark-gray);
-        line-height: 1.5;
-        max-height: 85px;
-        overflow-y: auto;
-        padding-right: 6px;
-    }
-
-    /* Form thêm giỏ hàng trong modal */
-    .lightbox-qty-row {
-        display: flex;
-        align-items: center;
-        gap: 12px;
-        margin-bottom: 18px;
-    }
-
-    .lightbox-qty-label {
-        font-size: 12px;
-        font-weight: 500;
-        color: var(--clr-dark-gray);
-    }
-
-    .lightbox-qty-ctrl {
-        display: inline-flex;
-        align-items: center;
-        border: 1px solid var(--clr-beige);
-        border-radius: 6px;
-        background: var(--clr-white);
-        overflow: hidden;
-    }
-
-    .lightbox-qty-btn {
-        width: 32px;
-        height: 32px;
-        background: transparent;
-        border: none;
-        cursor: pointer;
-        font-size: 16px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        color: var(--clr-black);
-        transition: background 0.15s ease;
-    }
-
-    .lightbox-qty-btn:hover:not(:disabled) {
-        background: var(--clr-offwhite);
-    }
-
-    .lightbox-qty-btn:disabled {
-        opacity: 0.35;
-        cursor: not-allowed;
-    }
-
-    .lightbox-qty-val {
-        width: 44px;
-        height: 32px;
-        text-align: center;
-        border: none;
-        border-left: 1px solid var(--clr-beige);
-        border-right: 1px solid var(--clr-beige);
-        font-family: inherit;
-        font-size: 13px;
-        font-weight: 500;
-        color: var(--clr-black);
-        background: transparent;
-        outline: none;
-    }
-
-    .lightbox-actions-row {
-        display: flex;
-        align-items: center;
-        gap: 10px;
-        flex-wrap: wrap;
-    }
-
-    .btn-lightbox-add-cart {
-        flex: 1;
-        min-width: 160px;
-        height: 42px;
-        background: var(--clr-black);
-        color: var(--clr-white);
-        border: 1px solid var(--clr-black);
-        border-radius: 8px;
-        font-family: inherit;
-        font-size: 11px;
-        letter-spacing: 0.12em;
-        text-transform: uppercase;
-        font-weight: 500;
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        gap: 8px;
-        cursor: pointer;
-        padding: 0 16px;
-        box-sizing: border-box;
-        transition: all 0.22s ease;
-    }
-
-    .btn-lightbox-add-cart:hover:not(:disabled) {
-        background: var(--clr-dark-gray);
-        box-shadow: 0 4px 12px rgba(10, 10, 10, 0.18);
-    }
-
-    .btn-lightbox-add-cart:disabled,
-    .btn-lightbox-add-cart.sold-out {
-        background: var(--clr-offwhite);
-        color: var(--clr-warm-gray);
-        border-color: var(--clr-beige);
-        cursor: not-allowed;
     }
 
     .lightbox-btn-detail {
         display: inline-flex;
         align-items: center;
         justify-content: center;
-        gap: 6px;
-        height: 42px;
-        padding: 0 18px;
-        background: var(--clr-white);
-        color: var(--clr-black);
-        border: 1px solid var(--clr-beige);
-        font-family: inherit;
+        gap: 8px;
+        height: 44px;
+        padding: 0 24px;
+        background: var(--clr-black);
+        color: var(--clr-white);
         font-size: 11px;
-        letter-spacing: 0.12em;
+        letter-spacing: 0.15em;
         text-transform: uppercase;
-        font-weight: 500;
-        border-radius: 8px;
+        border-radius: 10px;
         text-decoration: none;
-        box-sizing: border-box;
-        transition: all 0.22s ease;
+        box-shadow: 0 2px 6px rgba(10, 10, 10, 0.12);
+        transition: all 0.25s ease;
+        align-self: flex-start;
     }
 
     .lightbox-btn-detail:hover {
-        background: var(--clr-ivory);
-        border-color: var(--clr-black);
+        transform: translateY(-1px);
+        box-shadow: 0 6px 18px rgba(10, 10, 10, 0.3);
     }
 
     /* -------------------- RESPONSIVE DESIGN -------------------- */
@@ -1821,46 +1374,6 @@ $selectedCategory = request('category') ? $categories->firstWhere('id', request(
          - SECTION THEO TỪNG LOẠI SẢN PHẨM (Áo thun, Áo sơ mi, Áo polo... ~4 SP/loại)
          - NÚT "XEM TẤT CẢ [LOẠI]" ĐIỀU HƯỚNG SANG TRANG LISTING
          ========================================================================= --}}
-
-{{-- THANH ĐIỀU HƯỚNG PHỤ (SECONDARY HORIZONTAL NAVIGATION - JUNO-INSPIRED) --}}
-<nav class="auren-secondary-nav" aria-label="Menu phụ danh mục">
-    <div class="secondary-nav-inner">
-        <ul class="secondary-nav-list">
-            <li class="secondary-nav-item has-dropdown">
-                <a href="{{ route('products.index', ['view' => 'all']) }}" class="secondary-nav-link">
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <line x1="3" y1="6" x2="21" y2="6"/>
-                        <line x1="3" y1="12" x2="21" y2="12"/>
-                        <line x1="3" y1="18" x2="21" y2="18"/>
-                    </svg>
-                    <span>DANH MỤC</span>
-                    <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-left: 2px;">
-                        <polyline points="6 9 12 15 18 9"/>
-                    </svg>
-                </a>
-                <div class="secondary-dropdown-menu">
-                    @foreach($categories as $category)
-                    <a href="{{ route('products.index', ['category' => $category->id]) }}" class="secondary-dropdown-link">{{ $category->name }}</a>
-                    @endforeach
-                </div>
-            </li>
-            <li class="secondary-nav-separator"></li>
-            <li class="secondary-nav-item"><a href="{{ route('products.index', ['view' => 'all']) }}" class="secondary-nav-link">HÀNG MỚI VỀ</a></li>
-            @php
-                $catThun = $categories->firstWhere('name', 'Áo thun');
-                $catPolo = $categories->firstWhere('name', 'Áo polo');
-                $catSomi = $categories->firstWhere('name', 'Áo sơ mi');
-                $catKhoac = $categories->firstWhere('name', 'Áo khoác');
-            @endphp
-            @if($catThun)<li class="secondary-nav-item"><a href="{{ route('products.index', ['category' => $catThun->id]) }}" class="secondary-nav-link">ÁO THUN</a></li>@endif
-            @if($catPolo)<li class="secondary-nav-item"><a href="{{ route('products.index', ['category' => $catPolo->id]) }}" class="secondary-nav-link">ÁO POLO</a></li>@endif
-            @if($catSomi)<li class="secondary-nav-item"><a href="{{ route('products.index', ['category' => $catSomi->id]) }}" class="secondary-nav-link">ÁO SƠ MI</a></li>@endif
-            @if($catKhoac)<li class="secondary-nav-item"><a href="{{ route('products.index', ['category' => $catKhoac->id]) }}" class="secondary-nav-link">ÁO KHOÁC</a></li>@endif
-            <li class="secondary-nav-separator"></li>
-            <li class="secondary-nav-item"><a href="{{ route('products.index', ['view' => 'all']) }}" class="secondary-nav-link highlight">TẤT CẢ SẢN PHẨM</a></li>
-        </ul>
-    </div>
-</nav>
 
 {{-- CAROUSEL AUREN (4 ẢNH CLOUDINARY CHUẨN) --}}
 <div class="homepage-carousel-wrapper">
@@ -2040,7 +1553,7 @@ $catProducts = $cat->products->take(4);
             <div class="product-img-wrap">
                 <a href="{{ route('products.show', $product) }}" tabindex="-1" aria-hidden="true">
                     <img
-                        src="{{ $product->image_url }}"
+                        src="{{ asset('images/products/' . $product->image) }}"
                         alt="{{ $product->name }}"
                         loading="lazy">
                 </a>
@@ -2053,15 +1566,10 @@ $catProducts = $cat->products->take(4);
                     class="btn-eye-quickview"
                     aria-label="Xem nhanh sản phẩm {{ $product->name }}"
                     title="Xem nhanh"
-                    data-id="{{ $product->id }}"
                     data-name="{{ $product->name }}"
                     data-img="{{ $product->image_url }}"
                     data-cat="{{ $cat->name }}"
                     data-price="{{ number_format($product->price, 0, ',', '.') }} ₫"
-                    data-stock="{{ $product->stock }}"
-                    data-size="{{ $product->size ?? '' }}"
-                    data-color="{{ $product->color ?? '' }}"
-                    data-desc="{{ e($product->description ?? '') }}"
                     data-url="{{ route('products.show', $product) }}">
                     <svg viewBox="0 0 24 24">
                         <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
@@ -2095,34 +1603,19 @@ $catProducts = $cat->products->take(4);
                 @endif
             </div>
 
-            {{-- NÚT THAO TÁC: THÊM GIỎ HÀNG & MUA NGAY --}}
-            <div class="product-card-actions">
-                @if($product->stock > 0)
-                <form action="{{ Route::has('cart.add') ? route('cart.add') : (Route::has('cart.store') ? route('cart.store', $product->id) : url('/cart/' . $product->id)) }}" method="POST" class="form-add-to-cart-card">
-                    @csrf
-                    <input type="hidden" name="product_id" value="{{ $product->id }}">
-                    <input type="hidden" name="quantity" value="1">
-                    <button type="submit" class="btn-card-add-cart" title="Thêm vào giỏ hàng">
-                        <svg viewBox="0 0 24 24">
-                            <circle cx="9" cy="21" r="1"/>
-                            <circle cx="20" cy="21" r="1"/>
-                            <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/>
-                        </svg>
-                        <span>Thêm giỏ</span>
-                    </button>
-                </form>
-                <a href="{{ route('products.show', $product) }}" class="btn-card-buy-now" title="Xem & Mua ngay">
-                    <svg viewBox="0 0 24 24">
-                        <path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z" />
-                        <line x1="3" y1="6" x2="21" y2="6" />
-                        <path d="M16 10a4 4 0 0 1-8 0" />
-                    </svg>
-                    <span>Mua ngay</span>
-                </a>
-                @else
-                <span class="btn-card-buy-now sold-out">Hết hàng</span>
-                @endif
-            </div>
+            {{-- NÚT MUA NGAY --}}
+            @if($product->stock > 0)
+            <a href="{{ route('products.show', $product) }}" class="btn-card-buy-now">
+                <svg viewBox="0 0 24 24">
+                    <path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z" />
+                    <line x1="3" y1="6" x2="21" y2="6" />
+                    <path d="M16 10a4 4 0 0 1-8 0" />
+                </svg>
+                Mua ngay
+            </a>
+            @else
+            <span class="btn-card-buy-now sold-out">Hết hàng</span>
+            @endif
         </div>
     </div>
     @endforeach
@@ -2361,7 +1854,7 @@ $catProducts = $cat->products->take(4);
                     <div class="product-img-wrap">
                         <a href="{{ route('products.show', $product) }}" tabindex="-1" aria-hidden="true">
                             <img
-                                src="{{ $product->image_url }}"
+                                src="{{ asset('images/products/' . $product->image) }}"
                                 alt="{{ $product->name }}"
                                 loading="lazy">
                         </a>
@@ -2374,17 +1867,12 @@ $catProducts = $cat->products->take(4);
                         <button
                             type="button"
                             class="btn-eye-quickview"
-                            aria-label="Xem nhanh sản phẩm {{ $product->name }}"
-                            title="Xem nhanh"
-                            data-id="{{ $product->id }}"
+                            aria-label="Xem ảnh lớn {{ $product->name }}"
+                            title="Xem ảnh lớn"
                             data-name="{{ $product->name }}"
                             data-img="{{ $product->image_url }}"
                             data-cat="{{ $product->category?->name ?? 'AUREN' }}"
                             data-price="{{ number_format($product->price, 0, ',', '.') }} ₫"
-                            data-stock="{{ $product->stock }}"
-                            data-size="{{ $product->size ?? '' }}"
-                            data-color="{{ $product->color ?? '' }}"
-                            data-desc="{{ e($product->description ?? '') }}"
                             data-url="{{ route('products.show', $product) }}">
                             <svg viewBox="0 0 24 24">
                                 <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
@@ -2419,34 +1907,19 @@ $catProducts = $cat->products->take(4);
                         @endif
                     </div>
 
-                    {{-- NÚT THAO TÁC: THÊM GIỎ HÀNG & MUA NGAY --}}
-                    <div class="product-card-actions">
-                        @if($product->stock > 0)
-                        <form action="{{ Route::has('cart.add') ? route('cart.add') : (Route::has('cart.store') ? route('cart.store', $product->id) : url('/cart/' . $product->id)) }}" method="POST" class="form-add-to-cart-card">
-                            @csrf
-                            <input type="hidden" name="product_id" value="{{ $product->id }}">
-                            <input type="hidden" name="quantity" value="1">
-                            <button type="submit" class="btn-card-add-cart" title="Thêm vào giỏ hàng">
-                                <svg viewBox="0 0 24 24">
-                                    <circle cx="9" cy="21" r="1"/>
-                                    <circle cx="20" cy="21" r="1"/>
-                                    <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/>
-                                </svg>
-                                <span>Thêm giỏ</span>
-                            </button>
-                        </form>
-                        <a href="{{ route('products.show', $product) }}" class="btn-card-buy-now" title="Xem & Mua ngay">
-                            <svg viewBox="0 0 24 24">
-                                <path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z" />
-                                <line x1="3" y1="6" x2="21" y2="6" />
-                                <path d="M16 10a4 4 0 0 1-8 0" />
-                            </svg>
-                            <span>Mua ngay</span>
-                        </a>
-                        @else
-                        <span class="btn-card-buy-now sold-out">Hết hàng</span>
-                        @endif
-                    </div>
+                    {{-- NÚT MUA NGAY --}}
+                    @if($product->stock > 0)
+                    <a href="{{ route('products.show', $product) }}" class="btn-card-buy-now">
+                        <svg viewBox="0 0 24 24">
+                            <path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z" />
+                            <line x1="3" y1="6" x2="21" y2="6" />
+                            <path d="M16 10a4 4 0 0 1-8 0" />
+                        </svg>
+                        Mua ngay
+                    </a>
+                    @else
+                    <span class="btn-card-buy-now sold-out">Hết hàng</span>
+                    @endif
                 </div>
             </div>
             @empty
@@ -2480,51 +1953,17 @@ $catProducts = $cat->products->take(4);
         </button>
         <div class="lightbox-img-wrap">
             <img id="lightboxImg" src="" alt="Ảnh sản phẩm">
-            <span class="lightbox-badge-stock in-stock" id="lightboxStockBadge">Còn hàng</span>
         </div>
         <div class="lightbox-content">
-            <div class="lightbox-meta-top">
-                <span class="lightbox-cat" id="lightboxCat">AUREN</span>
-                <span class="lightbox-meta-divider" id="lightboxMetaDivider" style="display:none;">·</span>
-                <span class="lightbox-attr-tag" id="lightboxSizeTag" style="display:none;">Size L</span>
-                <span class="lightbox-attr-tag" id="lightboxColorTag" style="display:none;">Đen</span>
-            </div>
+            <span class="lightbox-cat" id="lightboxCat">AUREN</span>
             <h3 class="lightbox-title" id="lightboxTitle">Tên sản phẩm</h3>
             <div class="lightbox-price" id="lightboxPrice">0 ₫</div>
-            
-            <div class="lightbox-desc-wrap">
-                <span class="lightbox-desc-label">Mô tả sản phẩm</span>
-                <p class="lightbox-desc" id="lightboxDesc">Sản phẩm thời trang cao cấp từ thương hiệu ♤ AUREN.</p>
-            </div>
-
-            <form id="lightboxCartForm" method="POST" action="">
-                @csrf
-                <input type="hidden" name="product_id" id="lightboxProductId" value="">
-                <div class="lightbox-qty-row">
-                    <span class="lightbox-qty-label">Số lượng:</span>
-                    <div class="lightbox-qty-ctrl">
-                        <button type="button" class="lightbox-qty-btn" id="lightboxQtyDec" aria-label="Giảm số lượng">-</button>
-                        <input type="number" name="quantity" id="lightboxQtyVal" class="lightbox-qty-val" value="1" min="1" max="99" readonly>
-                        <button type="button" class="lightbox-qty-btn" id="lightboxQtyInc" aria-label="Tăng số lượng">+</button>
-                    </div>
-                </div>
-                <div class="lightbox-actions-row">
-                    <button type="submit" class="btn-lightbox-add-cart" id="lightboxAddCartBtn">
-                        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <circle cx="9" cy="21" r="1"/>
-                            <circle cx="20" cy="21" r="1"/>
-                            <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/>
-                        </svg>
-                        <span>Thêm vào giỏ</span>
-                    </button>
-                    <a href="#" class="lightbox-btn-detail" id="lightboxLink">
-                        <span>Chi tiết</span>
-                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <path d="M5 12h14M12 5l7 7-7 7" />
-                        </svg>
-                    </a>
-                </div>
-            </form>
+            <a href="#" class="lightbox-btn-detail" id="lightboxLink">
+                Xem chi tiết
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M5 12h14M12 5l7 7-7 7" />
+                </svg>
+            </a>
         </div>
     </div>
 </div>
@@ -2603,41 +2042,11 @@ $catProducts = $cat->products->take(4);
         // -------------------- 2. LIGHTBOX QUICK VIEW --------------------
         const lightbox = document.getElementById('imageLightbox');
         const lightboxImg = document.getElementById('lightboxImg');
-        const lightboxStockBadge = document.getElementById('lightboxStockBadge');
         const lightboxTitle = document.getElementById('lightboxTitle');
         const lightboxCat = document.getElementById('lightboxCat');
-        const lightboxMetaDivider = document.getElementById('lightboxMetaDivider');
-        const lightboxSizeTag = document.getElementById('lightboxSizeTag');
-        const lightboxColorTag = document.getElementById('lightboxColorTag');
         const lightboxPrice = document.getElementById('lightboxPrice');
-        const lightboxDesc = document.getElementById('lightboxDesc');
         const lightboxLink = document.getElementById('lightboxLink');
         const closeBtn = document.getElementById('lightboxCloseBtn');
-
-        const lightboxCartForm = document.getElementById('lightboxCartForm');
-        const lightboxProductId = document.getElementById('lightboxProductId');
-        const lightboxQtyVal = document.getElementById('lightboxQtyVal');
-        const lightboxQtyDec = document.getElementById('lightboxQtyDec');
-        const lightboxQtyInc = document.getElementById('lightboxQtyInc');
-        const lightboxAddCartBtn = document.getElementById('lightboxAddCartBtn');
-
-        const baseCartUrl = "{{ url('/cart') }}";
-        const hasCartAdd = {{ Route::has('cart.add') ? 'true' : 'false' }};
-        const cartAddUrl = "{{ Route::has('cart.add') ? route('cart.add') : '' }}";
-
-        if (lightboxQtyDec && lightboxQtyVal) {
-            lightboxQtyDec.addEventListener('click', function() {
-                const cur = parseInt(lightboxQtyVal.value, 10) || 1;
-                if (cur > 1) lightboxQtyVal.value = cur - 1;
-            });
-        }
-        if (lightboxQtyInc && lightboxQtyVal) {
-            lightboxQtyInc.addEventListener('click', function() {
-                const cur = parseInt(lightboxQtyVal.value, 10) || 1;
-                const max = parseInt(lightboxQtyVal.max, 10) || 99;
-                if (cur < max) lightboxQtyVal.value = cur + 1;
-            });
-        }
 
         function openLightbox(data) {
             if (!lightbox) return;
@@ -2647,78 +2056,6 @@ $catProducts = $cat->products->take(4);
             lightboxCat.textContent = data.cat;
             lightboxPrice.textContent = data.price;
             lightboxLink.href = data.url;
-
-            // Cập nhật Stock Badge & Nút Thêm Giỏ Hàng
-            const stock = parseInt(data.stock, 10);
-            if (isNaN(stock) || stock > 0) {
-                if (lightboxStockBadge) {
-                    lightboxStockBadge.textContent = isNaN(stock) ? 'Còn hàng' : `Còn ${stock} sp`;
-                    lightboxStockBadge.className = 'lightbox-badge-stock in-stock';
-                }
-                if (lightboxAddCartBtn) {
-                    lightboxAddCartBtn.disabled = false;
-                    lightboxAddCartBtn.classList.remove('sold-out');
-                    const span = lightboxAddCartBtn.querySelector('span');
-                    if (span) span.textContent = 'Thêm vào giỏ';
-                }
-                if (lightboxQtyVal) {
-                    lightboxQtyVal.value = 1;
-                    lightboxQtyVal.max = isNaN(stock) ? 99 : Math.max(1, stock);
-                }
-            } else {
-                if (lightboxStockBadge) {
-                    lightboxStockBadge.textContent = 'Hết hàng';
-                    lightboxStockBadge.className = 'lightbox-badge-stock sold-out';
-                }
-                if (lightboxAddCartBtn) {
-                    lightboxAddCartBtn.disabled = true;
-                    lightboxAddCartBtn.classList.add('sold-out');
-                    const span = lightboxAddCartBtn.querySelector('span');
-                    if (span) span.textContent = 'Hết hàng';
-                }
-                if (lightboxQtyVal) {
-                    lightboxQtyVal.value = 1;
-                }
-            }
-
-            // Cập nhật thuộc tính Size & Màu sắc
-            if (lightboxSizeTag) {
-                if (data.size && data.size.trim().length > 0) {
-                    lightboxSizeTag.textContent = 'Size ' + data.size.trim();
-                    lightboxSizeTag.style.display = 'inline-block';
-                } else {
-                    lightboxSizeTag.style.display = 'none';
-                }
-            }
-            if (lightboxColorTag) {
-                if (data.color && data.color.trim().length > 0) {
-                    lightboxColorTag.textContent = data.color.trim();
-                    lightboxColorTag.style.display = 'inline-block';
-                } else {
-                    lightboxColorTag.style.display = 'none';
-                }
-            }
-            if (lightboxMetaDivider) {
-                const hasAttr = (data.size && data.size.trim().length > 0) || (data.color && data.color.trim().length > 0);
-                lightboxMetaDivider.style.display = hasAttr ? 'inline' : 'none';
-            }
-
-            // Cập nhật mô tả
-            if (lightboxDesc) {
-                lightboxDesc.textContent = (data.desc && data.desc.trim().length > 0)
-                    ? data.desc.trim()
-                    : 'Sản phẩm thời trang cao cấp từ thương hiệu ♤ AUREN. Tối giản trong thiết kế, tinh tế trong từng đường may.';
-            }
-
-            // Cập nhật Form Action & Product ID
-            if (lightboxProductId) lightboxProductId.value = data.id || '';
-            if (lightboxCartForm) {
-                if (hasCartAdd) {
-                    lightboxCartForm.action = cartAddUrl;
-                } else {
-                    lightboxCartForm.action = baseCartUrl + '/' + (data.id || '');
-                }
-            }
 
             lightbox.classList.add('active');
             lightbox.setAttribute('aria-hidden', 'false');
@@ -2737,15 +2074,10 @@ $catProducts = $cat->products->take(4);
                 e.preventDefault();
                 e.stopPropagation();
                 openLightbox({
-                    id: btn.getAttribute('data-id'),
                     name: btn.getAttribute('data-name'),
                     img: btn.getAttribute('data-img'),
                     cat: btn.getAttribute('data-cat'),
                     price: btn.getAttribute('data-price'),
-                    stock: btn.getAttribute('data-stock'),
-                    size: btn.getAttribute('data-size'),
-                    color: btn.getAttribute('data-color'),
-                    desc: btn.getAttribute('data-desc'),
                     url: btn.getAttribute('data-url')
                 });
             });
