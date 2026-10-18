@@ -49,21 +49,28 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/cart', [CartController::class, 'index'])->name('cart.index');
     Route::put('/cart/{cartItem}', [CartController::class, 'update'])->name('cart.update');
     Route::delete('/cart/{cartItem}', [CartController::class, 'destroy'])->name('cart.destroy');
-    Route::post('/cart/{product}', [CartController::class, 'store'])->name('cart.store');
+    Route::post('/cart/{id}', [CartController::class, 'store'])->name('cart.store');
     Route::put('/cart/update/{id}', [CartController::class, 'update'])->name('cart.update');
-
+    
     Route::get('/products/{id}', [ProductController::class, 'show'])->name('products.show');
     Route::post('/products/{id}', [CartController::class, 'store'])->name('cart.store');
     Route::post('/products/{product}/cart', [CartController::class, 'store'])->name('cart.store');
 
     Route::get('/checkout', [CheckoutController::class, 'index'])->name('checkout.index');
-
     Route::post('/checkout', [CheckoutController::class, 'store'])->name('checkout.process');
-    
+
+    Route::post('/checkout/momo', [MomoController::class, 'createPayment'])->name('momo.payment');
+    Route::get('/momo/return', [MomoController::class, 'returnPayment'])->name('momo.return');
+    Route::post('/momo/ipn', [MomoController::class, 'ipn'])->name('momo.ipn');
     Route::get('/checkout/success/{id}', [OrderController::class, 'success'])->name('orders.success');
+    
 
     Route::match(['put', 'patch'], '/cart/{id}', [CartController::class, 'update'])->name('cart.update');
+
+    Route::get('/order/success/{id}', [CheckoutController::class, 'showSuccess'])->name('order.success');   
+    Route::get('/my-orders', [CheckoutController::class, 'myOrders'])->name('orders.history');
     
+
     
 });
 
