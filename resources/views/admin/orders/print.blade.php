@@ -30,11 +30,17 @@
     <div class="card-top" style="display:flex; justify-content:space-between; align-items:center; margin-bottom:25px; border-bottom:1px solid var(--ad-border, #e5e7eb); padding-bottom:15px;">
         <div>
             <h2 class="card-top-title" style="margin:0; font-size:24px; letter-spacing:2px; text-transform:uppercase;">Hóa Đơn Bán Hàng #{{ $order->id }}</h2>
-            <span style="color:var(--ad-muted, #6b7280); font-size:13px;">Ngày đặt: {{ $order->created_at ? $order->created_at->format('d/m/Y H:i') : date('d/m/Y H:i') }}</span>
+            <span>Ngày đặt: 
+    @if($order->created_at)
+        {{ is_object($order->created_at) ? $order->created_at->format('d/m/Y H:i') : \Carbon\Carbon::parse($order->created_at)->format('d/m/Y H:i') }}
+    @else
+        N/A
+    @endif
+</span>
         </div>
         <div class="no-print" style="display:flex; gap:10px;">
             <button onclick="window.print()" class="btn-ad">
-                🖨️ In hóa đơn trực tiếp
+                 In hóa đơn trực tiếp
             </button>
             <a href="{{ route('admin.orders.index') }}" class="btn-ad btn-ad-outline">
                 ← Quay lại danh sách

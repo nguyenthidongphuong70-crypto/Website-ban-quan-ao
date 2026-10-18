@@ -19,14 +19,14 @@ class DashboardController extends Controller
         // Tổng số đơn hàng
         $totalOrders = Order::count();
 
-        // Đơn hàng đang chờ xử lý
-        $pendingOrders = Order::where('status', 'pending')->count();
+        // 1. Đơn hàng đang chờ xử lý (Bao gồm cả tiếng Anh lẫn tiếng Việt trong CSDL)
+$pendingOrders = Order::whereIn('status', ['pending', 'processing', 'Đang xử lý', 'Chờ xử lý'])->count();
 
-        // Đơn hoàn thành
-        $completedOrders = Order::count();
+// 2. Đơn hàng hoàn thành (Đã thêm điều kiện lọc đúng trạng thái hoàn thành)
+$completedOrders = Order::whereIn('status', ['completed', 'Hoàn thành', 'Đã hoàn thành'])->count();
 
-        // Tổng doanh thu tính từ TẤT CẢ đơn hàng
-        $totalRevenue = Order::sum('total_price');
+// 3. Tổng doanh thu (Chỉ tính tổng tiền của những đơn ĐÃ HOÀN THÀNH)
+$totalRevenue = Order::whereIn('status', ['completed', 'Hoàn thành', 'Đã hoàn thành'])->sum('total_price');
 
         // Top sản phẩm bán chạy nhất (ĐÃ ĐỔI THÀNH order_details)
         $topProducts = [];
