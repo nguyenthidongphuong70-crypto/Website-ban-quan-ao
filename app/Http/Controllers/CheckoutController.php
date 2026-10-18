@@ -40,7 +40,7 @@ class CheckoutController extends Controller
 
     public function store(Request $request)
 {
-    // 1. Validate dữ liệu với một ô địa chỉ đơn giản
+    
     $validated = $request->validate([
         'receiver_name' => ['required', 'string', 'max:100', 'regex:/^[\pL\s]+$/u'],
         'phone'         => ['required', 'string', 'regex:/^[0-9]{10}$/'],

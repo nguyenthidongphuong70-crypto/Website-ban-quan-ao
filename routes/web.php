@@ -47,10 +47,14 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/products/{product}/cart', [CartController::class, 'store'])->name('cart.store');
 
     Route::get('/checkout', [CheckoutController::class, 'index'])->name('checkout.index');
-
     Route::post('/checkout', [CheckoutController::class, 'store'])->name('checkout.process');
+
+    Route::post('/checkout/momo', [MomoController::class, 'createPayment'])->name('momo.payment');
+    Route::get('/momo/return', [MomoController::class, 'returnPayment'])->name('momo.return');
+    Route::post('/momo/ipn', [MomoController::class, 'ipn'])->name('momo.ipn');
     
     Route::get('/checkout/success/{id}', [OrderController::class, 'success'])->name('orders.success');
+    
 
     Route::match(['put', 'patch'], '/cart/{id}', [CartController::class, 'update'])->name('cart.update');
 

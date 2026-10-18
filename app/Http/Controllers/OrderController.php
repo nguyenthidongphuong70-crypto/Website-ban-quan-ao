@@ -101,5 +101,6 @@ class OrderController extends Controller
 
         return view('orders.index', compact('orders')); 
     }
+    
 
 }

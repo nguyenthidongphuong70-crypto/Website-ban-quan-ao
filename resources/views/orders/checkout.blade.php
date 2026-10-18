@@ -13,6 +13,7 @@
     <form action="{{ route('checkout.process') }}" method="POST">
     @csrf
     
+    
     <div style="margin-bottom: 15px;">
         <label style="font-weight: 500; display: block; margin-bottom: 5px;">HỌ VÀ TÊN NGƯỜI NHẬN *</label>
         <input type="text" name="receiver_name" value="{{ old('receiver_name') }}" required 
@@ -84,4 +85,24 @@
     </form>
 </div>
 @endsection
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    const checkoutForm = document.getElementById('checkout-form');
+    const paymentRadios = document.querySelectorAll('.payment-method-radio');
+
+    paymentRadios.forEach(radio => {
+        radio.addEventListener('change', function () {
+            if (this.checked) {
+                // Lấy route tương ứng từ thuộc tính data-action
+                const targetAction = this.getAttribute('data-action');
+                
+                // Cập nhật action cho form
+                checkoutForm.setAttribute('action', targetAction);
+                
+                console.log('Action form đã đổi sang:', targetAction);
+            }
+        });
+    });
+});
+</script>
 

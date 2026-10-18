@@ -14,7 +14,20 @@
         <p><strong>Họ tên:</strong> {{ $order->receiver_name }}</p>
         <p><strong>Số điện thoại:</strong> {{ $order->phone }}</p>
         <p><strong>Địa chỉ giao hàng:</strong> {{ $order->address }}</p>
-        <p><strong>Phương thức thanh toán:</strong> {{ strtoupper($order->payment_method) }}</p>
+        <p><strong>Phương thức thanh toán:</strong> 
+            @php
+                // Lấy giá trị phương thức thanh toán từ biến $order
+                $method = strtolower($order->payment_method ?? $order->payment_type ?? '');
+            @endphp
+
+            @if($method === 'momo')
+                <span>Ví điện tử MoMo</span>
+            @elseif($method === 'cod' || empty($method))
+                <span>Thanh toán khi nhận hàng (COD)</span>
+            @else
+                <span>{{ strtoupper($method) }}</span>
+            @endif
+        </p>
         <p><strong>Trạng thái đơn hàng:</strong> <span style="color: orange; font-weight: bold;">{{ ucfirst($order->status) }}</span></p>
     </div>
 
