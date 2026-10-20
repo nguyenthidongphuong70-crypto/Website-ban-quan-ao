@@ -715,9 +715,14 @@ $selectedCategory = request('category') ? $categories->firstWhere('id', request(
         box-sizing: border-box;
     }
 
-    .btn-card-add-cart:hover {
+    .btn-card-add-cart:hover:not(:disabled) {
         background: var(--clr-black);
         color: var(--clr-white);
+    }
+
+    .btn-card-add-cart:disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
     }
 
     .btn-card-add-cart svg {
@@ -1617,6 +1622,9 @@ $selectedCategory = request('category') ? $categories->firstWhere('id', request(
         background: var(--clr-ivory);
         border-color: var(--clr-black);
     }
+
+    .toast-notification.error {
+        background: #b91c1c;
     }
 
     /* -------------------- RESPONSIVE DESIGN -------------------- */
@@ -2709,6 +2717,167 @@ $catProducts = $cat->products->take(4);
                 closeLightbox();
             }
         });
+
+        // -------------------- LIGHTBOX ADD TO CART AJAX --------------------
+        if (lightboxCartForm) {
+            lightboxCartForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+
+                if (lightboxAddCartBtn && lightboxAddCartBtn.disabled) return;
+                const span = lightboxAddCartBtn ? lightboxAddCartBtn.querySelector('span') : null;
+                const oldText = span ? span.textContent : '';
+
+                if (lightboxAddCartBtn) lightboxAddCartBtn.disabled = true;
+
+                const formData = new FormData(lightboxCartForm);
+                const url = lightboxCartForm.getAttribute('action') || (baseCartUrl + '/' + (lightboxProductId ? lightboxProductId.value : ''));
+                const csrfMeta = document.querySelector('meta[name="csrf-token"]');
+                const csrfToken = csrfMeta ? csrfMeta.getAttribute('content') : '';
+
+                fetch(url, {
+                    method: 'POST',
+                    headers: {
+                        'X-CSRF-TOKEN': csrfToken,
+                        'Accept': 'application/json'
+                    },
+                    body: formData
+                })
+                .then(async response => {
+                    const data = await response.json().catch(() => null);
+                    if (!response.ok) {
+                        const msg = (data && data.message) ? data.message : 'Có lỗi xảy ra khi thêm vào giỏ hàng!';
+                        throw new Error(msg);
+                    }
+                    return data;
+                })
+                .then(data => {
+                    if (data && data.success) {
+                        showToast(data.message, 'success');
+                        updateHeaderCartCount(data.cartCount);
+
+                        if (span) span.textContent = '✓ Đã thêm';
+                        setTimeout(() => {
+                            if (span && lightboxAddCartBtn && !lightboxAddCartBtn.classList.contains('sold-out')) {
+                                span.textContent = oldText || 'Thêm vào giỏ';
+                            }
+                        }, 1500);
+                    } else {
+                        showToast((data && data.message) || 'Có lỗi xảy ra!', 'error');
+                    }
+                })
+                .catch(err => {
+                    console.error('Lỗi Cart:', err);
+                    showToast(err.message || 'Có lỗi xảy ra khi thêm vào giỏ hàng!', 'error');
+                })
+                .finally(() => {
+                    if (lightboxAddCartBtn && !lightboxAddCartBtn.classList.contains('sold-out')) {
+                        lightboxAddCartBtn.disabled = false;
+                    }
+                });
+            });
+        }
+
+        // -------------------- PRODUCT CARD ADD TO CART AJAX --------------------
+        document.addEventListener('submit', function(e) {
+            const form = e.target;
+            if (!form || !form.matches || !form.matches('.form-add-to-cart-card')) return;
+
+            e.preventDefault();
+
+            const submitBtn = form.querySelector('button[type="submit"]');
+            if (submitBtn && submitBtn.disabled) return;
+
+            const span = submitBtn ? submitBtn.querySelector('span') : null;
+            const oldSpanText = span ? span.textContent : '';
+
+            if (submitBtn) submitBtn.disabled = true;
+
+            const formData = new FormData(form);
+            const url = form.getAttribute('action');
+            const csrfMeta = document.querySelector('meta[name="csrf-token"]');
+            const csrfToken = csrfMeta ? csrfMeta.getAttribute('content') : '';
+
+            fetch(url, {
+                method: 'POST',
+                headers: {
+                    'X-CSRF-TOKEN': csrfToken,
+                    'Accept': 'application/json'
+                },
+                body: formData
+            })
+            .then(async response => {
+                const data = await response.json().catch(() => null);
+                if (!response.ok) {
+                    const msg = (data && data.message) ? data.message : 'Có lỗi xảy ra khi thêm vào giỏ hàng!';
+                    throw new Error(msg);
+                }
+                return data;
+            })
+            .then(data => {
+                if (data && data.success) {
+                    showToast(data.message, 'success');
+                    updateHeaderCartCount(data.cartCount);
+
+                    if (span) span.textContent = '✓ Đã thêm';
+                    setTimeout(() => {
+                        if (span) span.textContent = oldSpanText || 'Thêm giỏ';
+                    }, 1500);
+                } else {
+                    showToast((data && data.message) || 'Có lỗi xảy ra!', 'error');
+                }
+            })
+            .catch(err => {
+                console.error('Lỗi Cart:', err);
+                showToast(err.message || 'Có lỗi xảy ra khi thêm vào giỏ hàng!', 'error');
+            })
+            .finally(() => {
+                if (submitBtn) submitBtn.disabled = false;
+            });
+        });
+
+        // -------------------- HELPER: UPDATE HEADER CART COUNT & TOAST --------------------
+        function updateHeaderCartCount(count) {
+            if (count === undefined || count === null) return;
+            let badge = document.querySelector('.cart-count-badge, .cart-count');
+            if (!badge && count > 0) {
+                const cartLink = document.querySelector('a[aria-label="Giỏ hàng"]');
+                if (cartLink) {
+                    badge = document.createElement('span');
+                    badge.className = 'cart-count-badge';
+                    cartLink.appendChild(badge);
+                }
+            }
+            if (badge) {
+                badge.innerText = count;
+                badge.style.display = count > 0 ? 'inline-block' : 'none';
+            }
+        }
+
+        function showToast(message, type = 'success') {
+            let container = document.getElementById('toast-container');
+            if (!container) {
+                container = document.createElement('div');
+                container.id = 'toast-container';
+                document.body.appendChild(container);
+            }
+
+            const toast = document.createElement('div');
+            toast.className = `toast-notification ${type}`;
+            toast.innerText = message;
+
+            container.appendChild(toast);
+
+            setTimeout(() => {
+                toast.classList.add('show');
+            }, 10);
+
+            setTimeout(() => {
+                toast.classList.remove('show');
+                setTimeout(() => {
+                    toast.remove();
+                }, 300);
+            }, 2500);
+        }
 
         // -------------------- 3. SIDEBAR FILTER INTERACTIONS --------------------
         // Tìm kiếm nhanh loại sản phẩm (Ảnh 1)
