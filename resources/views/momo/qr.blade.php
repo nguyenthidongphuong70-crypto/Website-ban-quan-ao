@@ -15,7 +15,7 @@
         </div>
 
         <div class="my-3">
-            <span class="text-dark">Số tiền: </span>
+            <span>Số tiền: {{ number_format($amount) }} VNĐ</span>
             <strong class="text-danger fs-5" style="color: #d82d8b !important;">{{ number_format($amount) }} VNĐ</strong>
         </div>
 

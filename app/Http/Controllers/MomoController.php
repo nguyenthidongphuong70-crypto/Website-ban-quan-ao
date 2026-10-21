@@ -6,23 +6,35 @@ use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 use App\Models\Order; // Thay thế bằng Model đơn hàng của bạn
 use Illuminate\Support\Facades\Auth;
+use App\Models\CartItem;
 class MomoController extends Controller
 {
     public function createPayment(Request $request)
-    {
+{
+        // 1. Tính tổng tiền từ bảng cart_items của user hiện tại
+        $cartItems = CartItem::where('user_id', auth()->id())->with('product')->get();
+
+        if ($cartItems->isEmpty()) {
+            return redirect()->route('cart.index')->with('error', 'Giỏ hàng của bạn đang trống!');
+        }
+
+        $amount = $cartItems->sum(function ($item) {
+            return $item->quantity * $item->product->price;
+        });
+
         $orderId = 'ORDER_' . time();
-        $amount = 50000; 
         $orderInfo = "Thanh toán đơn hàng qua MoMo";
         
+        // 2. Tạo đơn hàng và lưu tổng tiền thực tế vào database
         $order = Order::create([
-        'user_id'       => auth()->id(),
-        'receiver_name' => $request->input('receiver_name') ?? $request->input('name'), // Sửa 'name' thành 'receiver_name'
-        'phone'         => $request->input('phone'),
-        'address'       => $request->input('address'),
-        'note'          => ($request->input('note') ?? '') . ' [Phương thức: MOMO]',
-        'status'        => 'Pending',
-    ]);
-
+            'user_id'       => auth()->id(),
+            'receiver_name' => $request->input('receiver_name') ?? $request->input('name'),
+            'phone'         => $request->input('phone'),
+            'address'       => $request->input('address'),
+            'note'          => ($request->input('note') ?? '') . ' [Phương thức: MOMO]',
+            'total_price'   => $amount, 
+            'status'        => 'Pending',
+        ]);
 
         $partnerCode = env('MOMO_PARTNER_CODE');
         $accessKey = env('MOMO_ACCESS_KEY');
@@ -35,32 +47,32 @@ class MomoController extends Controller
         $extraData = "";
 
         $rawHash = "accessKey=" . $accessKey .
-                   "&amount=" . $amount .
-                   "&extraData=" . $extraData .
-                   "&ipnUrl=" . $ipnUrl .
-                   "&orderId=" . $orderId .
-                   "&orderInfo=" . $orderInfo .
-                   "&partnerCode=" . $partnerCode .
-                   "&redirectUrl=" . $redirectUrl .
-                   "&requestId=" . $requestId .
-                   "&requestType=" . $requestType;
+                "&amount=" . $amount .
+                "&extraData=" . $extraData .
+                "&ipnUrl=" . $ipnUrl .
+                "&orderId=" . $orderId .
+                "&orderInfo=" . $orderInfo .
+                "&partnerCode=" . $partnerCode .
+                "&redirectUrl=" . $redirectUrl .
+                "&requestId=" . $requestId .
+                "&requestType=" . $requestType;
 
         $signature = hash_hmac("sha256", $rawHash, $secretKey);
 
         $data = [
             'partnerCode' => $partnerCode,
             'partnerName' => "Web Ban Quan Ao",
-            'storeId' => "StoreId",
-            'requestId' => $requestId,
-            'amount' => $amount,
-            'orderId' => $orderId,
-            'orderInfo' => $orderInfo,
+            'storeId'     => "StoreId",
+            'requestId'   => $requestId,
+            'amount'      => $amount, 
+            'orderId'     => $orderId,
+            'orderInfo'   => $orderInfo,
             'redirectUrl' => $redirectUrl,
-            'ipnUrl' => $ipnUrl,
-            'lang' => 'vi',
-            'extraData' => $extraData,
+            'ipnUrl'      => $ipnUrl,
+            'lang'        => 'vi',
+            'extraData'   => $extraData,
             'requestType' => $requestType,
-            'signature' => $signature,
+            'signature'   => $signature,
         ];
 
         $endpoint = env('MOMO_ENDPOINT', 'https://test-payment.momo.v2/gateway/api/create');
@@ -74,34 +86,13 @@ class MomoController extends Controller
             return view('momo.qr', [
                 'payUrl'    => $payUrl,
                 'qrCodeUrl' => $qrCodeUrl,
-                'amount'    => $amount ?? 50000,
-                'orderId'   => $orderId ?? 'ORDER_' . time(),
-                'orderInfo' => $orderInfo ?? "Thanh toán đơn hàng qua MoMo"
+                'amount'    => $amount, 
+                'orderId'   => $orderId,
+                'orderInfo' => $orderInfo
             ]);
         }
 
         return redirect()->back()->with('error', 'Không thể khởi tạo cổng thanh toán MoMo!');
-    }
-
-    /**
-     * 2. Xử lý khi user thanh toán xong và được MoMo redirect quay lại website
-     */
-    public function returnPayment(Request $request)
-    {
-    $resultCode = $request->input('resultCode');
-    $orderId = $request->input('orderId');
-
-    if ($resultCode == 0) {
-        // Cập nhật trạng thái đơn hàng thành đã thanh toán
-        $order = Order::where('id', $orderId)->first();
-        if ($order) {
-            $order->update(['status' => 'Paid']);
-            // Chuyển sang trang Order Success với ID đơn hàng
-            return redirect()->route('orders.success', $order->id)->with('success', 'Thanh toán MoMo thành công!');
-        }
-    }
-
-    return redirect()->route('checkout.index')->with('error', 'Thanh toán thất bại hoặc bị hủy!');
     }
 
     /**
