@@ -450,11 +450,89 @@
     background: #faf7f4;
 }
 
-/* Pagination */
+/* ── Pagination ─────────────────────────────────────────── */
 .pagination-wrap {
     margin-top: 24px;
     display: flex;
     justify-content: center;
+}
+
+/* Hide the mobile-only text "Trước / Sau" row (sm:hidden div) */
+.pagination-wrap nav > div.flex.gap-2 {
+    display: none !important;
+}
+
+/* Wrapper: remove default shadow, add gap between buttons */
+.pagination-wrap nav span.inline-flex {
+    box-shadow: none !important;
+    gap: 4px !important;
+    display: inline-flex !important;
+}
+
+/* ── Base style for ALL buttons (numbers + arrows) ── */
+.pagination-wrap nav span.inline-flex > a,
+.pagination-wrap nav span.inline-flex > span[aria-current="page"] > span,
+.pagination-wrap nav span.inline-flex > span[aria-disabled="true"] > span {
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    min-width: 2.25rem !important;
+    height: 2.25rem !important;
+    padding: 0 0.6rem !important;
+    margin: 0 !important;
+    font-size: 0.8125rem !important;
+    font-weight: 500 !important;
+    line-height: 1 !important;
+    border: 1.5px solid #c9b49a !important;
+    border-radius: 8px !important;
+    background: #fff !important;
+    color: #6b4f2e !important;
+    text-decoration: none !important;
+    transition: background 0.18s ease, color 0.18s ease, border-color 0.18s ease, transform 0.15s ease !important;
+    cursor: pointer !important;
+}
+
+/* ── Active (current) page ── */
+.pagination-wrap nav span.inline-flex > span[aria-current="page"] > span {
+    background: #6b4f2e !important;
+    color: #fff !important;
+    border-color: #6b4f2e !important;
+    cursor: default !important;
+}
+
+/* ── Disabled arrow (first / last page) ── */
+.pagination-wrap nav span.inline-flex > span[aria-disabled="true"] > span {
+    background: #f5f0eb !important;
+    color: #c9b49a !important;
+    border-color: #e0d4c4 !important;
+    cursor: not-allowed !important;
+    opacity: 0.6 !important;
+}
+
+/* ── Hover on clickable buttons (not active, not disabled) ── */
+.pagination-wrap nav span.inline-flex > a:hover {
+    background: #6b4f2e !important;
+    color: #fff !important;
+    border-color: #6b4f2e !important;
+    transform: translateY(-1px) !important;
+}
+
+/* ── Arrow (prev/next) buttons: square ── */
+.pagination-wrap nav span.inline-flex > a[rel="prev"],
+.pagination-wrap nav span.inline-flex > a[rel="next"] {
+    min-width: 2.25rem !important;
+    padding: 0 !important;
+    border-radius: 8px !important;
+}
+
+/* Fix Bootstrap .w-5/.h-5 = 50% override; set SVG to 14 px */
+.pagination-wrap nav span.inline-flex > a[rel="prev"] svg,
+.pagination-wrap nav span.inline-flex > a[rel="next"] svg,
+.pagination-wrap nav span.inline-flex > span[aria-disabled="true"] > span svg {
+    width: 0.875rem !important;
+    height: 0.875rem !important;
+    display: block !important;
+    flex-shrink: 0 !important;
 }
 
 /* Delete modal */
