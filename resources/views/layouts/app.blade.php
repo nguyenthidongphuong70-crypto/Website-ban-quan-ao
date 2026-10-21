@@ -1513,11 +1513,9 @@
                         </svg>
 
                         {{-- THÊM Ô HIỂN THỊ SỐ LƯỢNG Ở ĐÂY --}}
-                        @if(isset($cartCount) && $cartCount > 0)
-                            <span class="cart-count-badge">
-                                {{ $cartCount }}
-                            </span>
-                        @endif
+                            <span class="cart-count" style="{{ (!isset($cartCount) || $cartCount == 0) ? 'display: none;' : '' }} position: absolute; top: -5px; right: -8px; background: #000; color: #fff; border-radius: 50%; padding: 2px 6px; font-size: 10px; font-weight: bold;">
+                            {{ $cartCount ?? 0 }}
+                        </span>
                     </a>
 
                     {{-- Bổ sung đoạn CSS này vào file CSS chung hoặc đặt trực tiếp vào thẻ <style> --}}
@@ -2234,5 +2232,4 @@
     <span id="popup-message">Đã thêm sản phẩm vào giỏ hàng!</span>
 </div>
 </body>
-
 </html>

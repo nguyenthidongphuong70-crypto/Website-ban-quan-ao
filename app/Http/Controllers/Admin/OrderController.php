@@ -9,22 +9,37 @@ use Illuminate\Support\Facades\DB;
 
 class OrderController extends Controller
 {
-    // Hiển thị tất cả đơn hàng
-    // Hiển thị danh sách đơn hàng (có hỗ trợ lọc theo trạng thái)
+    // Hiển thị danh sách đơn hàng (hỗ trợ lọc theo trạng thái và tìm kiếm)
     public function index(Request $request)
     {
         $query = Order::with('user');
 
-        // Kiểm tra nếu trên URL có truyền tham số status (ví dụ: ?status=pending hoặc ?status=completed)
+        // Tìm kiếm theo ID đơn hàng hoặc Tên khách hàng
+        if ($request->has('search') && $request->search != '') {
+            $search = trim($request->search);
+            $query->where(function ($q) use ($search) {
+                $q->where('id', 'like', "%{$search}%")
+                  ->orWhereHas('user', function ($u) use ($search) {
+                      $u->where('full_name', 'like', "%{$search}%");
+                  });
+            });
+        }
+
+        // Lọc theo trạng thái đơn hàng
         if ($request->has('status') && $request->status != '') {
             $status = $request->status;
 
-            // Xử lý map giá trị trạng thái cho khớp với CSDL của bạn
-            if ($status === 'pending') {
-                // Tùy theo CSDL bạn lưu là 'pending' hay tiếng Việt, hãy thêm vào mảng bên dưới
-                $query->whereIn('status', ['pending', 'Đang xử lý', 'Chờ xử lý']);
+            // Xử lý linh hoạt hỗ trợ các biến thể trạng thái tương đương
+            if ($status === 'confirmed') {
+                $query->whereIn('status', ['confirmed', 'processing', 'Đang xử lý', 'Đã xác nhận']);
+            } elseif ($status === 'shipping') {
+                $query->whereIn('status', ['shipping', 'shipped', 'Đang giao', 'Đang giao hàng']);
+            } elseif ($status === 'pending') {
+                $query->whereIn('status', ['pending', 'Chờ xử lý']);
             } elseif ($status === 'completed') {
                 $query->whereIn('status', ['completed', 'Hoàn thành', 'Đã hoàn thành']);
+            } elseif ($status === 'cancelled') {
+                $query->whereIn('status', ['cancelled', 'Đã hủy']);
             } else {
                 $query->where('status', $status);
             }
@@ -46,11 +61,11 @@ class OrderController extends Controller
         return view('admin.orders.show', compact('order'));
     }
 
-    // Cập nhật trạng thái đơn hàng
+    // Cập nhật trạng thái đơn hàng chuẩn bộ 5 giá trị tiếng Anh
     public function updateStatus(Request $request, $id)
     {
         $request->validate([
-            'status' => 'required|in:pending,processing,shipped,completed,cancelled,Chờ xử lý,Đang xử lý,Đang giao,Hoàn thành,Đã hủy',
+            'status' => 'required|in:pending,confirmed,shipping,completed,cancelled',
         ]);
 
         $order = Order::with('orderDetails.product')->findOrFail($id);
@@ -61,7 +76,7 @@ class OrderController extends Controller
         DB::beginTransaction();
 
         try {
-            // Hủy đơn: hoàn lại số lượng tồn kho
+            // Hủy đơn: hoàn lại số lượng tồn kho sản phẩm
             if ($oldStatus !== 'cancelled' && $newStatus === 'cancelled') {
                 foreach ($order->orderDetails as $detail) {
                     $product = $detail->product;
@@ -73,16 +88,14 @@ class OrderController extends Controller
                 }
             }
 
-            // Khôi phục đơn đã hủy: trừ lại tồn kho
+            // Khôi phục đơn đã hủy: trừ lại tồn kho sản phẩm
             if ($oldStatus === 'cancelled' && $newStatus !== 'cancelled') {
                 foreach ($order->orderDetails as $detail) {
                     $product = $detail->product;
 
                     if ($product) {
                         if ($product->stock < $detail->quantity) {
-                            throw new \Exception(
-                                'Không đủ tồn kho để khôi phục đơn hàng.'
-                            );
+                            throw new \Exception('Không đủ tồn kho để khôi phục đơn hàng.');
                         }
 
                         $product->stock -= $detail->quantity;
@@ -91,6 +104,7 @@ class OrderController extends Controller
                 }
             }
 
+            // Cập nhật trạng thái mới
             $order->update([
                 'status' => $newStatus,
             ]);

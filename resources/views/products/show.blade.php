@@ -14,26 +14,39 @@
     display: inline-flex;
     align-items: center;
     gap: 10px;
+    padding: 10px 22px;
+    background: var(--clr-white);
+    color: var(--clr-dark-gray);
+    border: 1px solid var(--clr-beige);
+    border-radius: 10px;
     font-size: 11px;
-    letter-spacing: 0.16em;
+    font-weight: 500;
+    letter-spacing: 0.14em;
     text-transform: uppercase;
-    color: var(--clr-warm-gray);
-    transition: color 0.3s ease;
+    text-decoration: none;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.03);
+    transition: all 0.25s ease;
 }
 
-.product-back-link:hover { color: var(--clr-black); }
+.product-back-link:hover {
+    color: var(--clr-black);
+    border-color: var(--clr-black);
+    background: var(--clr-offwhite);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
 
 .product-back-link svg {
-    width: 16px;
+    width: 15px;
     height: 12px;
     stroke: currentColor;
     fill: none;
-    stroke-width: 1.5;
+    stroke-width: 1.8;
     stroke-linecap: round;
-    transition: transform 0.3s ease;
+    transition: transform 0.25s ease;
 }
 
-.product-back-link:hover svg { transform: translateX(-4px); }
+.product-back-link:hover svg { transform: translateX(-3px); }
 
 .product-detail-layout {
     max-width: var(--max-width);
@@ -240,29 +253,39 @@
 }
 
 .btn-add-to-cart {
-    height: 54px;
+    width: 100%;
+    min-height: 52px;
+    padding: 14px 28px;
     background: var(--clr-black);
     color: var(--clr-white);
     font-family: var(--font-body);
     font-size: 11px;
-    font-weight: 400;
-    letter-spacing: 0.2em;
+    font-weight: 500;
+    letter-spacing: 0.18em;
     text-transform: uppercase;
-    border: none;
+    border: 1px solid var(--clr-black);
     border-radius: 12px;
     cursor: pointer;
-    display: flex;
+    display: inline-flex;
     align-items: center;
     justify-content: center;
     gap: 12px;
-    box-shadow: 0 4px 12px rgba(10, 10, 10, 0.15);
+    box-shadow: 0 4px 14px rgba(10, 10, 10, 0.15);
     transition: all 0.25s ease;
+    box-sizing: border-box;
 }
 
-.btn-add-to-cart:hover {
+.btn-add-to-cart:hover:not(:disabled) {
     transform: translateY(-1px);
     box-shadow: 0 8px 24px rgba(10, 10, 10, 0.32);
     opacity: 0.95;
+}
+
+.btn-add-to-cart:disabled {
+    opacity: 0.65;
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
 }
 
 .btn-add-to-cart svg {
@@ -273,6 +296,10 @@
     stroke-width: 1.5;
     stroke-linecap: round;
     stroke-linejoin: round;
+}
+
+.toast-notification.error {
+    background: #b91c1c;
 }
 
 .product-out-of-stock-banner {
@@ -369,7 +396,7 @@
         {{-- ======================== CART FORM ========================--}}
         <div class="cart-action">
             @if ($product->stock > 0)
-                <<form id="add-to-cart-form" method="POST" action="{{ route('cart.store', $product->id) }}">
+                <form id="add-to-cart-form" method="POST" action="{{ route('cart.store', $product->id) }}">
                     @csrf
                     <input type="hidden" name="product_id" value="{{ $product->id }}">
 
@@ -442,6 +469,10 @@ document.addEventListener('DOMContentLoaded', function () {
         form.addEventListener('submit', function (e) {
             e.preventDefault(); // Chặn load lại trang
 
+            const submitBtn = form.querySelector('button[type="submit"]');
+            if (submitBtn && submitBtn.disabled) return;
+            if (submitBtn) submitBtn.disabled = true;
+
             let formData = new FormData(form);
             let url = form.getAttribute('action');
 
@@ -454,37 +485,51 @@ document.addEventListener('DOMContentLoaded', function () {
                 body: formData
             })
             .then(async response => {
+                const data = await response.json().catch(() => null);
                 if (!response.ok) {
-                    let text = await response.text();
-                    console.error('Server Error:', text);
-                    throw new Error('Lỗi từ Server');
+                    const msg = (data && data.message) ? data.message : 'Có lỗi xảy ra khi thêm vào giỏ hàng!';
+                    throw new Error(msg);
                 }
-                return response.json();
+                return data;
             })
             .then(data => {
-                if (data.success) {
+                if (data && data.success) {
                     // 1. Hiển thị Pop-up Toast ở góc trên bên phải
                     showToast(data.message, 'success');
 
                     // 2. Cập nhật con số trên icon giỏ hàng ở Header
-                    const cartCountEl = document.querySelector('.cart-count');
-                    if (cartCountEl) {
-                        cartCountEl.innerText = data.cartCount;
-                        if (data.cartCount > 0) {
-                            cartCountEl.style.display = 'inline-block';
-                        }
-                    }
+                    updateHeaderCartCount(data.cartCount);
                 } else {
-                    showToast(data.message || 'Có lỗi xảy ra!', 'error');
+                    showToast((data && data.message) || 'Có lỗi xảy ra!', 'error');
                 }
             })
             .catch(error => {
-                console.error('Lỗi AJAX:', error);
-                showToast('Có lỗi xảy ra khi thêm vào giỏ hàng!', 'error');
+                console.error('Lỗi Cart:', error);
+                showToast(error.message || 'Có lỗi xảy ra khi thêm vào giỏ hàng!', 'error');
+            })
+            .finally(() => {
+                if (submitBtn) submitBtn.disabled = false;
             });
         });
     }
 });
+
+function updateHeaderCartCount(count) {
+    if (count === undefined || count === null) return;
+    let badge = document.querySelector('.cart-count-badge, .cart-count');
+    if (!badge && count > 0) {
+        const cartLink = document.querySelector('a[aria-label="Giỏ hàng"]');
+        if (cartLink) {
+            badge = document.createElement('span');
+            badge.className = 'cart-count-badge';
+            cartLink.appendChild(badge);
+        }
+    }
+    if (badge) {
+        badge.innerText = count;
+        badge.style.display = count > 0 ? 'inline-block' : 'none';
+    }
+}
 
 // Hàm hỗ trợ tạo và hiển thị Toast động
 function showToast(message, type = 'success') {
